@@ -1,0 +1,5 @@
+/OrganLink-Heroes/nbproject/private/*
+/OrganLink-Heroes/dist/*
+/OrganLink-Heroes/build/*
+
+*.db4o
