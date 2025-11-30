@@ -67,8 +67,8 @@ public class PrepareOrderDetailsJPanel extends javax.swing.JPanel {
          for(PatientRequest patientRequest: system.getPatientRequestDirectory().getPatientRequestList()){            
             Object row[] = new Object[4];
             row[0]= patientRequest;
-            row[1]= patientRequest.getName();
-            row[2]= patientRequest.getContact();
+            row[1]= patientRequest.getPatient().getName(); // Access via getPatient()
+            row[2]= patientRequest.getPatient().getContact(); // Access via getPatient()
             row[3]= patientRequest.getStatus();
               
             dtm.addRow(row);
@@ -336,95 +336,88 @@ public class PrepareOrderDetailsJPanel extends javax.swing.JPanel {
         else
         {
         
-        Patient patient = new Patient();
+        PatientRequest selectedPatientRequest = null;
+        for(PatientRequest pr : system.getPatientRequestDirectory().getPatientRequestList()){
+            if(pr.getPatient().getReceiverID().equals(uidText.getText())){
+                selectedPatientRequest = pr;
+                break;
+            }
+        }
+        
+        if (selectedPatientRequest == null) {
+            JOptionPane.showMessageDialog(null, "Patient Request not found for selected UID.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        Patient patient = selectedPatientRequest.getPatient();
         
         try {
-
             patient.setBloodType(system.getPersonBloodTypes().findBloodType(bloodTypeText.getText()));
         }
         catch (Exception e) {
             JOptionPane.showMessageDialog(null, new JLabel("<html><b>Please check the patients blood group. It Should be AN,AP,BP,BN,ABP,ABN,OP,ON where N-Negative, P-Positive.</b></html>"), "Warning", JOptionPane.WARNING_MESSAGE);
-
             return;
         }
         
         patient.setName(nameText.getText());
         patient.setContact(Long.parseLong(contactText.getText()));  
         
-        patient.setReceiverID(uidText.getText()); // UID, receiverID
-        patient.setName(nameText.getText()); // Name
+        patient.setReceiverID(uidText.getText()); 
+        patient.setName(nameText.getText());
        
-        patient.setContact(Long.parseLong(contactText.getText())); // contact
-        patient.setEmailID(emailText.getText()); // emailID
-        patient.setStatus("Centre Approved"); // status
-        patient.setLabConfirmation(true); //  labConfirmation
-        system.getPatientDirectory().addPatient(patient);
+        patient.setContact(Long.parseLong(contactText.getText()));
+        patient.setEmailID(emailText.getText());
+        patient.setStatus("Centre Approved");
+        patient.setLabConfirmation(true);
       
         
-        for(PatientRequest patientRequest: system.getPatientRequestDirectory().getPatientRequestList()){                      
+        // Update the status of the selected patient request
+        selectedPatientRequest.setStatus("Centre Approved");
         
-            if(patientRequest.getReceiverID().equals(uidText.getText())){
-            patientRequest.setStatus("Centre Approved");
-            dB4OUtil.storeSystem(system);
-            }
-        }
-       
         Enterprise ent = null;
         Organization org = null;
         
         for (Enterprise enterprise : network.getEnterpriseDirectory().getEnterpriseList()) {
-            if (enterprise.getEnterpriseType().toString().equals("Legal")) {
-            
+            if (enterprise.getEnterpriseType().toString().equals("Legal")) { // Assuming "Legal" is the Government Enterprise
                 ent = enterprise;
                 System.out.println(enterprise);
                 break;
             }
         }
         
-        
-       
-        for (Organization organization : ent.getOrganizationDirectory().getOrganizationList()) {
-            if(organization instanceof LogisticsOrganization) {
-                org = organization;
-                break;
+        if (ent != null) {
+            for (Organization organization : ent.getOrganizationDirectory().getOrganizationList()) {
+                if(organization instanceof LogisticsOrganization) { // This seems incorrect for Legal/Government, should be GovernmentOrganization
+                    org = organization;
+                    break;
+                }
             }
         }
         
         if (org != null) {
-            // WORK REQUEST
-        
-            WorkRequest request = new System_Coordinator_Test_WorkRequest();
-
-            request.setPatient(patient);
+            WorkRequest request = new System_Coordinator_Test_WorkRequest(); // This request type seems generic, might need a more specific one
+            request.setPatient(patient); // Set the updated patient
             request.setActionDate(new Date());
             request.setAssigned("Legal Department");
-            request.setSummary("Requested for BoneMarrow Reception");
+            request.setSummary("Requested for BoneMarrow Reception"); // This summary is hardcoded, needs to be dynamic
             request.setStatus("Assigned to Legal Department");
-
             request.setUserAccount(userAccount);
             org.getWorkQueue().getWorkRequestList().add(request);
             System.out.println(org.getName());
             userAccount.getWorkQueue().getWorkRequestList().add(request);
-            //user.addUserRequest(request);
             
             dB4OUtil.storeSystem(system);
             populateRequestTable();
             JOptionPane.showMessageDialog(null, new JLabel(  "<html><b>Request approved successfully!</b></html>"));
             statusText.setText("Centre Approved");
            
-            //JOptionPane.showMessageDialog(null,"Request Sent Successfully", "Info", JOptionPane.INFORMATION_MESSAGE);
-            
         } else {
-        
-         JOptionPane.showMessageDialog(null, "No organization present", "Error", JOptionPane.ERROR_MESSAGE);
-         return;
+            JOptionPane.showMessageDialog(null, "No organization present", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
 
-        
         dB4OUtil.storeSystem(system);
         populateRequestTable();
-      //  JOptionPane.showMessageDialog(null,"New patient has been added!");
-        
         }
     }//GEN-LAST:event_buttonSendForFundingActionPerformed
 
@@ -513,14 +506,14 @@ public class PrepareOrderDetailsJPanel extends javax.swing.JPanel {
     // End of variables declaration//GEN-END:variables
 
     private void populateRequestDetails(PatientRequest patientRequest) {
-            uidText.setText(patientRequest.getReceiverID());
-            nameText.setText(patientRequest.getName());
-            bloodTypeText.setText(patientRequest.getBloodType().toString());
-            contactText.setText(String.valueOf(patientRequest.getContact()));
-            emailText.setText(patientRequest.getEmailID());
-            statusText.setText(patientRequest.getStatus());
+            uidText.setText(patientRequest.getPatient().getReceiverID());
+            nameText.setText(patientRequest.getPatient().getName());
+            bloodTypeText.setText(patientRequest.getPatient().getBloodType().toString());
+            contactText.setText(String.valueOf(patientRequest.getPatient().getContact()));
+            emailText.setText(patientRequest.getPatient().getEmailID());
+            statusText.setText(patientRequest.getStatus()); // Status is on PatientRequest
             
-            labConfirmationText.setText(String.valueOf(patientRequest.isLabConfirmation()));
+            labConfirmationText.setText(String.valueOf(patientRequest.getPatient().isLabConfirmation()));
              
             uidText.setEditable(false);
             nameText.setEditable(false);

@@ -17,6 +17,8 @@ public class HospitalEnterprise extends Enterprise {
     // Constructor to initialize the HospitalEnterprise
     public HospitalEnterprise(String name) {
         super(name, EnterpriseType.Hospital);
+        this.addOrganizationType(Type.Hospital);
+        this.addOrganizationType(Type.TransplantClinic);
     }
 
     // Method to get the supported roles for this enterprise

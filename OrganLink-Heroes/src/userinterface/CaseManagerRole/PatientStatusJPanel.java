@@ -56,13 +56,13 @@ public class PatientStatusJPanel extends javax.swing.JPanel {
         
         dtm.setRowCount(0);
         
-         for(PatientRequest patient: system.getPatientRequestDirectory().getPatientRequestList())
+         for(PatientRequest patientRequest: system.getPatientRequestDirectory().getPatientRequestList())
          {            
             Object row[] = new Object[4];
-            row[0]= patient;
-            row[1]=patient.getName();
-            row[2]=patient.getContact();
-            row[3]=patient.getStatus();
+            row[0]= patientRequest;
+            row[1]=patientRequest.getPatient().getName(); // Access via getPatient()
+            row[2]=patientRequest.getPatient().getContact(); // Access via getPatient()
+            row[3]=patientRequest.getStatus();
               
             dtm.addRow(row);
          }

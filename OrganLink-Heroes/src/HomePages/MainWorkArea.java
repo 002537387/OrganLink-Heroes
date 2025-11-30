@@ -20,7 +20,7 @@ public class MainWorkArea extends javax.swing.JPanel {
     EcoSystem system;
 
     /** Creates new form MainWorkArea */
-    public MainWorkArea(EcoSystem system, JPanel mainProcessContainer, JPanel workAreaPanel) {
+    public MainWorkArea(EcoSystem system, JPanel workAreaPanel, JPanel mainProcessContainer) {
         initComponents();
         this.system = system;
         this.mainProcessContainer = mainProcessContainer;
@@ -96,10 +96,14 @@ public class MainWorkArea extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLogOutActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnLogOutActionPerformed
-        // TODO add your handling code here:
-        mainProcessContainer.add("LoginJPanel", new LoginJPanel(system, mainProcessContainer));
-        CardLayout layout = (CardLayout) mainProcessContainer.getLayout();
-        layout.next(mainProcessContainer);
+         // Remove the current MainWorkArea panel from the mainProcessContainer
+         mainProcessContainer.removeAll();
+         // Add a new LoginJPanel to the mainProcessContainer
+         LoginJPanel loginScreen = new LoginJPanel(system, mainProcessContainer);
+         mainProcessContainer.add("LoginJPanel", loginScreen);
+         // Show the new LoginJPanel
+         CardLayout layout = (CardLayout) mainProcessContainer.getLayout();
+         layout.next(mainProcessContainer);
     }// GEN-LAST:event_btnLogOutActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

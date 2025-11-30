@@ -346,7 +346,7 @@ public class CreateDonorJPanel extends javax.swing.JPanel {
         
         System.out.println(contactTextField.getText());  
         donor.setContact((int) Double.parseDouble(contactTextField.getText())); 
-        donor.setHLA(system.getPersonBloodTypes().findBloodType(hlaTypeTextField.getText()));
+        donor.setBloodType(system.getPersonBloodTypes().findBloodType(hlaTypeTextField.getText()));
         donor.setStatus("Government Approved");
         system.getDonorDirectory().addDonor(donor);
 

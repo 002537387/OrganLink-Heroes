@@ -40,7 +40,6 @@ public class PickCustomerActionJPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         donorSignUpBtn = new javax.swing.JButton();
-        patientRegistrationBtn = new javax.swing.JButton();
         trackID = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(0, 153, 153));
@@ -54,17 +53,6 @@ public class PickCustomerActionJPanel extends javax.swing.JPanel {
         donorSignUpBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 donorSignUpBtnActionPerformed(evt);
-            }
-        });
-
-        patientRegistrationBtn.setBackground(new java.awt.Color(0, 102, 102));
-        patientRegistrationBtn.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        patientRegistrationBtn.setForeground(new java.awt.Color(204, 255, 204));
-        patientRegistrationBtn.setText("Request");
-        patientRegistrationBtn.setBorder(new javax.swing.border.MatteBorder(null));
-        patientRegistrationBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                patientRegistrationBtnActionPerformed(evt);
             }
         });
 
@@ -82,37 +70,23 @@ public class PickCustomerActionJPanel extends javax.swing.JPanel {
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addContainerGap(321, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout
-                                                .createSequentialGroup()
-                                                .addComponent(donorSignUpBtn, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                        337, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(31, 31, 31)
-                                                .addComponent(patientRegistrationBtn,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE, 336,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
-                                                layout.createSequentialGroup()
-                                                        .addComponent(trackID, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                336, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addGap(182, 182, 182)))
-                                .addGap(255, 255, 255)));
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(321, Short.MAX_VALUE)
+                .addComponent(donorSignUpBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31)
+                .addComponent(trackID, javax.swing.GroupLayout.PREFERRED_SIZE, 336, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(255, 255, 255))
+        );
         layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                                .addGap(270, 270, 270)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(donorSignUpBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 72,
-                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(patientRegistrationBtn, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                72, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(35, 35, 35)
-                                .addComponent(trackID, javax.swing.GroupLayout.PREFERRED_SIZE, 68,
-                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(275, Short.MAX_VALUE)));
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(270, 270, 270)
+                .addComponent(donorSignUpBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(35, 35, 35)
+                .addComponent(trackID, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(275, Short.MAX_VALUE))
+        );
     }// </editor-fold>//GEN-END:initComponents
 
     private void donorSignUpBtnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_donorSignUpBtnActionPerformed
@@ -121,16 +95,11 @@ public class PickCustomerActionJPanel extends javax.swing.JPanel {
         layout.next(customerProcessContainer);
     }// GEN-LAST:event_donorSignUpBtnActionPerformed
 
-    private void patientRegistrationBtnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_patientRegistrationBtnActionPerformed
-        customerProcessContainer.add("BloodRequest", new BloodRequestJPanel(system, customerProcessContainer));
-        CardLayout layout = (CardLayout) customerProcessContainer.getLayout();
-        layout.next(customerProcessContainer);
 
-    }// GEN-LAST:event_patientRegistrationBtnActionPerformed
 
     private void trackIDActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_trackIDActionPerformed
         // TODO add your handling code here:
-        customerProcessContainer.add("BloodRequest", new TrackStatusJPanel(system, customerProcessContainer));
+        customerProcessContainer.add("TrackingDonorApplicationListJPanel", new TrackingDonorApplicationListJPanel(system, customerProcessContainer));
         CardLayout layout = (CardLayout) customerProcessContainer.getLayout();
         layout.next(customerProcessContainer);
 

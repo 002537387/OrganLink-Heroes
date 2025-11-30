@@ -4,8 +4,6 @@
  */
 package Business.Requests;
 
-import Business.BloodTypes.BloodInventory;
-import Business.BloodTypes.BloodTransaction;
 import Business.BloodTypes.PersonBloodTypes;
 import Business.EcoSystem;
 import java.util.ArrayList;
@@ -51,11 +49,5 @@ public class DonorRequestDirectory {
     // Method to get the EcoSystem associated with this directory
     public EcoSystem getEcoSystem(){
         return system;
-    }
-    
-    // Register a donor application for blood inventory transaction
-    public void registerDonorApplicationForInventory(PersonBloodTypes.BloodType bloodType, DonorRequest request) {
-        BloodInventory inventory = system.getInventory();
-        inventory.addTransaction(bloodType, 1, BloodTransaction.TransactionType.In, request);
     }
 }

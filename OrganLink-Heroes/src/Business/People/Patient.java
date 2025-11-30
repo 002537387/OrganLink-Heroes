@@ -32,6 +32,8 @@ public class Patient {
     private Date treatmentDate; // Date of Cancer treatment done 
     private String imagePath;
     private byte[] dP;
+    private String tissueMarkers; // Added for tissue compatibility
+    private String antibodyProfile; // Added for antibody profile
 
     public Patient() {
     }
@@ -172,6 +174,22 @@ public class Patient {
     }
     public void setTreatmentDate(Date treatmentDate) {       
         this.treatmentDate = treatmentDate;    
+    }
+
+    public String getTissueMarkers() {
+        return tissueMarkers;
+    }
+
+    public void setTissueMarkers(String tissueMarkers) {
+        this.tissueMarkers = tissueMarkers;
+    }
+
+    public String getAntibodyProfile() {
+        return antibodyProfile;
+    }
+
+    public void setAntibodyProfile(String antibodyProfile) {
+        this.antibodyProfile = antibodyProfile;
     }
     
     // Override toString method for patient ID

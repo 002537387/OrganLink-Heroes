@@ -6,6 +6,7 @@
 package Business.Enterprise;
 
 import Business.Role.Role;
+import Business.Role.InternationalAffairsOfficerRole; // Added import
 import java.util.ArrayList;
 
 /**
@@ -25,6 +26,8 @@ public class GovernmentEnterprise extends Enterprise {
     // null)
     @Override
     public ArrayList<Role> getSupportedRole() {
-        return null;
+        ArrayList<Role> roles = new ArrayList<>();
+        roles.add(new InternationalAffairsOfficerRole());
+        return roles;
     }
 }

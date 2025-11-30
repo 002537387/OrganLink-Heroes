@@ -19,7 +19,7 @@ import Business.UserAccount.UserAccount;
 import java.awt.CardLayout;
 import java.awt.Color;
 import javax.swing.JPanel;
-import userinterface.CommonPanels.BloodRequestsListJPanel;
+import javax.swing.JOptionPane; // Added import for JOptionPane
 
 
 public class GovernmentCoordinatorWorkAreaJPanel extends javax.swing.JPanel {
@@ -76,7 +76,8 @@ public class GovernmentCoordinatorWorkAreaJPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         Header = new javax.swing.JPanel();
-        BtnDonorStatus = new javax.swing.JLabel();
+        btnDetectSuspiciousActivity = new javax.swing.JLabel(); // Added
+        btnViewAntiTraffickingAlerts = new javax.swing.JLabel(); // Added
         userProcessContainer = new javax.swing.JPanel();
 
         setPreferredSize(new java.awt.Dimension(800, 500));
@@ -87,17 +88,29 @@ public class GovernmentCoordinatorWorkAreaJPanel extends javax.swing.JPanel {
         Header.setPreferredSize(new java.awt.Dimension(800, 50));
         Header.setLayout(new java.awt.GridLayout(1, 0));
 
-        BtnDonorStatus.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        BtnDonorStatus.setForeground(new java.awt.Color(204, 255, 204));
-        BtnDonorStatus.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        BtnDonorStatus.setText("Blood Request Forms");
-        BtnDonorStatus.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        BtnDonorStatus.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnDetectSuspiciousActivity.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        btnDetectSuspiciousActivity.setForeground(new java.awt.Color(204, 255, 204));
+        btnDetectSuspiciousActivity.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnDetectSuspiciousActivity.setText("Detect Suspicious Activity");
+        btnDetectSuspiciousActivity.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnDetectSuspiciousActivity.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                BtnDonorStatusMouseClicked(evt);
+                btnDetectSuspiciousActivityMouseClicked(evt);
             }
         });
-        Header.add(BtnDonorStatus);
+        Header.add(btnDetectSuspiciousActivity);
+
+        btnViewAntiTraffickingAlerts.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        btnViewAntiTraffickingAlerts.setForeground(new java.awt.Color(204, 255, 204));
+        btnViewAntiTraffickingAlerts.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnViewAntiTraffickingAlerts.setText("View Anti-Trafficking Alerts");
+        btnViewAntiTraffickingAlerts.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnViewAntiTraffickingAlerts.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnViewAntiTraffickingAlertsMouseClicked(evt);
+            }
+        });
+        Header.add(btnViewAntiTraffickingAlerts);
 
         add(Header, java.awt.BorderLayout.PAGE_START);
 
@@ -106,20 +119,27 @@ public class GovernmentCoordinatorWorkAreaJPanel extends javax.swing.JPanel {
         add(userProcessContainer, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void BtnDonorStatusMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BtnDonorStatusMouseClicked
-        // TODO add your handling code here:
-        
-        userProcessContainer.removeAll();
-        BloodRequestsListJPanel panel = new BloodRequestsListJPanel(system, userAccount, network, userProcessContainer);
-        userProcessContainer.add("BloodRequestsListJPanel", panel);
-        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
-        layout.next(userProcessContainer);
-    }//GEN-LAST:event_BtnDonorStatusMouseClicked
+    private void btnDetectSuspiciousActivityMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDetectSuspiciousActivityMouseClicked
+        system.detectSuspiciousActivity();
+        JOptionPane.showMessageDialog(this, "Suspicious activity detection initiated. Check alerts!", "Success", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_btnDetectSuspiciousActivityMouseClicked
+
+    private void btnViewAntiTraffickingAlertsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnViewAntiTraffickingAlertsMouseClicked
+        // TODO: Navigate to ViewAntiTraffickingAlertsJPanel
+        // Example:
+        // ViewAntiTraffickingAlertsJPanel viewAlertsJPanel = new ViewAntiTraffickingAlertsJPanel(userProcessContainer, system, govtorganization);
+        // userProcessContainer.add("ViewAntiTraffickingAlertsJPanel", viewAlertsJPanel);
+        // CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+        // layout.next(userProcessContainer);
+    }//GEN-LAST:event_btnViewAntiTraffickingAlertsMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel BtnDonorStatus;
     private javax.swing.JPanel Header;
+    private javax.swing.JLabel btnDetectSuspiciousActivity;
+    private javax.swing.JLabel btnViewAntiTraffickingAlerts;
     private javax.swing.JPanel userProcessContainer;
     // End of variables declaration//GEN-END:variables
 }
+
+

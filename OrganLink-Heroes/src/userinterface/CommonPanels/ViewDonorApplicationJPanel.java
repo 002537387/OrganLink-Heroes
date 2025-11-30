@@ -664,17 +664,17 @@ public class ViewDonorApplicationJPanel extends javax.swing.JPanel {
 
     private void populateDonorRequestData() {
         
-        uidText.setText(donorRequest.getDonorID());
-        nameText.setText(donorRequest.getName());
-        dobDateField.setDate(donorRequest.getDob());
-        ageText.setText(String.valueOf(donorRequest.getAge()));
-        genderJComboBox.setSelectedItem(donorRequest.getGender());
-        streetText.setText(donorRequest.getStreetAddress());
-        cityText.setText(donorRequest.getCity());
-        stateJComboBox.setSelectedItem(donorRequest.getState());
-        zipText.setText(String.valueOf(donorRequest.getZipCode()));
-        contactText.setText(String.valueOf(donorRequest.getContact()));
-        emailText.setText(donorRequest.getEmailID());
+        uidText.setText(donorRequest.getDonor().getDonorID());
+        nameText.setText(donorRequest.getDonor().getName());
+        dobDateField.setDate(donorRequest.getDonor().getDob());
+        ageText.setText(String.valueOf(donorRequest.getDonor().getAge()));
+        genderJComboBox.setSelectedItem(donorRequest.getDonor().getGender());
+        streetText.setText(donorRequest.getDonor().getStreetAddress());
+        cityText.setText(donorRequest.getDonor().getCity());
+        stateJComboBox.setSelectedItem(donorRequest.getDonor().getState());
+        zipText.setText(String.valueOf(donorRequest.getDonor().getZipCode()));
+        contactText.setText(String.valueOf(donorRequest.getDonor().getContact()));
+        emailText.setText(donorRequest.getDonor().getEmailID());
         btnNoQ1.setSelected(true);
         btnNoQ2.setSelected(true);
         btnNoQ4.setSelected(true);

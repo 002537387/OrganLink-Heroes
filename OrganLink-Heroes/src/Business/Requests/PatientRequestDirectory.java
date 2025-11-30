@@ -4,8 +4,6 @@
  */
 package Business.Requests;
 
-import Business.BloodTypes.BloodInventory;
-import Business.BloodTypes.BloodTransaction;
 import Business.BloodTypes.PersonBloodTypes;
 import Business.EcoSystem;
 import Business.Requests.DonorRequest;
@@ -50,11 +48,5 @@ public class PatientRequestDirectory {
     // Getter for the EcoSystem instance
     public EcoSystem getEcoSystem() {
         return system;
-    }
-
-    // Method to register a blood request in the inventory
-    public void registerBloodRequestForInventory(PersonBloodTypes.BloodType bloodType, PatientRequest request, int volume) {
-        BloodInventory inventory = system.getInventory();
-        inventory.addTransaction(bloodType, volume, BloodTransaction.TransactionType.Out, request);
     }
 }

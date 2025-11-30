@@ -27,7 +27,8 @@ public class LoginJPanel extends javax.swing.JPanel {
      */
     EcoSystem system;
     JPanel mainProcessContainer;
-
+    MainJFrame mainJframe;
+    
     public LoginJPanel(EcoSystem system, JPanel mainProcessContainer) {
         initComponents();
 
@@ -195,11 +196,14 @@ public class LoginJPanel extends javax.swing.JPanel {
             System.out.println(userAccount.getRole());
             System.out.println(system);
 
+            // Clear the mainProcessContainer before adding the new panel
+            mainProcessContainer.removeAll();
+
             CardLayout layout = (CardLayout) mainProcessContainer.getLayout();
             JPanel loggedInWorkArea = userAccount.getRole().createWorkArea(mainProcessContainer, userAccount,
                     inOrganization, inEnterprise, system, inNetwork);
 
-            MainWorkArea mainWorkArea = new MainWorkArea(system, mainProcessContainer, loggedInWorkArea);
+            MainWorkArea mainWorkArea = new MainWorkArea(system, loggedInWorkArea, mainProcessContainer);
             mainProcessContainer.add("MainWorkArea", mainWorkArea);
             layout.next(mainProcessContainer);
         }

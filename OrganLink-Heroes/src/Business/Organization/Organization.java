@@ -30,10 +30,12 @@ public abstract class Organization {
     private static int counter = 0;
     private ArrayList<PersonBloodTypes> allHLAs;
     private DB4OUtil dB4OUtil = DB4OUtil.getInstance();
+    private Type type; // New member variable for Organization Type
 
     // Enum to define different types of organizations
     public enum Type {
         Admin("Admin Organization"),
+        System("System Organization"), // Added System Organization type
         Government("Government Agency Organization"),
         ThirdParty("ThirdParty Organization"),
         Laboratory("Laboratory Organization"),
@@ -50,12 +52,23 @@ public abstract class Organization {
         public String getValue() {
             return value;
         }
+        
+        // Helper method to get Type from its string value
+        public static Type fromValue(String value) {
+            for (Type type : Type.values()) {
+                if (type.getValue().equals(value)) {
+                    return type;
+                }
+            }
+            throw new IllegalArgumentException("Unknown Organization Type value: " + value);
+        }
     }
 
     // Constructor to initialize the organization with name and directory
-    public Organization(String name, OrganizationDirectory directory, String type) {
+    public Organization(String name, OrganizationDirectory directory, String typeString) {
         this.realName = name;
-        this.name = type;
+        this.name = typeString; // Name is set from typeString, should be actual type
+        this.type = Type.fromValue(typeString); // Convert typeString to Type enum using helper
         this.directory = directory;
         workQueue = new WorkQueue();  // Initialize work queue
         System.out.println("initialise work queue");
@@ -83,6 +96,11 @@ public abstract class Organization {
 
     public String getName() {
         return name;
+    }
+    
+    // New getter for Type enum
+    public Type getType() {
+        return type;
     }
 
     public WorkQueue getWorkQueue() {

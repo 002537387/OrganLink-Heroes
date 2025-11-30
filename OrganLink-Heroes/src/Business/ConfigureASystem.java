@@ -3,7 +3,9 @@ package Business;
 import Business.Employee.Employee;
 import Business.Enterprise.Enterprise;
 import Business.Network.Network;
+import Business.OrganTypes.OrganType;
 import Business.Organization.Organization;
+import Business.People.Patient;
 import Business.Requests.PatientRequest;
 import Business.Requests.PatientRequestDirectory;
 import Business.Role.CaseManagerRole;
@@ -12,6 +14,7 @@ import Business.Role.LabTechnicianRole;
 import Business.Role.HospitalOfficerRole;
 import Business.Role.LogisticsOfficerRole;
 import Business.Role.SystemAdminRole;
+import Business.Statuses.RequestStatus;
 import Business.UserAccount.UserAccount;
 
 /**
@@ -22,13 +25,28 @@ public class ConfigureASystem {
 
     // Let's create a sample patient request to test our setup
     public static void addSampleRequestData(EcoSystem system) {
-        PatientRequestDirectory prd = system.getPatientRequestDirectory();
-        PatientRequest sampleRequest = new PatientRequest(prd);
-        sampleRequest.setName("Jack");
-        sampleRequest.setAge(35);
-        sampleRequest.setCity("Boston");
-        sampleRequest.setEmailID("jack@northeastern.edu");
-        prd.addPatientRequest(sampleRequest);
+        // Create a Patient object
+        Patient samplePatient = new Patient();
+        samplePatient.setName("Jack");
+        samplePatient.setAge(35);
+        samplePatient.setCity("Boston");
+        samplePatient.setEmailID("jack@northeastern.edu");
+        samplePatient.setReceiverID("PAT-Sample-001"); // Example ID
+        // Assuming other Patient attributes are set elsewhere or default
+
+        // Add the patient to the system's patient directory
+        system.getPatientDirectory().addPatient(samplePatient);
+
+        // Create a PatientRequest and link it to the Patient
+        PatientRequest sampleRequest = new PatientRequest();
+        sampleRequest.setPatient(samplePatient); // Link the patient
+        sampleRequest.setStatus(RequestStatus.PatientRequestStatus.PENDING_VERIFICATION.getValue()); // Set initial status
+        sampleRequest.setRequiredOrganType(OrganType.KIDNEY.getValue()); // Example required organ
+        sampleRequest.setMedicalUrgencyLevel("Medium"); // Example urgency level
+
+
+        // Add the PatientRequest to the system's PatientRequestDirectory
+        system.getPatientRequestDirectory().addPatientRequest(sampleRequest);
     }
 
     // This method configures the entire ecosystem with some default enterprises, organizations and users
@@ -38,7 +56,7 @@ public class ConfigureASystem {
 
         // Setting up a new network for the US region
         Network worldCordNetwork = system.createAndAddNetwork();
-        worldCordNetwork.setName("Hearbeat Heroes");
+        worldCordNetwork.setName("OrganLink Heroes");
         worldCordNetwork.setCountry("US");
 
         Enterprise thirdParty = worldCordNetwork.getEnterpriseDirectory().createAndAddEnterprise("US Third Party", Enterprise.EnterpriseType.ThirdParty);
@@ -91,7 +109,7 @@ public class ConfigureASystem {
         Employee employee = system.getEmployeeDirectory().createEmployee("sysadmin");
         UserAccount ua = system.getUserAccountDirectory().createUserAccount("sysadmin", "sysadmin", employee, new SystemAdminRole());
 
-        // addSampleRequestData(system);
+        addSampleRequestData(system); // Uncommented
         return system;
     }
 }

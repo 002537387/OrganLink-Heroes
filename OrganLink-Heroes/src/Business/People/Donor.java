@@ -6,6 +6,7 @@ package Business.People;
 
 import Business.BloodTypes.PersonBloodTypes;
 import Business.BloodTypes.PersonBloodTypes.BloodType;
+import Business.Employee.Employee; // Added import
 import java.util.Date;
 
 /**
@@ -27,16 +28,25 @@ public class Donor {
     private long contact;
     private String emailID;
     private String status;
-    private Date  lastDonationDate;
     private boolean brainInjury;
     private boolean diabitiesBP;       // Currently you do NOT have any diabitiesBP? 
     private boolean breathingProb;
     private String imagePath; 
     private byte[] dP;
     private Date cancerDiagnosedDate;
+    private String tissueMarkers; // Added for tissue compatibility
+    private String antibodyProfile; // Added for antibody profile
 
     // Default constructor
     public Donor(){
+    }
+    
+    // Method to create an Employee object from this Donor
+    public Employee createEmployeeFromDonor() {
+        Employee employee = new Employee();
+        employee.setName(this.name);
+        // You might want to set other employee attributes here if they apply
+        return employee;
     }
     
     // Getter and Setter for imagePath
@@ -76,7 +86,7 @@ public class Donor {
     public void setGender(String gender) { this.gender = gender; } // Set donor's gender
 
     public BloodType getBloodType() { return this.bloodType; } // Get blood type
-    public void setHLA(BloodType bloodType) { this.bloodType = bloodType; } // Set blood type
+    public void setBloodType(BloodType bloodType) { this.bloodType = bloodType; } // Set blood type
 
     public String getStreetAddress() { return streetAddress; } // Get street address
     public void setStreetAddress(String streetAddress) { this.streetAddress = streetAddress; } // Set street address
@@ -96,9 +106,6 @@ public class Donor {
     public String getStatus() { return status; }            // Get donor's status
     public void setStatus(String status) { this.status = status; } // Set donor's status
 
-    public Date getLastDonationDate() { return lastDonationDate; } // Get last donation date
-    public void setLastDonationDate(Date lastDonationDate) { this.lastDonationDate = lastDonationDate; } // Set last donation date
-
     public boolean isBrainInjury() { return brainInjury; }  // Check if donor has brain injury
     public void setBrainInjury(boolean brainInjury) { this.brainInjury = brainInjury; } // Set brain injury status
 
@@ -109,6 +116,25 @@ public class Donor {
     public void setBreathingProb(boolean breathingProb) { this.breathingProb = breathingProb; } // Set breathing problem status
 
     public void setCancerDiagnosedDate(Date date) { this.cancerDiagnosedDate = date; } // Set cancer diagnosed date
+    
+    // Getter and Setter for tissueMarkers
+    public String getTissueMarkers() {
+        return tissueMarkers;
+    }
+
+    public void setTissueMarkers(String tissueMarkers) {
+        this.tissueMarkers = tissueMarkers;
+    }
+
+    // Getter and Setter for antibodyProfile
+    public String getAntibodyProfile() {
+        return antibodyProfile;
+    }
+
+    public void setAntibodyProfile(String antibodyProfile) {
+        this.antibodyProfile = antibodyProfile;
+    }
+
     
     @Override
     public String toString() {

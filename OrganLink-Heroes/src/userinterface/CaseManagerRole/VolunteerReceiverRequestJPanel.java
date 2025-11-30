@@ -65,8 +65,8 @@ public class VolunteerReceiverRequestJPanel extends javax.swing.JPanel {
          for(PatientRequest patientRequest: system.getPatientRequestDirectory().getPatientRequestList()){            
             Object row[] = new Object[4];
             row[0]= patientRequest;
-            row[1]= patientRequest.getName();
-            row[2]= patientRequest.getContact();
+            row[1]= patientRequest.getPatient().getName(); // Access via getPatient()
+            row[2]= patientRequest.getPatient().getContact(); // Access via getPatient()
             row[3]= patientRequest.getStatus();
               
             dtm.addRow(row);
@@ -403,61 +403,63 @@ public class VolunteerReceiverRequestJPanel extends javax.swing.JPanel {
         if( !statusText.getText().equals("New Request"))
             {
                 JOptionPane.showMessageDialog(null, new JLabel(  "<html><b>Request can not be approved!</b></html>"), "Warning", JOptionPane.WARNING_MESSAGE);
-           
-                
-            //    JOptionPane.showMessageDialog(null,"Can Not Approve the Request!");
             }
         
         else
         {
         
-        Patient patient = new Patient();
+        PatientRequest selectedPatientRequest = null;
+        for(PatientRequest pr : system.getPatientRequestDirectory().getPatientRequestList()){
+            if(pr.getPatient().getReceiverID().equals(uidText.getText())){
+                selectedPatientRequest = pr;
+                break;
+            }
+        }
+        
+        if (selectedPatientRequest == null) {
+            JOptionPane.showMessageDialog(null, "Patient Request not found for selected UID.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        Patient patient = selectedPatientRequest.getPatient();
         
         try {
-
             patient.setBloodType(system.getPersonBloodTypes().findBloodType(hlaText.getText()));
         }
         catch (Exception e) {
             JOptionPane.showMessageDialog(null, new JLabel("<html><b>Please check the patients blood group. It Should be AN,AP,BP,BN,ABP,ABN,OP,ON where N-Negative, P-Positive.</b></html>"), "Warning", JOptionPane.WARNING_MESSAGE);
-
             return;
         }
         
         patient.setName(nameText.getText());
         patient.setContact(Long.parseLong(contactText.getText()));  
         
-        patient.setReceiverID(uidText.getText()); // UID, receiverID
-        patient.setName(nameText.getText()); // Name
+        patient.setReceiverID(uidText.getText()); 
+        patient.setName(nameText.getText()); 
        
        
+        patient.setAge(Integer.parseInt(ageText.getText())); 
+        patient.setGender(genderText.getText()); 
         
-        patient.setAge(Integer.parseInt(ageText.getText())); // Age
-        patient.setGender(genderText.getText()); // gender
-        
-        patient.setStreetAddress(streetText.getText()); // streetAddress
-        patient.setCity(cityText.getText()); // city
-        patient.setState(stateText.getText()); // state
-        patient.setZipCode(Integer.parseInt(zipText.getText())); // zipCode
-        patient.setContact(Long.parseLong(contactText.getText())); // contact
-        patient.setEmailID(emailText.getText()); // emailID
-        patient.setStatus("Centre Approved"); // status
-        patient.setLabConfirmation(true); //  labConfirmation
-        system.getPatientDirectory().addPatient(patient);
+        patient.setStreetAddress(streetText.getText()); 
+        patient.setCity(cityText.getText()); 
+        patient.setState(stateText.getText()); 
+        patient.setZipCode(Integer.parseInt(zipText.getText())); 
+        patient.setContact(Long.parseLong(contactText.getText())); 
+        patient.setEmailID(emailText.getText()); 
+        patient.setStatus("Centre Approved"); 
+        patient.setLabConfirmation(true); 
       
-        
-        for(PatientRequest patientRequest: system.getPatientRequestDirectory().getPatientRequestList()){                      
-        
-            if(patientRequest.getReceiverID().equals(uidText.getText())){
-            patientRequest.setStatus("Centre Approved");
-            dB4OUtil.storeSystem(system);
-            }
-        }
+        // No need to add patient to directory again, it's already linked to the request
+        // system.getPatientDirectory().addPatient(patient); 
+      
+        selectedPatientRequest.setStatus("Centre Approved");
        
         Enterprise ent = null;
         Organization org = null;
         
         for (Enterprise enterprise : network.getEnterpriseDirectory().getEnterpriseList()) {
-            if (enterprise.getEnterpriseType().toString().equals("Legal")) {
+            if (enterprise.getEnterpriseType().toString().equals("Legal")) { // Assuming "Legal" maps to Government
             
                 ent = enterprise;
                 System.out.println(enterprise);
@@ -467,10 +469,12 @@ public class VolunteerReceiverRequestJPanel extends javax.swing.JPanel {
         
         
        
-        for (Organization organization : ent.getOrganizationDirectory().getOrganizationList()) {
-            if(organization instanceof LogisticsOrganization) {
-                org = organization;
-                break;
+        if (ent != null) {
+            for (Organization organization : ent.getOrganizationDirectory().getOrganizationList()) {
+                if(organization instanceof LogisticsOrganization) { // This seems incorrect for Legal/Government, should be GovernmentOrganization
+                    org = organization;
+                    break;
+                }
             }
         }
         
@@ -489,14 +493,12 @@ public class VolunteerReceiverRequestJPanel extends javax.swing.JPanel {
             org.getWorkQueue().getWorkRequestList().add(request);
             System.out.println(org.getName());
             userAccount.getWorkQueue().getWorkRequestList().add(request);
-            //user.addUserRequest(request);
             
             dB4OUtil.storeSystem(system);
             populateRequestTable();
             JOptionPane.showMessageDialog(null, new JLabel(  "<html><b>Request approved successfully!</b></html>"));
             statusText.setText("Centre Approved");
            
-            //JOptionPane.showMessageDialog(null,"Request Sent Successfully", "Info", JOptionPane.INFORMATION_MESSAGE);
             
         } else {
         
@@ -524,7 +526,7 @@ public class VolunteerReceiverRequestJPanel extends javax.swing.JPanel {
        else{
         for(PatientRequest patientRequest: system.getPatientRequestDirectory().getPatientRequestList()){                      
         
-            if(patientRequest.getName().equals(nameText.getText())){
+            if(patientRequest.getPatient().getName().equals(nameText.getText())){
             statusText.setText("Rejected");
             patientRequest.setStatus("Rejected");
             }}
@@ -555,7 +557,7 @@ public class VolunteerReceiverRequestJPanel extends javax.swing.JPanel {
             buttonApprove.setEnabled(true);
             buttonReject.setEnabled(true);
             
-            if(Integer.parseInt(ageText.getText()) < 18)
+            if(patientRequest.getPatient().getAge() < 18) // Access via getPatient()
             {
             ageText.setBorder(BorderFactory.createLineBorder(Color.RED));
             ageText.setForeground(Color.red);
@@ -564,7 +566,7 @@ public class VolunteerReceiverRequestJPanel extends javax.swing.JPanel {
                 ageText.setBorder(BorderFactory.createLineBorder(Color.BLACK));
                 ageText.setForeground(Color.black);
             }
-            if(labConfirmationText.getText().equals("false"))
+            if(!patientRequest.getPatient().isLabConfirmation()) // Access via getPatient()
             {
                 labConfirmationText.setBorder(BorderFactory.createLineBorder(Color.RED));
                 labConfirmationText.setForeground(Color.red);
@@ -643,25 +645,25 @@ public class VolunteerReceiverRequestJPanel extends javax.swing.JPanel {
     // End of variables declaration//GEN-END:variables
 
     private void populateRequestDetails(PatientRequest patientRequest) {
-            uidText.setText(patientRequest.getReceiverID());
-            nameText.setText(patientRequest.getName());
-            dobDateField.setDate(patientRequest.getDob());
-            ageText.setText(String.valueOf(patientRequest.getAge()));
-            genderText.setText(patientRequest.getGender());
-            hlaText.setText(patientRequest.getBloodType().toString());
-            streetText.setText(patientRequest.getStreetAddress());
-            cityText.setText(patientRequest.getCity());
-            stateText.setText(patientRequest.getState());
-            zipText.setText(String.valueOf(patientRequest.getZipCode()));
-            contactText.setText(String.valueOf(patientRequest.getContact()));
-            emailText.setText(patientRequest.getEmailID());
-            statusText.setText(patientRequest.getStatus());
+            uidText.setText(patientRequest.getPatient().getReceiverID());
+            nameText.setText(patientRequest.getPatient().getName());
+            dobDateField.setDate(patientRequest.getPatient().getDob());
+            ageText.setText(String.valueOf(patientRequest.getPatient().getAge()));
+            genderText.setText(patientRequest.getPatient().getGender());
+            hlaText.setText(patientRequest.getPatient().getBloodType().toString());
+            streetText.setText(patientRequest.getPatient().getStreetAddress());
+            cityText.setText(patientRequest.getPatient().getCity());
+            stateText.setText(patientRequest.getPatient().getState());
+            zipText.setText(String.valueOf(patientRequest.getPatient().getZipCode()));
+            contactText.setText(String.valueOf(patientRequest.getPatient().getContact()));
+            emailText.setText(patientRequest.getPatient().getEmailID());
+            statusText.setText(patientRequest.getStatus()); // Status is on PatientRequest
             
-            labConfirmationText.setText(String.valueOf(patientRequest.isLabConfirmation()));
+            labConfirmationText.setText(String.valueOf(patientRequest.getPatient().isLabConfirmation()));
             
-             if(patientRequest.getdP() !=null){
+             if(patientRequest.getPatient().getdP() !=null){ // Access via getPatient()
             //Working line
-            byte[] JLabelpictureLabel = patientRequest.getdP();
+            byte[] JLabelpictureLabel = patientRequest.getPatient().getdP(); // Access via getPatient()
             ImageIcon i = setPicturebyte(JLabelpictureLabel);
             lblProfilePicture.setIcon(i);
             }

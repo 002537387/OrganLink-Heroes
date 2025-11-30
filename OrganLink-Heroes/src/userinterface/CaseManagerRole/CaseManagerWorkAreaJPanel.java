@@ -5,8 +5,6 @@
  */
 package userinterface.CaseManagerRole;
 
-
-import userinterface.CommonPanels.BloodRequestsListJPanel;
 import Business.DB4OUtil.DB4OUtil;
 import Business.EcoSystem;
 import Business.Enterprise.Enterprise;
@@ -81,8 +79,6 @@ public class CaseManagerWorkAreaJPanel extends javax.swing.JPanel {
         Header = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
-        btnManageInventory = new javax.swing.JLabel();
-        btnPrepareOrder = new javax.swing.JLabel();
         btnReceiveRequests = new javax.swing.JLabel();
         userProcessContainer = new javax.swing.JPanel();
 
@@ -124,29 +120,6 @@ public class CaseManagerWorkAreaJPanel extends javax.swing.JPanel {
 
         Header.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 0, 100, 50));
 
-        btnManageInventory.setBackground(new java.awt.Color(204, 255, 204));
-        btnManageInventory.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        btnManageInventory.setForeground(new java.awt.Color(204, 255, 204));
-        btnManageInventory.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        btnManageInventory.setText("Manage Inventory");
-        btnManageInventory.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnManageInventoryMouseClicked(evt);
-            }
-        });
-        Header.add(btnManageInventory, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 0, 170, 50));
-
-        btnPrepareOrder.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        btnPrepareOrder.setForeground(new java.awt.Color(204, 255, 204));
-        btnPrepareOrder.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        btnPrepareOrder.setText("Prepare Request");
-        btnPrepareOrder.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnPrepareOrderMouseClicked(evt);
-            }
-        });
-        Header.add(btnPrepareOrder, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 0, 180, 50));
-
         btnReceiveRequests.setBackground(new java.awt.Color(31, 31, 31));
         btnReceiveRequests.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         btnReceiveRequests.setForeground(new java.awt.Color(204, 255, 204));
@@ -175,29 +148,13 @@ public class CaseManagerWorkAreaJPanel extends javax.swing.JPanel {
         layout.next(userProcessContainer);
     }//GEN-LAST:event_btnReceiveRequestsMouseClicked
 
-    private void btnManageInventoryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnManageInventoryMouseClicked
-        // TODO add your handling code here:
-        userProcessContainer.removeAll();
-        ManageInventoryJPanel panel = new ManageInventoryJPanel(system, userProcessContainer);
-        userProcessContainer.add("ManageInventoryJPanel", panel);
-        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
-        layout.next(userProcessContainer);
-    }//GEN-LAST:event_btnManageInventoryMouseClicked
 
-    private void btnPrepareOrderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPrepareOrderMouseClicked
-        // TODO add your handling code here:
-        userProcessContainer.removeAll();
-        BloodRequestsListJPanel panel = new BloodRequestsListJPanel(system, userAccount, network, userProcessContainer);
-        userProcessContainer.add("BloodRequestsListJPanel", panel);
-        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
-        layout.next(userProcessContainer);
-    }//GEN-LAST:event_btnPrepareOrderMouseClicked
+
+
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Header;
-    private javax.swing.JLabel btnManageInventory;
-    private javax.swing.JLabel btnPrepareOrder;
     private javax.swing.JLabel btnReceiveRequests;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

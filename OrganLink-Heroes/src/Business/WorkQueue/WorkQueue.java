@@ -22,4 +22,9 @@ public class WorkQueue {
     public ArrayList<WorkRequest> getWorkRequestList() {
         return workRequestList;
     }
+    
+    // Method to add a WorkRequest to the list
+    public void addWorkRequest(WorkRequest request) {
+        this.workRequestList.add(request);
+    }
 }

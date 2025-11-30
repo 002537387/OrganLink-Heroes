@@ -17,6 +17,7 @@ public class TransplantCenterEnterprise extends Enterprise {
     // Constructor to initialize the TransplantCenterEnterprise
     public TransplantCenterEnterprise(String name) {
         super(name, EnterpriseType.TransplantCenter);
+        this.addOrganizationType(Type.TransplantClinic);
     }
 
     // Method to get the supported roles for this enterprise

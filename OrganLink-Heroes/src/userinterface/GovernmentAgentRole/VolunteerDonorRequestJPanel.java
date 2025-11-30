@@ -57,8 +57,8 @@ public class VolunteerDonorRequestJPanel extends javax.swing.JPanel {
          for(DonorRequest donorRequest: system.getDonorRequestDirectory().getDonorRequestList()){            
             Object row[] = new Object[4];
             row[0]= donorRequest;
-            row[1]= donorRequest.getName();
-            row[2]= donorRequest.getContact();
+            row[1]= donorRequest.getDonor().getName();
+            row[2]= donorRequest.getDonor().getContact();
             row[3]= donorRequest.getStatus();
               
             dtm.addRow(row);
@@ -515,28 +515,28 @@ public class VolunteerDonorRequestJPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_dobDateFielduDobKeyTyped
 
     private void populateRequestDetails(DonorRequest donorRequest){
-            uidText.setText(donorRequest.getDonorID());
-            nameText.setText(donorRequest.getName());
-            dobDateField.setDate(donorRequest.getDob());
-            ageText.setText(String.valueOf(donorRequest.getAge()));
-            genderText.setText(donorRequest.getGender());
-            hlaTypesTextField.setText(donorRequest.getBloodType().toString());
-            streetText.setText(donorRequest.getStreetAddress());
-            cityText.setText(donorRequest.getCity());
-            stateText.setText(donorRequest.getState());
-            zipText.setText(String.valueOf(donorRequest.getZipCode()));
-            contactText.setText(String.valueOf(donorRequest.getContact()));
-            emailText.setText(donorRequest.getEmailID());
+            uidText.setText(donorRequest.getDonor().getDonorID());
+            nameText.setText(donorRequest.getDonor().getName());
+            dobDateField.setDate(donorRequest.getDonor().getDob());
+            ageText.setText(String.valueOf(donorRequest.getDonor().getAge()));
+            genderText.setText(donorRequest.getDonor().getGender());
+            hlaTypesTextField.setText(donorRequest.getDonor().getBloodType().toString());
+            streetText.setText(donorRequest.getDonor().getStreetAddress());
+            cityText.setText(donorRequest.getDonor().getCity());
+            stateText.setText(donorRequest.getDonor().getState());
+            zipText.setText(String.valueOf(donorRequest.getDonor().getZipCode()));
+            contactText.setText(String.valueOf(donorRequest.getDonor().getContact()));
+            emailText.setText(donorRequest.getDonor().getEmailID());
             statusText.setText(donorRequest.getStatus());
 
-            txtBrainInjury.setText(String.valueOf(donorRequest.isChronicConditions()));
-            txtBreathingProb.setText(String.valueOf(donorRequest.isSelfDrugUse()));
-            txtDiabitiesBP.setText(String.valueOf(donorRequest.isCurrentlyUnwell()));
-            txtChronicPains.setText(String.valueOf(donorRequest.isContagiousDiseases()));
+            txtBrainInjury.setText(String.valueOf(donorRequest.getDonor().isBrainInjury()));
+            txtBreathingProb.setText(String.valueOf(donorRequest.getDonor().isDiabitiesBP()));
+            txtDiabitiesBP.setText(String.valueOf(donorRequest.getDonor().isBreathingProb()));
+            // txtChronicPains.setText(String.valueOf(donorRequest.isContagiousDiseases())); // Removed as isContagiousDiseases() is not in Donor.java
 
-            if(donorRequest.getdP() !=null){
+            if(donorRequest.getDonor().getdP() !=null){
                 //Working line
-                byte[] JLabelpictureLabel = donorRequest.getdP();
+                byte[] JLabelpictureLabel = donorRequest.getDonor().getdP();
                 ImageIcon i = setPicturebyte(JLabelpictureLabel);
                 lblProfilePicture.setIcon(i);
             }
@@ -627,13 +627,13 @@ public class VolunteerDonorRequestJPanel extends javax.swing.JPanel {
                
         donor.setAge(Integer.parseInt(ageText.getText())); // Age
         donor.setGender(genderText.getText()); // gender
-        donor.setHLA(system.getPersonBloodTypes().findBloodType(hlaTypesTextField.getText()));
+        donor.setBloodType(system.getPersonBloodTypes().findBloodType(hlaTypesTextField.getText()));
         donor.setStreetAddress(streetText.getText()); // streetAddress
         donor.setCity(cityText.getText()); // city
         donor.setState(stateText.getText()); // state
         donor.setZipCode(Integer.parseInt(zipText.getText())); // zipCode
         donor.setContact(Long.parseLong(contactText.getText())); // contact
-        donor.setEmailID(statusText.getText()); // emailID
+        donor.setEmailID(emailText.getText()); // emailID // Corrected
         donor.setStatus("Government Approved"); // status
     
         donor.setBrainInjury(true); //  labConfirmation
@@ -643,7 +643,7 @@ public class VolunteerDonorRequestJPanel extends javax.swing.JPanel {
              
         for(DonorRequest donorRequest: system.getDonorRequestDirectory().getDonorRequestList()){            
         
-            if(donorRequest.getDonorID().equals(uidText.getText())){
+            if(donorRequest.getDonor().getDonorID().equals(uidText.getText())){ // Corrected
             donorRequest.setStatus("Government Approved");
             dB4OUtil.storeSystem(system);
             }
@@ -674,7 +674,7 @@ public class VolunteerDonorRequestJPanel extends javax.swing.JPanel {
        else{
         for(DonorRequest donorRequest: system.getDonorRequestDirectory().getDonorRequestList()){            
         
-            if(donorRequest.getName().equals(nameText.getText())){
+            if(donorRequest.getDonor().getName().equals(nameText.getText())){ // Corrected
             statusText.setText("Rejected");
             donorRequest.setStatus("Rejected");
             }}

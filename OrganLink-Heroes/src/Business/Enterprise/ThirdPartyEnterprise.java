@@ -16,7 +16,8 @@ public class ThirdPartyEnterprise extends Enterprise {
 
     // Constructor to initialize the ThirdPartyEnterprise with a name
     public ThirdPartyEnterprise(String name) {
-        super(name, EnterpriseType.ThirdParty); // Calls the constructor of the superclass (Enterprise)
+        super(name, EnterpriseType.ThirdParty);
+        this.addOrganizationType(Type.ThirdParty);
     }
 
     // Method to return supported roles (currently not implemented)

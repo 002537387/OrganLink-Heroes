@@ -14,7 +14,6 @@ import Business.UserAccount.UserAccount;
 import java.awt.CardLayout;
 import java.awt.Color;
 import javax.swing.JPanel;
-import userinterface.CommonPanels.BloodRequestsListJPanel;
 
 /**
  *
@@ -72,7 +71,6 @@ public class HospitalWorkAreaJPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         Header = new javax.swing.JPanel();
-        BtnManageRequests = new javax.swing.JLabel();
         userProcessContainer = new javax.swing.JPanel();
 
         setPreferredSize(new java.awt.Dimension(800, 500));
@@ -82,18 +80,6 @@ public class HospitalWorkAreaJPanel extends javax.swing.JPanel {
         Header.setPreferredSize(new java.awt.Dimension(800, 50));
         Header.setLayout(new java.awt.GridLayout(1, 0));
 
-        BtnManageRequests.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        BtnManageRequests.setForeground(new java.awt.Color(255, 255, 255));
-        BtnManageRequests.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        BtnManageRequests.setText("Blood Administration");
-        BtnManageRequests.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        BtnManageRequests.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                BtnManageRequestsMouseClicked(evt);
-            }
-        });
-        Header.add(BtnManageRequests);
-
         add(Header, java.awt.BorderLayout.PAGE_START);
 
         userProcessContainer.setBackground(new java.awt.Color(0, 153, 153));
@@ -101,18 +87,8 @@ public class HospitalWorkAreaJPanel extends javax.swing.JPanel {
         add(userProcessContainer, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void BtnManageRequestsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BtnManageRequestsMouseClicked
-        // TODO add your handling code here:
-        userProcessContainer.removeAll();
-        BloodRequestsListJPanel panel = new BloodRequestsListJPanel(system, userAccount, network, userProcessContainer);
-        userProcessContainer.add("BloodRequestsListJPanel", panel);
-        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
-        layout.next(userProcessContainer);
-    }//GEN-LAST:event_BtnManageRequestsMouseClicked
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel BtnManageRequests;
     private javax.swing.JPanel Header;
     private javax.swing.JPanel userProcessContainer;
     // End of variables declaration//GEN-END:variables

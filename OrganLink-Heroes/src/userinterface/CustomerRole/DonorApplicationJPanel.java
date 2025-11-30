@@ -8,6 +8,7 @@ package userinterface.CustomerRole;
 import Business.BloodTypes.PersonBloodTypes.BloodType;
 import Business.DB4OUtil.DB4OUtil;
 import Business.EcoSystem;
+import Business.People.Donor;
 import Business.Requests.DonorRequest;
 import java.awt.CardLayout;
 
@@ -479,7 +480,13 @@ public class DonorApplicationJPanel extends javax.swing.JPanel {
 
     private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnSubmitActionPerformed
         // TODO add your handling code here:
-        DonorRequest donorRequest = new DonorRequest(system.getDonorRequestDirectory());
+        // Create a Donor object
+        Donor donor = new Donor();
+
+        // Create a DonorRequest
+        DonorRequest donorRequest = new DonorRequest();
+        donorRequest.setDonor(donor); // Link the donor to the request
+
         Date currentDate = new Date();
         if (stateJComboBox.getSelectedItem().equals("")) {
             stateJComboBox.setBorder(BorderFactory.createLineBorder(Color.RED));
@@ -607,11 +614,10 @@ public class DonorApplicationJPanel extends javax.swing.JPanel {
                     "Error", JOptionPane.ERROR_MESSAGE);
 
             return;
-        } else {
+        } else { // This 'else' correctly matches the last 'if'
             try {
                 // TODO:
-                // donorRequest.getHLA().updateHLAlist(bloodTypesTextField.getText());
-                donorRequest.setBloodType(
+                donor.setBloodType(
                         system.getPersonBloodTypes().findBloodType((bloodTypeComboBox.getSelectedItem().toString())));
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, new JLabel("<html><b>Blood type doesn't exist</b></html>"));
@@ -624,44 +630,40 @@ public class DonorApplicationJPanel extends javax.swing.JPanel {
 
             if (n == 0) {
 
-                donorRequest.setDonorID(uidText.getText()); // UID
-                donorRequest.setName(nameText.getText()); // Name
-                donorRequest.setDob(dobDateField.getDate()); // DOB
-                donorRequest.setAge(Integer.parseInt(ageText.getText())); // Age
-                donorRequest.setGender((String) genderJComboBox.getSelectedItem()); // gender
-                donorRequest.setStreetAddress(streetText.getText()); // streetAddress
-                donorRequest.setCity(cityText.getText()); // city
-                donorRequest.setState((String) stateJComboBox.getSelectedItem()); // state
-                donorRequest.setZipCode(Integer.parseInt(zipText.getText())); // zipCode
-                donorRequest.setContact(Long.parseLong(contactText.getText())); // contact
-                donorRequest.setEmailID(emailText.getText()); // emailID
-                donorRequest.setStatus("New Request"); // status
-                // donorRequest.setImagePath(photoTextField.getText());
-                donorRequest.setdP(tempdP);
+                donor.setDonorID(uidText.getText()); // UID
+                donor.setName(nameText.getText()); // Name
+                donor.setDob(dobDateField.getDate()); // DOB
+                donor.setAge(Integer.parseInt(ageText.getText())); // Age
+                donor.setGender((String) genderJComboBox.getSelectedItem()); // gender
+                donor.setStreetAddress(streetText.getText()); // streetAddress
+                donor.setCity(cityText.getText()); // city
+                donor.setState((String) stateJComboBox.getSelectedItem()); // state
+                donor.setZipCode(Integer.parseInt(zipText.getText())); // zipCode
+                donor.setContact(Long.parseLong(contactText.getText())); // contact
+                donor.setEmailID(emailText.getText()); // emailID
+                donor.setdP(tempdP); // Set dP on donor
 
-                for (DonorRequest dnr : system.getDonorRequestDirectory().getDonorRequestList()) {
-                    // System.out.println("PRINITNG IT HERE!!");
-                    // System.out.println(dnr.getName());
-                }
-
-                if (btnYesQ1.isSelected()) {
-                    donorRequest.setChronicConditions(true); // labConfirmation
-                } else if (btnNoQ1.isSelected()) {
-                    donorRequest.setChronicConditions(false); // labConfirmation
-                }
-
-                if (btnYesQ2.isSelected()) {
-                    donorRequest.setSelfDrugUse(true); // symptoms
-                } else if (btnNoQ2.isSelected()) {
-                    donorRequest.setSelfDrugUse(false); // symptoms
-                }
-
-                if (btnYesQ4.isSelected()) {
-                    donorRequest.setContagiousDiseases(true); // followUpTest
-                } else if (btnNoQ4.isSelected()) {
-                    donorRequest.setContagiousDiseases(false); // followUpTest
-                }
-                system.getDonorRequestDirectory().addDonorRequest(donorRequest);
+                                    if (btnYesQ1.isSelected()) {
+                                        donor.setBrainInjury(true); 
+                                    } else if (btnNoQ1.isSelected()) {
+                                        donor.setBrainInjury(false);
+                                    }
+                
+                                    if (btnYesQ2.isSelected()) {
+                                        donor.setDiabitiesBP(true);
+                                    } else if (btnNoQ2.isSelected()) {
+                                        donor.setDiabitiesBP(false);
+                                    }
+                
+                                    if (btnYesQ4.isSelected()) {
+                                        donor.setBreathingProb(true);
+                                    } else if (btnNoQ4.isSelected()) {
+                                        donor.setBreathingProb(false);
+                                    }                
+                donorRequest.setStatus("New Request"); // status on DonorRequest
+                system.getDonorDirectory().addDonor(donor); // Add the donor to the directory
+                system.getDonorRequestDirectory().addDonorRequest(donorRequest); // Add the donor request to the directory
+                
                 JOptionPane.showMessageDialog(null,
                         new JLabel("<html><b>Thank you for volunteering to save a life!</b></html>"));
 

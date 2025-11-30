@@ -24,6 +24,6 @@ public class LogisticsOfficerRole extends Role {
     @Override
     public JPanel createWorkArea(JPanel userProcessContainer, UserAccount account, Organization organization, Enterprise enterprise, EcoSystem business, Network network) {
         // Returning the specific Logistics Officer Work Area Panel
-        return new LogisticsOfficerWorkAreaJPanel(account, (LogisticsOrganization) organization, enterprise, business, network);
+        return new LogisticsOfficerWorkAreaJPanel(userProcessContainer, account, (LogisticsOrganization) organization, enterprise, business, network);
     }
 }

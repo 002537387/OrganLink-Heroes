@@ -546,9 +546,9 @@ public class ManageLabTechnicianRequests extends javax.swing.JPanel {
            
         for(Donor dnr: system.getDonorDirectory().getDonorList()){
             if(dnr.getDonorID().equals(request1.getDonor().getDonorID())){
-                dnr.setLastDonationDate(new Date());
+                //dnr.setLastDonationDate(new Date()); // Removed
                 dnr.setStatus("BoneMarrow Donated");
-                System.out.println(String.valueOf(dnr.getLastDonationDate())+" last donation date");
+                //System.out.println(String.valueOf(dnr.getLastDonationDate())+" last donation date"); // Removed
             }
         }
 //        populateMedTechDonorTable();

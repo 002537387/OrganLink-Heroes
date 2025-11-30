@@ -12,7 +12,6 @@ import Business.Network.Network;
 import Business.Organization.ThirdPartyOrganization;
 import Business.Requests.DonorRequest;
 import Business.People.PatientDirectory;
-import Business.Statuses.BloodRequestStatuses;
 import Business.Statuses.DonorApplicationStatuses;
 import Business.UserAccount.UserAccount;
 import Magic.Design.MyTableFormat;
@@ -53,13 +52,13 @@ public class DonorApplicationListJPanel extends javax.swing.JPanel {
 
         dtm.setRowCount(0);
 
-        for (DonorRequest donor : system.getDonorRequestDirectory().getDonorRequestList()) {
+        for (DonorRequest donorRequest: system.getDonorRequestDirectory().getDonorRequestList()) {
             Object row[] = new Object[5];
-            row[0] = donor;
-            row[1] = donor.getName();
-            row[2] = donor.getContact();
-            row[3] = donor.getBloodType().toString();
-            row[4] = donor.getStatus();
+            row[0] = donorRequest;
+            row[1] = donorRequest.getDonor().getName(); // Access via getDonor()
+            row[2] = donorRequest.getDonor().getContact(); // Access via getDonor()
+            row[3] = donorRequest.getDonor().getBloodType().toString(); // Access via getDonor()
+            row[4] = donorRequest.getStatus();
 
             dtm.addRow(row);
         }

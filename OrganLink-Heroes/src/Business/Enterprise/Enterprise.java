@@ -83,12 +83,13 @@ public abstract class Enterprise extends Organization {
 
     // Enum for different types of enterprises
     public enum EnterpriseType {
-        Laboratory("Laboratory"),
-        Hospital("Hospital"),
-        Logistics("Logistics"),
-        ThirdParty("ThirdParty"),
-        Government("Government"),
-        TransplantCenter("TransplantCenter");
+        Laboratory("Laboratory Organization"),
+        Hospital("Hospital Organization"),
+        Logistics("Logistics Organization"),
+        ThirdParty("ThirdParty Organization"),
+        Government("Government Agency Organization"),
+        TransplantCenter("Transplant Clinic Organization"); // Mapped to Transplant Clinic Organization
+
 
         private String value;
 

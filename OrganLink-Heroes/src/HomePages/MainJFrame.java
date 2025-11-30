@@ -8,6 +8,9 @@ import Business.EcoSystem;
 import Business.DB4OUtil.DB4OUtil;
 import java.awt.CardLayout;
 import userinterface.CustomerRole.CustomerWorkAreaJPanel;
+import javax.swing.JButton; // Added for JButton
+import javax.swing.JPanel; // Added for staticMainProcessContainer
+import userinterface.CommonPanels.EmergencyDashboardJPanel; // Added import for EmergencyDashboardJPanel
 
 /**
  *
@@ -20,12 +23,19 @@ public class MainJFrame extends javax.swing.JFrame {
      */
     private EcoSystem system;
     private DB4OUtil dB4OUtil = DB4OUtil.getInstance();
+    
+    // Static references for global access
+    private static JPanel staticMainProcessContainer;
+    private static EcoSystem staticSystem;
 
     public MainJFrame() {
         initComponents();
 
         system = dB4OUtil.retrieveSystem();
         this.setSize(1280, 800);
+        
+        staticMainProcessContainer = mainProcessContainer;
+        staticSystem = system;
 
         mainProcessContainer.add("CustomerWorkAreaJPanel", new CustomerWorkAreaJPanel(system, mainProcessContainer));
         CardLayout layout = (CardLayout) mainProcessContainer.getLayout();
@@ -44,25 +54,60 @@ public class MainJFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         mainProcessContainer = new javax.swing.JPanel();
+        btnEmergencyAlert = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
         mainProcessContainer.setLayout(new java.awt.CardLayout());
 
+        btnEmergencyAlert.setBackground(new java.awt.Color(255, 0, 0));
+        btnEmergencyAlert.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        btnEmergencyAlert.setForeground(new java.awt.Color(255, 255, 255));
+        btnEmergencyAlert.setText("Emergency Alert");
+        btnEmergencyAlert.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEmergencyAlertActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(mainProcessContainer, javax.swing.GroupLayout.PREFERRED_SIZE, 1280,
-                                javax.swing.GroupLayout.PREFERRED_SIZE));
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btnEmergencyAlert)
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(mainProcessContainer, javax.swing.GroupLayout.PREFERRED_SIZE, 1280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
         layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(mainProcessContainer, javax.swing.GroupLayout.DEFAULT_SIZE, 800,
-                                Short.MAX_VALUE));
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(btnEmergencyAlert)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(mainProcessContainer, javax.swing.GroupLayout.DEFAULT_SIZE, 770, Short.MAX_VALUE))
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnEmergencyAlertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEmergencyAlertActionPerformed
+        EmergencyDashboardJPanel emergencyDashboardJPanel = new EmergencyDashboardJPanel(staticMainProcessContainer, staticSystem);
+        staticMainProcessContainer.add("EmergencyDashboardJPanel", emergencyDashboardJPanel);
+        CardLayout layout = (CardLayout) staticMainProcessContainer.getLayout();
+        layout.next(staticMainProcessContainer);
+    }//GEN-LAST:event_btnEmergencyAlertActionPerformed
+
+    public void logoutAction() {
+        mainProcessContainer.removeAll();
+        LoginJPanel loginScreen = new LoginJPanel(system, mainProcessContainer);
+        mainProcessContainer.add("LoginJPanel", loginScreen);
+        CardLayout layout = (CardLayout) mainProcessContainer.getLayout();
+        layout.next(mainProcessContainer);
+    }
 
     /**
      * @param args the command line arguments
@@ -108,6 +153,7 @@ public class MainJFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnEmergencyAlert;
     private javax.swing.JPanel mainProcessContainer;
     // End of variables declaration//GEN-END:variables
 }
