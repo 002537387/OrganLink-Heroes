@@ -15,6 +15,7 @@ import Business.Network.Network;
 import Business.Organization.LogisticsOrganization;
 import Business.Organization.Organization;
 import Business.People.Patient;
+import Business.Statuses.RequestStatus; // Added import for RequestStatus
 import Business.People.PatientDirectory;
 import Business.UserAccount.UserAccount;
 import Business.WorkQueue.System_Coordinator_Test_WorkRequest;
@@ -313,7 +314,7 @@ public class CreatePatientJPanel extends javax.swing.JPanel {
         patient.setEmailID((emailTextField.getText()));
         patient.setBloodType(system.getPersonBloodTypes().findBloodType(HLATypesTextField.getText()));
         patient.setEmergencyStatus(chkEmergency.isSelected());
-        patient.setStatus("Centre Approved");
+        patient.setStatus(RequestStatus.PatientStatus.ACTIVE);
         
         system.getPatientDirectory().addPatient(patient);
         

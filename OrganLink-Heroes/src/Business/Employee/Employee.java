@@ -14,13 +14,14 @@ import java.util.Date;
 public class Employee {
     private String name;
     private int id;
-    private int contactNumber;
+    private String contactNumber;
     private Date dateOfBirth;
     private String gender;
     private String city;
     private String state;
     private String specialization;
-    private String address;
+    private String streetAddress; // Renamed from address to streetAddress for consistency
+    private String emailID; // Added emailID
 
     private static int count = 1;
 
@@ -46,12 +47,12 @@ public class Employee {
     }
 
     // Getter method for contact number
-    public int getContactNumber() {
+    public String getContactNumber() {
         return contactNumber;
     }
 
     // Setter method for contact number
-    public void setContactNumber(int contactNumber) {
+    public void setContactNumber(String contactNumber) {
         this.contactNumber = contactNumber;
     }
 
@@ -105,14 +106,24 @@ public class Employee {
         this.specialization = specialization;
     }
 
-    // Getter method for address
-    public String getAddress() {
-        return address;
+    // Getter method for streetAddress (renamed from address)
+    public String getStreetAddress() {
+        return streetAddress;
     }
 
-    // Setter method for address
-    public void setAddress(String address) {
-        this.address = address;
+    // Setter method for streetAddress (renamed from address)
+    public void setStreetAddress(String streetAddress) {
+        this.streetAddress = streetAddress;
+    }
+
+    // Getter method for emailID
+    public String getEmailID() {
+        return emailID;
+    }
+
+    // Setter method for emailID
+    public void setEmailID(String emailID) {
+        this.emailID = emailID;
     }
 
     // Override toString method to return employee's name

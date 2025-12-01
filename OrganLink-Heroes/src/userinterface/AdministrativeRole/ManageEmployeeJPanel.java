@@ -60,7 +60,7 @@ public class ManageEmployeeJPanel extends javax.swing.JPanel {
             for (Employee employee : o.getEmployeeDirectory().getEmployeeList()) {
                 Object[] row = new Object[3];
                 row[0] = o;
-                row[1] = o.getRealName();
+                row[1] = o.getName();
                 row[2] = employee.getName();
                 model.addRow(row);
             }
@@ -73,7 +73,7 @@ public class ManageEmployeeJPanel extends javax.swing.JPanel {
         organizationJComboBox.removeAllItems();
 
         for (Organization organization : organizationDir.getOrganizationList()) {
-            System.out.println(organization.getRealName() + "manageEMp");
+            System.out.println(organization.getName() + "manageEMp");
             organizationJComboBox.addItem(organization);
         }
     }
@@ -82,7 +82,7 @@ public class ManageEmployeeJPanel extends javax.swing.JPanel {
         organizationEmpJComboBox.removeAllItems();
 
         for (Organization organization : organizationDir.getOrganizationList()) {
-            organizationEmpJComboBox.addItem(organization.getRealName());
+            organizationEmpJComboBox.addItem(organization.getName());
         }
     }
 
@@ -94,7 +94,7 @@ public class ManageEmployeeJPanel extends javax.swing.JPanel {
         for (Employee employee : organization.getEmployeeDirectory().getEmployeeList()) {
             Object[] row = new Object[3];
             row[0] = organization;
-            row[1] = organization.getRealName();
+            row[1] = organization.getName();
             row[2] = employee;
             model.addRow(row);
         }
@@ -350,7 +350,7 @@ public class ManageEmployeeJPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
         Organization organization = (Organization) organizationJComboBox.getSelectedItem();
         organizationEmpJComboBox.removeAllItems();
-        organizationEmpJComboBox.addItem(organization.getRealName());
+        organizationEmpJComboBox.addItem(organization.getName());
 
     }//GEN-LAST:event_organizationJComboBoxItemStateChanged
 

@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class GovernmentOrganization extends Organization {
 
     public GovernmentOrganization(String name, OrganizationDirectory parent) {
-        super(name == null ? Organization.Type.Government.getValue() : name, parent, Organization.Type.Government.getValue());
+        super(name == null ? Organization.Type.Government.getValue() : name, Organization.Type.Government.getValue());
     }
 
     @Override

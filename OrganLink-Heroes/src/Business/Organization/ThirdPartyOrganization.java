@@ -17,7 +17,7 @@ public class ThirdPartyOrganization extends Organization {
 
     // Constructor for ThirdPartyOrganization, initializes with the given name or default to "ThirdParty"
     public ThirdPartyOrganization(String name, OrganizationDirectory parent) {
-        super(name == null ? Organization.Type.ThirdParty.getValue() : name, parent, Organization.Type.ThirdParty.getValue());
+        super(name == null ? Organization.Type.ThirdParty.getValue() : name, Organization.Type.ThirdParty.getValue());
     }
 
     // Returns the list of roles supported by the HeadquarterOrganization

@@ -18,7 +18,7 @@ public class TransplantClinicOrganization extends Organization {
 
     // Constructor to initialize TransplantClinicOrganization with a name and parent OrganizationDirectory
     public TransplantClinicOrganization(String name, OrganizationDirectory parent) {
-        super(name == null ? Organization.Type.TransplantClinic.getValue() : name, parent, Organization.Type.TransplantClinic.getValue());
+        super(name == null ? Organization.Type.TransplantClinic.getValue() : name, Organization.Type.TransplantClinic.getValue());
     }
 
     // Overridden method to return supported roles for TransplantClinicOrganization

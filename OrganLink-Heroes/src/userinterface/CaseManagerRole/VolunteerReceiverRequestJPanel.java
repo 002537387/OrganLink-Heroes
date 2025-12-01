@@ -13,6 +13,7 @@ import Business.Organization.LogisticsOrganization;
 import Business.Organization.Organization;
 import Business.People.Patient;
 import Business.Requests.PatientRequest;
+import Business.Statuses.RequestStatus; // Added import
 import Business.UserAccount.UserAccount;
 import Business.WorkQueue.System_Coordinator_Test_WorkRequest;
 import Business.WorkQueue.WorkRequest;
@@ -447,7 +448,7 @@ public class VolunteerReceiverRequestJPanel extends javax.swing.JPanel {
         patient.setZipCode(Integer.parseInt(zipText.getText())); 
         patient.setContact(Long.parseLong(contactText.getText())); 
         patient.setEmailID(emailText.getText()); 
-        patient.setStatus("Centre Approved"); 
+        patient.setStatus(RequestStatus.PatientStatus.ACTIVE); 
         patient.setLabConfirmation(true); 
       
         // No need to add patient to directory again, it's already linked to the request

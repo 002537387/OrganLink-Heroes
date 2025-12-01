@@ -19,6 +19,7 @@ import Business.People.DonorDirectory;
 import Business.UserAccount.UserAccount;
 import Business.WorkQueue.System_Coordinator_Test_WorkRequest;
 import Business.WorkQueue.WorkRequest;
+import Business.Statuses.RequestStatus; // Added import for RequestStatus
 import Magic.Design.MyTableFormat;
 import java.util.Date;
 import javax.swing.JLabel;
@@ -383,7 +384,7 @@ public class DonorListJPanel extends javax.swing.JPanel {
                             "Info", JOptionPane.INFORMATION_MESSAGE);
                     request.setActionDate(new Date());
                     request.setUserAccount(userAccount);
-                    request.getDonor().setStatus("Assigned to Hospital"); // Donor's Status changed
+                    request.getDonor().setStatus(RequestStatus.DonorApplicationStatus.PRE_SURGERY_COORDINATION); // Donor's Status changed
                     request.setAssigned("Hospital Pool");
                     request.setSummary("Requested for Donation");
                     request.setStatus("Assigned to Hospital"); // WorkRequest Status changed

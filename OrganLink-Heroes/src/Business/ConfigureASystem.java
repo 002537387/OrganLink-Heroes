@@ -7,6 +7,7 @@ import Business.OrganTypes.OrganType;
 import Business.Organization.Organization;
 import Business.People.Patient;
 import Business.Requests.PatientRequest;
+import Business.Requests.MedicalUrgencyLevel; // Added import for MedicalUrgencyLevel
 import Business.Requests.PatientRequestDirectory;
 import Business.Role.CaseManagerRole;
 import Business.Role.GovernmentAgentRole;
@@ -41,8 +42,8 @@ public class ConfigureASystem {
         PatientRequest sampleRequest = new PatientRequest();
         sampleRequest.setPatient(samplePatient); // Link the patient
         sampleRequest.setStatus(RequestStatus.PatientRequestStatus.PENDING_VERIFICATION.getValue()); // Set initial status
-        sampleRequest.setRequiredOrganType(OrganType.KIDNEY.getValue()); // Example required organ
-        sampleRequest.setMedicalUrgencyLevel("Medium"); // Example urgency level
+        sampleRequest.setRequiredOrganType(OrganType.KIDNEY); // Example required organ
+        sampleRequest.setMedicalUrgencyLevel(MedicalUrgencyLevel.MEDIUM); // Example urgency level
 
 
         // Add the PatientRequest to the system's PatientRequestDirectory

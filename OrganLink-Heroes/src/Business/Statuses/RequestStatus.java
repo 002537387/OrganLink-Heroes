@@ -100,4 +100,23 @@ public class RequestStatus {
             return value;
         }
     }
+    
+    public enum PatientStatus { // New Enum for Patient's overall status
+        ACTIVE("Active"),
+        INACTIVE("Inactive"),
+        ON_HOLD("On Hold"),
+        TRANSPLANTED_SUCCESSFULLY("Transplanted Successfully"),
+        TRANSPLANTED_UNSUCCESSFULLY("Transplanted Unsuccessfully"),
+        DECEASED("Deceased");
+
+        private final String value;
+
+        PatientStatus(String value) {
+            this.value = value;
+        }
+
+        public String getValue() {
+            return value;
+        }
+    }
 }

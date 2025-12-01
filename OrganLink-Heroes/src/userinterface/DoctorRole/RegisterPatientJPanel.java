@@ -9,6 +9,7 @@ import Business.People.Patient;
 import Business.Requests.PatientRequest;
 import Business.Statuses.RequestStatus;
 import Business.OrganTypes.OrganType;
+import Business.Requests.MedicalUrgencyLevel; // Added import
 import Business.UserAccount.UserAccount;
 import java.awt.CardLayout;
 import java.text.SimpleDateFormat;
@@ -377,14 +378,15 @@ public class RegisterPatientJPanel extends javax.swing.JPanel {
             
             // Create a new PatientRequest
             PatientRequest patientRequest = new PatientRequest();
-            patientRequest.setRequiredOrganType(cbRequiredOrganType.getSelectedItem().toString());
+            patientRequest.setRequiredOrganType((OrganType) cbRequiredOrganType.getSelectedItem());
             
-            String urgency = "";
-            if(rbCritical.isSelected()) urgency = "Critical";
-            else if(rbHigh.isSelected()) urgency = "High";
-            else if(rbMedium.isSelected()) urgency = "Medium";
-            else if(rbStandard.isSelected()) urgency = "Standard";
-            patientRequest.setMedicalUrgencyLevel(urgency);
+            String urgencyString = "";
+            if(rbCritical.isSelected()) urgencyString = "CRITICAL";
+            else if(rbHigh.isSelected()) urgencyString = "HIGH";
+            else if(rbMedium.isSelected()) urgencyString = "MEDIUM";
+            else if(rbStandard.isSelected()) urgencyString = "STANDARD";
+            
+            patientRequest.setMedicalUrgencyLevel(MedicalUrgencyLevel.valueOf(urgencyString));
             
             patientRequest.setContraindications(txtAreaContraindications.getText());
             patientRequest.setSender(account); // Doctor is sending the request

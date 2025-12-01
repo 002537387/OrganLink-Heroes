@@ -18,7 +18,7 @@ public class HospitalOrganization extends Organization {
 
     // Constructor to initialize HospitalOrganization with a name and parent OrganizationDirectory
     public HospitalOrganization(String name, OrganizationDirectory parent) {
-        super(name == null ? Organization.Type.Hospital.getValue() : name, parent, Organization.Type.Hospital.getValue());
+        super(name == null ? Organization.Type.Hospital.getValue() : name, Organization.Type.Hospital.getValue());
     }
 
     // Overridden method to return supported roles for HospitalOrganization

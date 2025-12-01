@@ -9,6 +9,7 @@ import Business.Enterprise.Enterprise;
 import Business.People.Donor;
 import Business.People.Patient;
 import Business.UserAccount.UserAccount;
+import Business.WorkQueue.WorkRequestType; // Added import for WorkRequestType
 import java.util.Date;
 
 /**
@@ -30,12 +31,10 @@ public abstract class WorkRequest {
     private String assigned;
     private UserAccount medTech;
     private UserAccount userAccount;
-    private String overallStatus;
     private Donor donor;
     private Enterprise enterprise;
-    private String type;
+    private WorkRequestType type;
     private Patient patient;
-    private DB4OUtil dB4OUtil = DB4OUtil.getInstance();
     private int requestNumberInt;
 
     // Static variables
@@ -46,6 +45,7 @@ public abstract class WorkRequest {
     public WorkRequest() {
         count++;
         this.requestNumberInt = count;
+        this.requestNumber = Integer.toString(this.requestNumberInt); // Directly set as String
         requestDate = new Date();
     }
 
@@ -80,14 +80,6 @@ public abstract class WorkRequest {
 
     public void setUserAccount(UserAccount userAccount) {
         this.userAccount = userAccount;
-    }
-
-    public String getOverallStatus() {
-        return overallStatus;
-    }
-
-    public void setOverallStatus(String overallStatus) {
-        this.overallStatus = overallStatus;
     }
 
     public String getMessage() {
@@ -148,10 +140,6 @@ public abstract class WorkRequest {
 
     // Method for generating request number if not set
     public String getRequestNumber() {
-        if (requestNumber == null)
-            this.setRequestNumber(Integer.toString(requestNumberInt));
-        else if (requestNumber.equals("Req number Not set yet"))
-            this.setRequestNumber(Integer.toString(requestNumberInt));
         return requestNumber;
     }
 
@@ -191,11 +179,11 @@ public abstract class WorkRequest {
         WorkRequest.count = count;
     }
 
-    public String getType() {
+    public WorkRequestType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(WorkRequestType type) {
         this.type = type;
     }
 

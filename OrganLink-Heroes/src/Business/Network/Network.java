@@ -6,6 +6,8 @@ package Business.Network;
 
 import Business.Enterprise.EnterpriseDirectory;
 
+import Business.UserAccount.UserAccountDirectory;
+
 /**
  *
  * @author User
@@ -16,10 +18,12 @@ public class Network {
     private String state;
     private String country;
     private EnterpriseDirectory enterpriseDirectory;
+    private UserAccountDirectory userAccountDirectory; // Added UserAccountDirectory
 
-    // Constructor initializing enterpriseDirectory
+    // Constructor initializing enterpriseDirectory and userAccountDirectory
     public Network() {
         enterpriseDirectory = new EnterpriseDirectory();
+        userAccountDirectory = new UserAccountDirectory(); // Initialize UserAccountDirectory
     }
 
     // Getter method for name
@@ -35,6 +39,11 @@ public class Network {
     // Getter method for enterpriseDirectory
     public EnterpriseDirectory getEnterpriseDirectory() {
         return enterpriseDirectory;
+    }
+
+    // Getter method for userAccountDirectory
+    public UserAccountDirectory getUserAccountDirectory() {
+        return userAccountDirectory;
     }
 
     // Getter method for state

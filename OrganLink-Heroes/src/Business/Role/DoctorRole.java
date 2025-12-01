@@ -24,3 +24,4 @@ public class DoctorRole extends Role {
         return new DoctorWorkAreaJPanel(userProcessContainer, account, organization, enterprise, business, network);
     }
 }
+

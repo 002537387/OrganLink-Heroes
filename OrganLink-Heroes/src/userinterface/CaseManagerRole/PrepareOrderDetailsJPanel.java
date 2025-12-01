@@ -14,6 +14,7 @@ import Business.Organization.LogisticsOrganization;
 import Business.Organization.Organization;
 import Business.People.Patient;
 import Business.Requests.PatientRequest;
+import Business.Statuses.RequestStatus; // Added import for RequestStatus
 import Business.UserAccount.UserAccount;
 import Business.WorkQueue.System_Coordinator_Test_WorkRequest;
 import Business.WorkQueue.WorkRequest;
@@ -367,7 +368,7 @@ public class PrepareOrderDetailsJPanel extends javax.swing.JPanel {
        
         patient.setContact(Long.parseLong(contactText.getText()));
         patient.setEmailID(emailText.getText());
-        patient.setStatus("Centre Approved");
+        patient.setStatus(RequestStatus.PatientStatus.ACTIVE);
         patient.setLabConfirmation(true);
       
         

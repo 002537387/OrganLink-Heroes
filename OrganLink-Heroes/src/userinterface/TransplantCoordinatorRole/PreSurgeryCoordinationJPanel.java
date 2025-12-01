@@ -33,7 +33,7 @@ public class PreSurgeryCoordinationJPanel extends javax.swing.JPanel {
     private void displayMatchDetails() {
         lblPatientName.setText(organMatch.getPatientRequest().getPatient().getName());
         lblDonorName.setText(organMatch.getDonorRequest().getDonor().getName());
-        lblOrganType.setText(organMatch.getPatientRequest().getRequiredOrganType());
+        lblOrganType.setText(organMatch.getPatientRequest().getRequiredOrganType().getValue());
         lblMatchStatus.setText(organMatch.getStatus());
     }
 

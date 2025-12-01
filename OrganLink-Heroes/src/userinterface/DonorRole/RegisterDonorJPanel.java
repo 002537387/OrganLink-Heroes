@@ -10,6 +10,7 @@ import Business.Requests.DonorRequest;
 import Business.Statuses.RequestStatus;
 import Business.UserAccount.UserAccount;
 import Business.OrganTypes.OrganType; // Added import
+import Business.Requests.DonationType; // Added import
 import java.awt.CardLayout;
 import java.util.Date;
 import javax.swing.ButtonGroup;
@@ -372,7 +373,7 @@ public class RegisterDonorJPanel extends javax.swing.JPanel {
 
             // Create a new DonorRequest
             DonorRequest donorRequest = new DonorRequest();
-            donorRequest.setDonationType(rbLivingDonation.isSelected() ? "Living Donation" : "Post-Mortem Donation");
+            donorRequest.setDonationType(rbLivingDonation.isSelected() ? DonationType.LIVING_DONATION : DonationType.POST_MORTEM_DONATION);
             donorRequest.setConsentAcknowledged(chkConsent.isSelected());
             donorRequest.setOfferedOrganType((OrganType) cbOfferedOrganType.getSelectedItem()); // Set the offered organ type
             donorRequest.setSender(account);

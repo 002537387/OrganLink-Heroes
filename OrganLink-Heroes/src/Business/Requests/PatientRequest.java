@@ -8,37 +8,35 @@ import Business.BloodTypes.PersonBloodTypes;
 import Business.BloodTypes.PersonBloodTypes.BloodType;
 import Business.Statuses.DonorApplicationStatuses;
 import Business.WorkQueue.WorkRequest;
+import Business.OrganTypes.OrganType; // Added import for OrganType
+import Business.Requests.MedicalUrgencyLevel; // Added import for MedicalUrgencyLevel
 import java.util.Date;
 
 public class PatientRequest extends WorkRequest {
 
     // Constructor to initialize PatientRequest, calls superclass constructor
-    public PatientRequest() {
-        super();
-    }
-
-
-
-    private String requiredOrganType;
-    private String medicalUrgencyLevel;
+        public PatientRequest() {
+            super();
+        }
+    
+        private OrganType requiredOrganType;
+    private MedicalUrgencyLevel medicalUrgencyLevel;
     private String contraindications;
     private String specialRequirements;
 
-    // Getter and Setter for requiredOrganType
-    public String getRequiredOrganType() {
+    public OrganType getRequiredOrganType() {
         return requiredOrganType;
     }
 
-    public void setRequiredOrganType(String requiredOrganType) {
+    public void setRequiredOrganType(OrganType requiredOrganType) {
         this.requiredOrganType = requiredOrganType;
     }
 
-    // Getter and Setter for medicalUrgencyLevel
-    public String getMedicalUrgencyLevel() {
+    public MedicalUrgencyLevel getMedicalUrgencyLevel() {
         return medicalUrgencyLevel;
     }
 
-    public void setMedicalUrgencyLevel(String medicalUrgencyLevel) {
+    public void setMedicalUrgencyLevel(MedicalUrgencyLevel medicalUrgencyLevel) {
         this.medicalUrgencyLevel = medicalUrgencyLevel;
     }
 

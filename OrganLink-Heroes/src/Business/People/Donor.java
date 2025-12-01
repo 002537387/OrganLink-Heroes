@@ -7,6 +7,7 @@ package Business.People;
 import Business.BloodTypes.PersonBloodTypes;
 import Business.BloodTypes.PersonBloodTypes.BloodType;
 import Business.Employee.Employee; // Added import
+import Business.Statuses.RequestStatus; // Corrected import to RequestStatus
 import java.util.Date;
 
 /**
@@ -27,7 +28,7 @@ public class Donor {
     private int zipCode;
     private long contact;
     private String emailID;
-    private String status;
+    private RequestStatus.DonorApplicationStatus status; // Changed type to correct enum
     private boolean brainInjury;
     private boolean diabitiesBP;       // Currently you do NOT have any diabitiesBP? 
     private boolean breathingProb;
@@ -103,8 +104,8 @@ public class Donor {
     public String getEmailID() { return emailID; }          // Get email ID
     public void setEmailID(String emailID) { this.emailID = emailID; } // Set email ID
 
-    public String getStatus() { return status; }            // Get donor's status
-    public void setStatus(String status) { this.status = status; } // Set donor's status
+    public RequestStatus.DonorApplicationStatus getStatus() { return status; }            // Get donor's status
+    public void setStatus(RequestStatus.DonorApplicationStatus status) { this.status = status; } // Set donor's status
 
     public boolean isBrainInjury() { return brainInjury; }  // Check if donor has brain injury
     public void setBrainInjury(boolean brainInjury) { this.brainInjury = brainInjury; } // Set brain injury status
@@ -115,6 +116,7 @@ public class Donor {
     public boolean isBreathingProb() { return breathingProb; } // Check if donor has breathing problems
     public void setBreathingProb(boolean breathingProb) { this.breathingProb = breathingProb; } // Set breathing problem status
 
+    public Date getCancerDiagnosedDate() { return cancerDiagnosedDate; } // Getter for cancer diagnosed date
     public void setCancerDiagnosedDate(Date date) { this.cancerDiagnosedDate = date; } // Set cancer diagnosed date
     
     // Getter and Setter for tissueMarkers

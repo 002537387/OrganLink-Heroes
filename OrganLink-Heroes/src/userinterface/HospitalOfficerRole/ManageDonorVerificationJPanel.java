@@ -5,7 +5,9 @@ import Business.Enterprise.Enterprise;
 import Business.Network.Network;
 import Business.Organization.HospitalOrganization;
 import Business.Requests.DonorRequest;
-import Business.Statuses.RequestStatus;
+import Business.Statuses.RequestStatus; // Corrected import to RequestStatus
+import Business.UserAccount.UserAccount;
+import Business.WorkQueue.WorkRequest;
 import Business.UserAccount.UserAccount;
 import Business.WorkQueue.WorkRequest;
 import java.awt.CardLayout;
@@ -206,7 +208,7 @@ public class ManageDonorVerificationJPanel extends javax.swing.JPanel {
         }
 
         request.setStatus(RequestStatus.DonorApplicationStatus.APPROVED.getValue());
-        request.getDonor().setStatus("Active Donor"); // Update donor's status
+        request.getDonor().setStatus(RequestStatus.DonorApplicationStatus.ACTIVE_DONOR); // Update donor's status
         request.setResolveDate(new Date());
         JOptionPane.showMessageDialog(this, "Donor request approved.", "Success", JOptionPane.INFORMATION_MESSAGE);
         populateRequestTable();
@@ -231,7 +233,7 @@ public class ManageDonorVerificationJPanel extends javax.swing.JPanel {
         }
 
         request.setStatus(RequestStatus.DonorApplicationStatus.REJECTED.getValue());
-        request.getDonor().setStatus("Rejected Donor"); // Update donor's status
+        request.getDonor().setStatus(RequestStatus.DonorApplicationStatus.REJECTED); // Update donor's status
         request.setResolveDate(new Date());
         JOptionPane.showMessageDialog(this, "Donor request rejected.", "Success", JOptionPane.INFORMATION_MESSAGE);
         populateRequestTable();

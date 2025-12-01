@@ -42,7 +42,7 @@ public class ManageSystemCoordinatorProfile extends javax.swing.JPanel {
         comboGender.removeAllItems();
         comboGender.addItem("Male");
         comboGender.addItem("Female");
-        txtAddress.setText(userAccount.getEmployee().getAddress());
+        txtAddress.setText(userAccount.getEmployee().getStreetAddress());
         txtCity.setText(userAccount.getEmployee().getCity());
         txtContact.setText(String.valueOf(userAccount.getEmployee().getContactNumber()));
         txtDOB.setText(String.valueOf(userAccount.getEmployee().getDateOfBirth()));
@@ -171,10 +171,10 @@ public class ManageSystemCoordinatorProfile extends javax.swing.JPanel {
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnSaveActionPerformed
         // TODO add your handling code here:
         userAccount.getEmployee().setCity(txtCity.getText());
-        userAccount.getEmployee().setContactNumber(Integer.parseInt(txtContact.getText()));
+        userAccount.getEmployee().setContactNumber(txtContact.getText());
         userAccount.getEmployee().setDateOfBirth(new Date(txtDOB.getText()));
         userAccount.getEmployee().setGender((String) comboGender.getSelectedItem());
-        userAccount.getEmployee().setAddress(txtAddress.getText());
+        userAccount.getEmployee().setStreetAddress(txtAddress.getText());
 
         userAccount.getEmployee().setState(txtCity.getText());
         userAccount.getEmployee().setSpecialization(txtSpecialization.getText());

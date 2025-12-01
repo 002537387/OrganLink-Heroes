@@ -9,6 +9,7 @@ import Business.BloodTypes.PersonBloodTypes.BloodType;
 import Business.Statuses.DonorApplicationStatuses;
 import Business.WorkQueue.WorkRequest;
 import Business.OrganTypes.OrganType; // Added import
+import Business.Requests.DonationType; // Added import for DonationType
 import java.util.Date;
 
 public class DonorRequest extends WorkRequest {
@@ -18,7 +19,7 @@ public class DonorRequest extends WorkRequest {
         super();
     }
 
-    private String donationType; // e.g., "Living" or "Post-mortem"
+    private DonationType donationType; // e.g., "Living" or "Post-mortem"
     private boolean consentAcknowledged;
     private String digitalSignature;
     private OrganType offeredOrganType; // New field for the type of organ being offered
@@ -26,10 +27,10 @@ public class DonorRequest extends WorkRequest {
 
     // Getter and Setter for donationType
     public String getDonationType() {
-        return donationType;
+        return donationType.getValue(); // Return the string value of the enum
     }
 
-    public void setDonationType(String donationType) {
+    public void setDonationType(DonationType donationType) {
         this.donationType = donationType;
     }
     

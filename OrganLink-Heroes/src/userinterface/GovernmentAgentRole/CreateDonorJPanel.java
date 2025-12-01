@@ -10,6 +10,7 @@ import Business.DB4OUtil.DB4OUtil;
 import Business.EcoSystem;
 import Business.People.Donor;
 import Business.People.DonorDirectory;
+import Business.Statuses.RequestStatus; // Corrected import to RequestStatus
 import Magic.Design.*;
 import Magic.Design.MyJLabel;
 import Magic.Design.MyJButton;
@@ -347,7 +348,7 @@ public class CreateDonorJPanel extends javax.swing.JPanel {
         System.out.println(contactTextField.getText());  
         donor.setContact((int) Double.parseDouble(contactTextField.getText())); 
         donor.setBloodType(system.getPersonBloodTypes().findBloodType(hlaTypeTextField.getText()));
-        donor.setStatus("Government Approved");
+        donor.setStatus(RequestStatus.DonorApplicationStatus.APPROVED);
         system.getDonorDirectory().addDonor(donor);
 
         dB4OUtil.storeSystem(system);

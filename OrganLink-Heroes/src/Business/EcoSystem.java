@@ -15,6 +15,7 @@ import Business.People.DonorDirectory;
 import Business.People.Patient;
 import Business.People.PatientDirectory;
 import Business.Requests.AntiTraffickingAlert;
+import Business.Requests.AlertLevel; // Added import for AlertLevel
 import Business.Requests.DonorRequest;
 import Business.Requests.DonorRequestDirectory;
 import Business.Requests.PatientRequest;
@@ -48,7 +49,7 @@ public class EcoSystem extends Organization {
 
     // Private constructor for Singleton pattern
     private EcoSystem() {
-        super("OrganLink Heroes", null, Organization.Type.System.getValue());
+        super("OrganLink Heroes", Organization.Type.System.getValue());
         networkList = new ArrayList<Network>();
         this.donorDirectory = new DonorDirectory();
         this.patientDirectory = new PatientDirectory();
@@ -163,11 +164,23 @@ public class EcoSystem extends Organization {
 
     // Checks if a username is unique across the system
     public boolean checkIfUserIsUnique(String userName) {
-        if (!this.getUserAccountDirectory().checkIfUsernameIsUnique(userName)) {
+        if (this.getUserAccountDirectory().checkIfUsernameIsUnique(userName)) {
             return false;
         }
         for (Network network : networkList) {
-            // Additional checks for networks can be added here
+            if (network.getUserAccountDirectory().checkIfUsernameIsUnique(userName)) {
+                return false;
+            }
+            for (Enterprise enterprise : network.getEnterpriseDirectory().getEnterpriseList()) {
+                if (enterprise.getUserAccountDirectory().checkIfUsernameIsUnique(userName)) {
+                    return false;
+                }
+                for (Organization organization : enterprise.getOrganizationDirectory().getOrganizationList()) {
+                    if (organization.getUserAccountDirectory().checkIfUsernameIsUnique(userName)) {
+                        return false;
+                    }
+                }
+            }
         }
         return true;
     }
@@ -274,7 +287,7 @@ public class EcoSystem extends Organization {
                     "Potential underage living donor",
                     donor.getDonorID(),
                     donor.getState() + ", " + donor.getCity(),
-                    "High"
+                    AlertLevel.HIGH
                 );
                 routeAntiTraffickingAlert(alert);
             }

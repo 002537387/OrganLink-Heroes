@@ -10,6 +10,7 @@ import Business.EcoSystem;
 import Business.BloodTypes.PersonBloodTypes;
 import Business.People.Donor;
 import Business.Requests.DonorRequest;
+import Business.Statuses.RequestStatus; // Corrected import to RequestStatus
 import Magic.Design.*;
 import Magic.Design.MyTableFormat;
 import Magic.Design.MyJLabel;
@@ -634,7 +635,7 @@ public class VolunteerDonorRequestJPanel extends javax.swing.JPanel {
         donor.setZipCode(Integer.parseInt(zipText.getText())); // zipCode
         donor.setContact(Long.parseLong(contactText.getText())); // contact
         donor.setEmailID(emailText.getText()); // emailID // Corrected
-        donor.setStatus("Government Approved"); // status
+        donor.setStatus(RequestStatus.DonorApplicationStatus.APPROVED); // status
     
         donor.setBrainInjury(true); //  labConfirmation
         donor.setDiabitiesBP(true); //  symptoms
@@ -644,11 +645,11 @@ public class VolunteerDonorRequestJPanel extends javax.swing.JPanel {
         for(DonorRequest donorRequest: system.getDonorRequestDirectory().getDonorRequestList()){            
         
             if(donorRequest.getDonor().getDonorID().equals(uidText.getText())){ // Corrected
-            donorRequest.setStatus("Government Approved");
+            donorRequest.setStatus(RequestStatus.DonorApplicationStatus.APPROVED.getValue());
             dB4OUtil.storeSystem(system);
             }
         }
-        statusText.setText("Government Approved");
+        statusText.setText(RequestStatus.DonorApplicationStatus.APPROVED.getValue());
         
         dB4OUtil.storeSystem(system);
         populateRequestTable();
@@ -675,8 +676,8 @@ public class VolunteerDonorRequestJPanel extends javax.swing.JPanel {
         for(DonorRequest donorRequest: system.getDonorRequestDirectory().getDonorRequestList()){            
         
             if(donorRequest.getDonor().getName().equals(nameText.getText())){ // Corrected
-            statusText.setText("Rejected");
-            donorRequest.setStatus("Rejected");
+            statusText.setText(RequestStatus.DonorApplicationStatus.REJECTED.getValue());
+            donorRequest.setStatus(RequestStatus.DonorApplicationStatus.REJECTED.getValue());
             }}
         dB4OUtil.storeSystem(system);
         populateRequestTable();

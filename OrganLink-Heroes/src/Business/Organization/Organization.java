@@ -20,16 +20,12 @@ import java.util.ArrayList;
 public abstract class Organization {
 
     // Declare instance variables for organization details
-    private OrganizationDirectory directory;
     private int organizationID;
     private String name;
-    private String realName;
     private WorkQueue workQueue;
     private EmployeeDirectory employeeDirectory;
     private UserAccountDirectory userAccountDirectory;
     private static int counter = 0;
-    private ArrayList<PersonBloodTypes> allHLAs;
-    private DB4OUtil dB4OUtil = DB4OUtil.getInstance();
     private Type type; // New member variable for Organization Type
 
     // Enum to define different types of organizations
@@ -65,11 +61,9 @@ public abstract class Organization {
     }
 
     // Constructor to initialize the organization with name and directory
-    public Organization(String name, OrganizationDirectory directory, String typeString) {
-        this.realName = name;
-        this.name = typeString; // Name is set from typeString, should be actual type
+    public Organization(String name, String typeString) {
+        this.name = name; // 'name' now stores the instance-specific name
         this.type = Type.fromValue(typeString); // Convert typeString to Type enum using helper
-        this.directory = directory;
         workQueue = new WorkQueue();  // Initialize work queue
         System.out.println("initialise work queue");
         employeeDirectory = new EmployeeDirectory();  // Initialize employee directory
@@ -114,14 +108,6 @@ public abstract class Organization {
 
     public void setWorkQueue(WorkQueue workQueue) {
         this.workQueue = workQueue;
-    }
-
-    public String getRealName() {
-        return realName;
-    }
-
-    public void setRealName(String realName) {
-        this.realName = realName;
     }
 
     // Override toString to return the organization's name

@@ -15,10 +15,8 @@ import java.util.ArrayList;
  */
 public class LaboratoryOrganization extends Organization {
 
-    // Constructor for the LaboratoryOrganization class
     public LaboratoryOrganization(String name, OrganizationDirectory parent) {
-        // If name is null, assign a default Laboratory value, otherwise use the provided name
-        super(name == null ? Organization.Type.Laboratory.getValue() : name, parent, Organization.Type.Laboratory.getValue());
+        super(name == null ? Organization.Type.Laboratory.getValue() : name, Organization.Type.Laboratory.getValue());
     }
 
     // Method to get the list of roles supported by this organization

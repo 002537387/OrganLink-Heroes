@@ -6,6 +6,8 @@ package Business.People;
 
 import Business.BloodTypes.PersonBloodTypes;
 import Business.BloodTypes.PersonBloodTypes.BloodType;
+import Business.Statuses.RequestStatus; // Added import for the outer RequestStatus class
+import Business.Statuses.RequestStatus.PatientStatus;
 import java.util.Date;
 
 /**
@@ -25,7 +27,7 @@ public class Patient {
     private int zipCode;
     private long contact;
     private String emailID;
-    private String status;
+    private RequestStatus.PatientStatus status;
     private boolean labConfirmation;
     private boolean legalApproval;
     private boolean emergencyStatus;
@@ -140,10 +142,10 @@ public class Patient {
         this.emailID = emailID;    
     }
 
-    public String getStatus() {        
+    public RequestStatus.PatientStatus getStatus() {        
         return status;    
     }
-    public void setStatus(String status) {        
+    public void setStatus(RequestStatus.PatientStatus status) {        
         this.status = status;    
     }
 

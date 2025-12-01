@@ -2,27 +2,29 @@ package Business.Requests;
 
 import Business.OrganMatch;
 import Business.WorkQueue.WorkRequest;
+import Business.Requests.AlertLevel; // Added import for AlertLevel
+import Business.Statuses.RequestStatus; // Import for RequestStatus.EmergencyStatus
 import java.util.Date;
 
 public class AntiTraffickingAlert extends WorkRequest {
     private String suspectedActivity;
     private String relatedEntity; // e.g., Donor ID, Patient ID, Request ID
     private String geographicalArea;
-    private String alertLevel; // e.g., "Low", "Medium", "High"
+    private AlertLevel alertLevel; // e.g., "Low", "Medium", "High"
 
     public AntiTraffickingAlert() {
         super();
-        this.setStatus("New Alert"); // Initial status
-        this.setAlertLevel("Medium"); // Default alert level
+        this.setStatus(RequestStatus.EmergencyStatus.ISSUE_DETECTED.getValue()); // Initial status using enum
+        this.alertLevel = AlertLevel.MEDIUM; // Default alert level using enum
     }
 
-    public AntiTraffickingAlert(String suspectedActivity, String relatedEntity, String geographicalArea, String alertLevel) {
+    public AntiTraffickingAlert(String suspectedActivity, String relatedEntity, String geographicalArea, AlertLevel alertLevel) {
         super();
         this.suspectedActivity = suspectedActivity;
         this.relatedEntity = relatedEntity;
         this.geographicalArea = geographicalArea;
         this.alertLevel = alertLevel;
-        this.setStatus("New Alert");
+        this.setStatus(RequestStatus.EmergencyStatus.ISSUE_DETECTED.getValue());
     }
 
     // --- Getters and Setters ---
@@ -50,11 +52,11 @@ public class AntiTraffickingAlert extends WorkRequest {
         this.geographicalArea = geographicalArea;
     }
 
-    public String getAlertLevel() {
+    public AlertLevel getAlertLevel() {
         return alertLevel;
     }
 
-    public void setAlertLevel(String alertLevel) {
+    public void setAlertLevel(AlertLevel alertLevel) {
         this.alertLevel = alertLevel;
     }
     

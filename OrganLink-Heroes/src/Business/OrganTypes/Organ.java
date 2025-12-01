@@ -1,13 +1,15 @@
 package Business.OrganTypes;
 
 import java.util.Date;
+import Business.OrganTypes.OrganCondition;
+import Business.OrganTypes.OrganStatus;
 
 public class Organ {
     private String organId;
     private OrganType type;
-    private String condition; // e.g., "Good", "Fair", "Excellent"
+    private OrganCondition condition; // e.g., "Good", "Fair", "Excellent"
     private Date retrievalDate;
-    private String currentStatus; // e.g., "Available", "Allocated", "In Transit"
+    private OrganStatus currentStatus; // e.g., "Available", "Allocated", "In Transit"
     private String compatibilityMarkers; // Generic string for now, could be a complex object later
     private String donorId; // Reference to the donor
     private String patientId; // Reference to the recipient (if allocated)
@@ -16,7 +18,7 @@ public class Organ {
         this.type = type;
         this.donorId = donorId;
         this.organId = generateUniqueOrganId(); // Needs to be implemented
-        this.currentStatus = "Available"; // Default status
+        this.currentStatus = OrganStatus.AVAILABLE; // Default status using enum
     }
 
     // --- Getters and Setters ---
@@ -36,11 +38,11 @@ public class Organ {
         this.type = type;
     }
 
-    public String getCondition() {
+    public OrganCondition getCondition() {
         return condition;
     }
 
-    public void voidsetCondition(String condition) {
+    public void setCondition(OrganCondition condition) {
         this.condition = condition;
     }
 
@@ -52,11 +54,11 @@ public class Organ {
         this.retrievalDate = retrievalDate;
     }
 
-    public String getCurrentStatus() {
+    public OrganStatus getCurrentStatus() {
         return currentStatus;
     }
 
-    public void setCurrentStatus(String currentStatus) {
+    public void setCurrentStatus(OrganStatus currentStatus) {
         this.currentStatus = currentStatus;
     }
 

@@ -14,6 +14,8 @@ import com.db4o.config.EmbeddedConfiguration;
 import com.db4o.ta.TransparentPersistenceSupport;
 import java.io.File;
 import java.nio.file.Paths;
+import java.util.logging.Level; // Added for logging levels
+import java.util.logging.Logger; // Added for logging
 
 /**
  *
@@ -21,6 +23,7 @@ import java.nio.file.Paths;
  */
 public class DB4OUtil {
 
+    private static final Logger logger = Logger.getLogger(DB4OUtil.class.getName());
     // Path to the data store
     private static final String FILENAME = Paths.get("Databank.db4o").toAbsolutePath().toString();
     private static DB4OUtil dB4OUtil;
@@ -44,10 +47,11 @@ public class DB4OUtil {
 
             // Register the top-most class for cascading updates
             config.common().objectClass(EcoSystem.class).cascadeOnUpdate(true);
+            // config.common().add(new TransparentPersistenceSupport()); // Commented out for debugging
             ObjectContainer db = Db4oEmbedded.openFile(config, FILENAME);
             return db;
         } catch (Exception ex) {
-            System.out.print(ex.getMessage());
+            logger.log(Level.SEVERE, "Error creating DB4O connection", ex);
         }
         return null;
     }
@@ -55,14 +59,14 @@ public class DB4OUtil {
     // Stores the EcoSystem object in the database
     public synchronized void storeSystem(EcoSystem system) {
         ObjectContainer conn = createConnection();
-        File f = new File(FILENAME);
-        try {
-            f.delete(); // Remove old data file
-            f.createNewFile(); // Create a new data file
-        } catch (Exception e) {
-            // Handle exception silently
+        ObjectSet<EcoSystem> systems = conn.query(EcoSystem.class);
+        if (systems.size() == 0) { // If no system exists, store the new one
+            conn.store(system);
+        } else { // If a system exists, update it
+            EcoSystem oldSystem = systems.get(systems.size() - 1);
+            conn.delete(oldSystem);
+            conn.store(system);
         }
-        conn.store(system);
         conn.commit();
         conn.close();
     }

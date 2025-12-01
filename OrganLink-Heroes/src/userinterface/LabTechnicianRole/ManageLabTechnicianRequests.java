@@ -15,6 +15,7 @@ import Business.Organization.HospitalOrganization;
 import Business.Organization.Organization;
 import Business.Organization.LaboratoryOrganization;
 import Business.People.Donor;
+import Business.Statuses.RequestStatus; // Corrected import to RequestStatus
 import Business.UserAccount.UserAccount;
 import Business.WorkQueue.WorkRequest;
 import Magic.Design.MyTableFormat;
@@ -547,7 +548,7 @@ public class ManageLabTechnicianRequests extends javax.swing.JPanel {
         for(Donor dnr: system.getDonorDirectory().getDonorList()){
             if(dnr.getDonorID().equals(request1.getDonor().getDonorID())){
                 //dnr.setLastDonationDate(new Date()); // Removed
-                dnr.setStatus("BoneMarrow Donated");
+                dnr.setStatus(RequestStatus.DonorApplicationStatus.RETRIEVAL_SCHEDULED);
                 //System.out.println(String.valueOf(dnr.getLastDonationDate())+" last donation date"); // Removed
             }
         }

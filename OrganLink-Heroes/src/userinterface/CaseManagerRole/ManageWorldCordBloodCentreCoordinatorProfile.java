@@ -159,10 +159,10 @@ public class ManageWorldCordBloodCentreCoordinatorProfile extends javax.swing.JP
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         // TODO add your handling code here:
         userAccount.getEmployee().setCity(txtCity.getText());
-        userAccount.getEmployee().setContactNumber(Integer.parseInt(txtContact.getText()));
+        userAccount.getEmployee().setContactNumber(txtContact.getText());
         userAccount.getEmployee().setDateOfBirth(new Date(txtDOB.getText()));
         userAccount.getEmployee().setGender((String) comboGender.getSelectedItem());
-        userAccount.getEmployee().setAddress(txtAddress.getText());
+        userAccount.getEmployee().setStreetAddress(txtAddress.getText());
         userAccount.getEmployee().setState(txtCity.getText());
 
     }//GEN-LAST:event_btnSaveActionPerformed
