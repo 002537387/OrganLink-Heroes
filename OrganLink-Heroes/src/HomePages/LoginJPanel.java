@@ -28,7 +28,7 @@ public class LoginJPanel extends javax.swing.JPanel {
     EcoSystem system;
     JPanel mainProcessContainer;
     MainJFrame mainJframe;
-    
+
     public LoginJPanel(EcoSystem system, JPanel mainProcessContainer) {
         initComponents();
 

@@ -20,6 +20,7 @@ import Business.Requests.DonorRequest;
 import Business.Requests.DonorRequestDirectory;
 import Business.Requests.PatientRequest;
 import Business.Requests.PatientRequestDirectory;
+import Business.Emergency.EmergencyDirectory;
 import Business.Role.Role;
 import Business.Role.SystemAdminRole;
 import Business.Statuses.DonorApplicationStatuses;
@@ -40,6 +41,7 @@ public class EcoSystem extends Organization {
     private PatientDirectory patientDirectory;
     private DonorRequestDirectory donorRequestDirectory;
     private PatientRequestDirectory patientRequestDirectory;
+    private EmergencyDirectory emergencyDirectory;
     private UserAccountDirectory userAccountDirectory;
     private PersonBloodTypes personBloodTypes;
     private DonorApplicationStatuses donorApplicationStatus;
@@ -59,6 +61,7 @@ public class EcoSystem extends Organization {
         this.donorApplicationStatus = new DonorApplicationStatuses();
         this.personBloodTypes = new PersonBloodTypes();
         this.matchedRequests = new ArrayList<>(); // Initialize matchedRequests
+        this.emergencyDirectory = new EmergencyDirectory();
     }
 
     // Singleton instance accessor
@@ -86,6 +89,10 @@ public class EcoSystem extends Organization {
         }
         return patientDirectory;
     }
+    public EmergencyDirectory getEmergencyDirectory() {
+    return emergencyDirectory;
+}
+
 
     public void setPatientDirectory(PatientDirectory patientDirectory) {
         this.patientDirectory = patientDirectory;
