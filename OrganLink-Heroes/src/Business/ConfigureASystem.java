@@ -44,7 +44,8 @@ public class ConfigureASystem {
         sampleRequest.setStatus(RequestStatus.PatientRequestStatus.PENDING_VERIFICATION.getValue()); // Set initial status
         sampleRequest.setRequiredOrganType(OrganType.KIDNEY); // Example required organ
         sampleRequest.setMedicalUrgencyLevel(MedicalUrgencyLevel.MEDIUM); // Example urgency level
-
+        
+    
 
         // Add the PatientRequest to the system's PatientRequestDirectory
         system.getPatientRequestDirectory().addPatientRequest(sampleRequest);

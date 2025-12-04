@@ -11,6 +11,7 @@ import Business.Network.Network;
 import Business.Organization.Organization;
 import Business.UserAccount.UserAccount;
 import javax.swing.JPanel; // Added import
+import userinterface.CustomerRole.PickCustomerActionJPanel;
 import userinterface.DonorRole.DonorWorkAreaJPanel;
 
 /**
@@ -19,8 +20,26 @@ import userinterface.DonorRole.DonorWorkAreaJPanel;
  */
 public class DonorRole extends Role {
 
+     @Override
+    public JPanel createWorkArea(JPanel userProcessContainer, 
+                                 UserAccount account, 
+                                 Organization organization, 
+                                 Enterprise enterprise, 
+                                 EcoSystem business,
+                                 Network network) {
+        // 登入後返回 PickCustomerActionJPanel（Donor 的選單頁面）
+        return new PickCustomerActionJPanel(business, userProcessContainer);
+        /*
+    System.out.println("=== DonorRole.createWorkArea() 被調用 ===");
+    PickCustomerActionJPanel panel = new PickCustomerActionJPanel(business, userProcessContainer);
+    System.out.println("返回的 panel: " + panel);
+    System.out.println("Panel size: " + panel.getSize());
+    System.out.println("Panel preferred size: " + panel.getPreferredSize());
+    return panel;
+    */
+    }
     @Override
-    public JPanel createWorkArea(JPanel userProcessContainer, UserAccount account, Organization organization, Enterprise enterprise, EcoSystem business, Network network) {
-        return new DonorWorkAreaJPanel(userProcessContainer, account, organization, enterprise, business, network);
+    public String toString() {
+        return "Donor";
     }
 }

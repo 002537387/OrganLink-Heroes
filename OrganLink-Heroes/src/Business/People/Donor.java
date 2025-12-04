@@ -7,6 +7,7 @@ package Business.People;
 import Business.BloodTypes.PersonBloodTypes;
 import Business.BloodTypes.PersonBloodTypes.BloodType;
 import Business.Employee.Employee; // Added import
+import Business.OrganTypes.OrganType;
 import Business.Statuses.RequestStatus; // Corrected import to RequestStatus
 import java.util.Date;
 
@@ -37,6 +38,8 @@ public class Donor {
     private Date cancerDiagnosedDate;
     private String tissueMarkers; // Added for tissue compatibility
     private String antibodyProfile; // Added for antibody profile
+      // 新增器官類型屬性
+    private OrganType organType;
 
     // Default constructor
     public Donor(){
@@ -135,6 +138,16 @@ public class Donor {
 
     public void setAntibodyProfile(String antibodyProfile) {
         this.antibodyProfile = antibodyProfile;
+    }
+    
+    
+    // 新增 OrganType 的 Getter 和 Setter
+    public OrganType getOrganType() {
+        return organType;
+    }
+    
+    public void setOrganType(OrganType organType) {
+        this.organType = organType;
     }
 
     

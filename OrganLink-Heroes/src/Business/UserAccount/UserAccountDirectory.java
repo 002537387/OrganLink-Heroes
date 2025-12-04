@@ -54,4 +54,13 @@ public class UserAccountDirectory {
         userAccountList.add(userAccount);
         return userAccount;
     }
+
+    public boolean checkIfUsernameExists(String username) {
+    for (UserAccount ua : userAccountList) {
+        if (ua.getUsername().equals(username)) {
+            return true;
+        }
+    }
+    return false;
+   }
 }

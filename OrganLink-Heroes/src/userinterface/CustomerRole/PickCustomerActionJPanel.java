@@ -27,6 +27,13 @@ public class PickCustomerActionJPanel extends javax.swing.JPanel {
         this.customerProcessContainer = customerProcessContainer;
 
         this.setSize(1280, 760);
+        
+        /*
+        System.out.println("donorSignUpBtn: " + donorSignUpBtn);
+        System.out.println("trackID: " + trackID);
+        System.out.println("donorSignUpBtn text: " + (donorSignUpBtn != null ? donorSignUpBtn.getText() : "null"));
+        System.out.println("=== PickCustomerActionJPanel 建構子結束 ===");
+        */
     }
 
     /**
