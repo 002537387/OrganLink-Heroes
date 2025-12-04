@@ -8,6 +8,7 @@ package userinterface.CustomerRole;
 import Business.BloodTypes.PersonBloodTypes.BloodType;
 import Business.DB4OUtil.DB4OUtil;
 import Business.EcoSystem;
+import Business.OrganTypes.OrganType;
 import Business.People.Donor;
 import Business.Requests.DonorRequest;
 import java.awt.CardLayout;
@@ -154,7 +155,7 @@ public class DonorApplicationJPanel extends javax.swing.JPanel {
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jLabel3 = new javax.swing.JLabel();
@@ -231,7 +232,7 @@ public class DonorApplicationJPanel extends javax.swing.JPanel {
 
         jLabel6.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(204, 255, 204));
-        jLabel6.setText("DOB:");
+        jLabel6.setText("DOO:");
         add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 160, -1, -1));
 
         jLabel7.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
@@ -380,11 +381,9 @@ public class DonorApplicationJPanel extends javax.swing.JPanel {
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 dobDateFieldMouseExited(evt);
             }
-
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 dobDateFieldMousePressed(evt);
             }
-
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 agePop(evt);
             }
@@ -436,17 +435,17 @@ public class DonorApplicationJPanel extends javax.swing.JPanel {
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
-                jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel25, javax.swing.GroupLayout.PREFERRED_SIZE, 1280,
-                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 410, Short.MAX_VALUE)));
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addComponent(jLabel25, javax.swing.GroupLayout.PREFERRED_SIZE, 1280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 410, Short.MAX_VALUE))
+        );
         jPanel3Layout.setVerticalGroup(
-                jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(jLabel25, javax.swing.GroupLayout.PREFERRED_SIZE, 70,
-                                        javax.swing.GroupLayout.PREFERRED_SIZE)));
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jLabel25, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
 
         add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1690, -1));
         add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 320, 1140, 20));
@@ -659,14 +658,24 @@ public class DonorApplicationJPanel extends javax.swing.JPanel {
                                         donor.setBreathingProb(true);
                                     } else if (btnNoQ4.isSelected()) {
                                         donor.setBreathingProb(false);
-                                    }                
+                                    } 
+                                    
+                  //添加organ type
+               String selectedOrganTypeName = (String) bloodTypeComboBox.getSelectedItem();
+               if (selectedOrganTypeName != null && !selectedOrganTypeName.isEmpty()) {
+               // 將字符串轉換為 OrganType 枚舉
+               OrganType selectedOrganType = OrganType.valueOf(selectedOrganTypeName.toUpperCase());
+               donorRequest.setOfferedOrganType(selectedOrganType);
+               }
+               
                 donorRequest.setStatus("New Request"); // status on DonorRequest
                 system.getDonorDirectory().addDonor(donor); // Add the donor to the directory
                 system.getDonorRequestDirectory().addDonorRequest(donorRequest); // Add the donor request to the directory
                 
                 JOptionPane.showMessageDialog(null,
                         new JLabel("<html><b>Thank you for volunteering to save a life!</b></html>"));
-
+                
+                
                 dB4OUtil.storeSystem(system);
                 returnToCustomerWorkArea();
                 // disableAllButton();
@@ -865,8 +874,8 @@ public class DonorApplicationJPanel extends javax.swing.JPanel {
     private void populatebloodTypeComboBox() {
 
         bloodTypeComboBox.removeAllItems();
-        for (BloodType bt : system.getPersonBloodTypes().getBloodTypeList()) {
-            bloodTypeComboBox.addItem(bt.toString());
+         for (OrganType organType : OrganType.values()) {
+            bloodTypeComboBox.addItem(organType.toString());
         }
     }// GEN-LAST:event_bloodTypeComboBoxActionPerformed
 

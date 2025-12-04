@@ -16,6 +16,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import userinterface.CustomerRole.CustomerWorkAreaJPanel;
 
+
 /**
  *
  * @author User
@@ -44,7 +45,7 @@ public class LoginJPanel extends javax.swing.JPanel {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         lblUserName = new javax.swing.JLabel();
@@ -53,6 +54,7 @@ public class LoginJPanel extends javax.swing.JPanel {
         txtPassword = new javax.swing.JPasswordField();
         btnLogin = new javax.swing.JButton();
         btnCustomerMode = new javax.swing.JButton();
+        btnCreateAccount = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(0, 153, 153));
         setMaximumSize(new java.awt.Dimension(1280, 720));
@@ -91,46 +93,65 @@ public class LoginJPanel extends javax.swing.JPanel {
             }
         });
 
+        btnCreateAccount.setBackground(new java.awt.Color(0, 102, 102));
+        btnCreateAccount.setForeground(new java.awt.Color(204, 255, 204));
+        btnCreateAccount.setText("Create Account");
+        btnCreateAccount.setBorder(new javax.swing.border.MatteBorder(null));
+        btnCreateAccount.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCreateAccountActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnCustomerMode, javax.swing.GroupLayout.PREFERRED_SIZE, 98,
-                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(26, 26, 26))
-                        .addGroup(layout.createSequentialGroup()
-                                .addGap(415, 415, 415)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(lblUserName)
-                                        .addComponent(lblPassword)
-                                        .addComponent(txtUserName)
-                                        .addComponent(txtPassword)
-                                        .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 400,
-                                                javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addContainerGap(465, Short.MAX_VALUE)));
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnCustomerMode, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(415, 415, 415)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnCreateAccount, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(lblUserName)
+                        .addComponent(lblPassword)
+                        .addComponent(txtUserName)
+                        .addComponent(txtPassword)
+                        .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(465, Short.MAX_VALUE))
+        );
         layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                                .addGap(17, 17, 17)
-                                .addComponent(btnCustomerMode)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 270,
-                                        Short.MAX_VALUE)
-                                .addComponent(lblUserName)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtUserName, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(14, 14, 14)
-                                .addComponent(lblPassword)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(26, 26, 26)
-                                .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 31,
-                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(249, 249, 249)));
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addComponent(btnCustomerMode)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 268, Short.MAX_VALUE)
+                .addComponent(lblUserName)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtUserName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(14, 14, 14)
+                .addComponent(lblPassword)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
+                .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(34, 34, 34)
+                .addComponent(btnCreateAccount, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(184, 184, 184))
+        );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnCreateAccountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateAccountActionPerformed
+        // TODO add your handling code here:
+         mainProcessContainer.removeAll();
+         mainProcessContainer.add("CreateAccountJPanel", 
+                 new CreateAccountJPanel(system, mainProcessContainer));
+        CardLayout layout = (CardLayout) mainProcessContainer.getLayout();
+        layout.next(mainProcessContainer);
+    }//GEN-LAST:event_btnCreateAccountActionPerformed
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnLoginActionPerformed
         String userName = txtUserName.getText();
@@ -209,7 +230,9 @@ public class LoginJPanel extends javax.swing.JPanel {
         }
 
     }// GEN-LAST:event_btnLoginActionPerformed
-
+    
+    
+    
     private void btnCustomerModeActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCustomerModeActionPerformed
         // TODO add your handling code here:
         mainProcessContainer.removeAll();
@@ -218,8 +241,10 @@ public class LoginJPanel extends javax.swing.JPanel {
         layout.next(mainProcessContainer);
 
     }// GEN-LAST:event_btnCustomerModeActionPerformed
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCreateAccount;
     private javax.swing.JButton btnCustomerMode;
     private javax.swing.JButton btnLogin;
     private javax.swing.JLabel lblPassword;

@@ -7,7 +7,7 @@ package userinterface.CustomerRole;
 
 /**
  *
- * @author User
+ * @author Wanyu
  */
 
 import userinterface.SystemCoordinatorRole.*;

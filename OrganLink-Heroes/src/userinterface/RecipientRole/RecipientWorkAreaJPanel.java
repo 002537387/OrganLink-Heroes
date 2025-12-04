@@ -5,7 +5,13 @@ import Business.Enterprise.Enterprise;
 import Business.Network.Network;
 import Business.Organization.Organization;
 import Business.UserAccount.UserAccount;
+import java.awt.CardLayout;
 import javax.swing.JPanel;
+import userinterface.CustomerRole.PickCustomerActionJPanel;
+
+/**
+     * Creates new form RecipientWorkAreaJPanel
+     */
 
 public class RecipientWorkAreaJPanel extends javax.swing.JPanel {
 
@@ -29,6 +35,8 @@ public class RecipientWorkAreaJPanel extends javax.swing.JPanel {
         this.network = network;
         
         lblWelcome.setText("Welcome Recipient " + account.getEmployee().getName());
+        
+        
     }
 
     /**
@@ -101,10 +109,34 @@ public class RecipientWorkAreaJPanel extends javax.swing.JPanel {
 
     private void btnViewRequestStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewRequestStatusActionPerformed
         // TODO: Implement logic for viewing request status
+        ViewRequestStatusJPanel viewRequestStatusPanel = new ViewRequestStatusJPanel(
+        userProcessContainer, 
+        account, 
+        organization, 
+        enterprise, 
+        business, 
+        network
+    );
+        // 使用 CardLayout 切换到新页面
+        userProcessContainer.add("ViewRequestStatusJPanel", viewRequestStatusPanel);
+        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+        layout.next(userProcessContainer);
     }//GEN-LAST:event_btnViewRequestStatusActionPerformed
 
     private void btnViewEstimatedWaitTimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewEstimatedWaitTimeActionPerformed
         // TODO: Implement logic for viewing estimated wait time
+        EstimateWaitingTimeJPanel EstimateWaitingTimeJPanel = new EstimateWaitingTimeJPanel(
+        userProcessContainer, 
+        account, 
+        organization, 
+        enterprise, 
+        business, 
+        network
+    );
+        // 使用 CardLayout 切换到新页面
+        userProcessContainer.add("ViewRequestStatusJPanel", EstimateWaitingTimeJPanel);
+        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+        layout.next(userProcessContainer);
     }//GEN-LAST:event_btnViewEstimatedWaitTimeActionPerformed
 
 

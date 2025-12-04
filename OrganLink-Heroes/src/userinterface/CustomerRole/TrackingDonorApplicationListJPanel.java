@@ -24,7 +24,7 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author User
+ * @author wanyu
  */
 public class TrackingDonorApplicationListJPanel extends javax.swing.JPanel {
 
@@ -57,7 +57,7 @@ public class TrackingDonorApplicationListJPanel extends javax.swing.JPanel {
             row[0] = donorRequest;
             row[1] = donorRequest.getDonor().getName(); // Access via getDonor()
             row[2] = donorRequest.getDonor().getContact(); // Access via getDonor()
-            row[3] = donorRequest.getDonor().getBloodType().toString(); // Access via getDonor()
+            row[3] = donorRequest.getDonor().getOrganType(); // Access via getDonor()
             row[4] = donorRequest.getStatus();
 
             dtm.addRow(row);
@@ -71,7 +71,7 @@ public class TrackingDonorApplicationListJPanel extends javax.swing.JPanel {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -90,18 +90,19 @@ public class TrackingDonorApplicationListJPanel extends javax.swing.JPanel {
         tblDonorApplications.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
         tblDonorApplications.setForeground(new java.awt.Color(255, 255, 255));
         tblDonorApplications.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][] {
+            new Object [][] {
 
-                },
-                new String[] {
-                        "Patient ID", "Name", "Contact", "Blood Type", "Status"
-                }) {
-            boolean[] canEdit = new boolean[] {
-                    false, false, false, false, false
+            },
+            new String [] {
+                "Patient ID", "Name", "Contact", "Organ Type", "Status"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit[columnIndex];
+                return canEdit [columnIndex];
             }
         });
         tblDonorApplications.setFocusable(false);
@@ -133,17 +134,17 @@ public class TrackingDonorApplicationListJPanel extends javax.swing.JPanel {
         javax.swing.GroupLayout titlePanelLayout = new javax.swing.GroupLayout(titlePanel);
         titlePanel.setLayout(titlePanelLayout);
         titlePanelLayout.setHorizontalGroup(
-                titlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(titlePanelLayout.createSequentialGroup()
-                                .addComponent(jLabel26, javax.swing.GroupLayout.PREFERRED_SIZE, 1273,
-                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 527, Short.MAX_VALUE)));
+            titlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(titlePanelLayout.createSequentialGroup()
+                .addComponent(jLabel26, javax.swing.GroupLayout.PREFERRED_SIZE, 1273, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 527, Short.MAX_VALUE))
+        );
         titlePanelLayout.setVerticalGroup(
-                titlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, titlePanelLayout.createSequentialGroup()
-                                .addGap(0, 12, Short.MAX_VALUE)
-                                .addComponent(jLabel26, javax.swing.GroupLayout.PREFERRED_SIZE, 58,
-                                        javax.swing.GroupLayout.PREFERRED_SIZE)));
+            titlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, titlePanelLayout.createSequentialGroup()
+                .addGap(0, 12, Short.MAX_VALUE)
+                .addComponent(jLabel26, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
 
         add(titlePanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1800, -1));
 
