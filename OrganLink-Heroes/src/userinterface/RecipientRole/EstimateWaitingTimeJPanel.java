@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 
 /**
  *
- * @author wanyuchiu
+ * @author wanyu
  */
 public class EstimateWaitingTimeJPanel extends javax.swing.JPanel {
 

@@ -141,7 +141,7 @@ public class Donor {
     }
     
     
-    // 新增 OrganType 的 Getter 和 Setter
+    // 新增 OrganType 的 Getter 和 Setter 方法
     public OrganType getOrganType() {
         return organType;
     }

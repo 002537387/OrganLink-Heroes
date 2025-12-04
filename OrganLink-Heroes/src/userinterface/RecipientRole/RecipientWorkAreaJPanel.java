@@ -9,6 +9,10 @@ import java.awt.CardLayout;
 import javax.swing.JPanel;
 import userinterface.CustomerRole.PickCustomerActionJPanel;
 
+/**
+     * Creates new form RecipientWorkAreaJPanel
+     */
+
 public class RecipientWorkAreaJPanel extends javax.swing.JPanel {
 
     private JPanel userProcessContainer;

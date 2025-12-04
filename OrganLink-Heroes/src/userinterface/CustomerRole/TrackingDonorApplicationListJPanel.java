@@ -24,7 +24,7 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author User
+ * @author wanyu
  */
 public class TrackingDonorApplicationListJPanel extends javax.swing.JPanel {
 

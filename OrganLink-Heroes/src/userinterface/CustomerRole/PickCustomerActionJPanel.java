@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 
 /**
  *
- * @author User
+ * @author wanyu
  */
 public class PickCustomerActionJPanel extends javax.swing.JPanel {
 

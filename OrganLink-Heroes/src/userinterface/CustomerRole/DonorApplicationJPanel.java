@@ -660,7 +660,7 @@ public class DonorApplicationJPanel extends javax.swing.JPanel {
                                         donor.setBreathingProb(false);
                                     } 
                                     
-                  // *** 添加這段代碼：設置選擇的器官類型到 DonorRequest ***
+                  //添加organ type
                String selectedOrganTypeName = (String) bloodTypeComboBox.getSelectedItem();
                if (selectedOrganTypeName != null && !selectedOrganTypeName.isEmpty()) {
                // 將字符串轉換為 OrganType 枚舉

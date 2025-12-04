@@ -14,9 +14,8 @@ import java.awt.CardLayout;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import userinterface.CustomerRole.CreateDonorAccountJPanel;
 import userinterface.CustomerRole.CustomerWorkAreaJPanel;
-import userinterface.RecipientRole.CreateReceipientAccountJPanel;
+
 
 /**
  *
@@ -231,7 +230,9 @@ public class LoginJPanel extends javax.swing.JPanel {
         }
 
     }// GEN-LAST:event_btnLoginActionPerformed
-
+    
+    
+    
     private void btnCustomerModeActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCustomerModeActionPerformed
         // TODO add your handling code here:
         mainProcessContainer.removeAll();
@@ -240,6 +241,7 @@ public class LoginJPanel extends javax.swing.JPanel {
         layout.next(mainProcessContainer);
 
     }// GEN-LAST:event_btnCustomerModeActionPerformed
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCreateAccount;

@@ -16,7 +16,7 @@ import userinterface.CustomerRole.PickCustomerActionJPanel;
 
 /**
  *
- * @author wanyuchiu
+ * @author wanyu
  */
 public class ViewRequestStatusJPanel extends javax.swing.JPanel {
 
