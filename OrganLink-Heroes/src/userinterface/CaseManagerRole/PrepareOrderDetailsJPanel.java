@@ -10,16 +10,19 @@ import Business.EcoSystem;
 import Business.Enterprise.Enterprise;
 import Business.Network.Network;
 import Magic.Design.*;
+import Business.OrganMatch; // Import OrganMatch
 import Business.Organization.LogisticsOrganization;
 import Business.Organization.Organization;
 import Business.People.Patient;
 import Business.Requests.PatientRequest;
+import Business.Requests.LogisticsRequest; // Added import
 import Business.Statuses.RequestStatus; // Added import for RequestStatus
 import Business.UserAccount.UserAccount;
 import Business.WorkQueue.System_Coordinator_Test_WorkRequest;
 import Business.WorkQueue.WorkRequest;
 import Magic.Design.MyJButton;
 import Magic.Design.MyTableFormat;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Image;
 import java.text.ParseException;
@@ -32,6 +35,7 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -44,36 +48,53 @@ public class PrepareOrderDetailsJPanel extends javax.swing.JPanel {
     /**
      * Creates new form VolunteerReceiverRequestJPanel
      */
-    private  EcoSystem system;
-    private PatientRequest patientRequest;
-    private DB4OUtil dB4OUtil = DB4OUtil.getInstance();
+    private EcoSystem system;
     private UserAccount userAccount;
     private Network network;
+    private OrganMatch selectedMatch; // To store the selected organ match
+    private JPanel userProcessContainer;
+    private DB4OUtil dB4OUtil = DB4OUtil.getInstance();
     
-    public PrepareOrderDetailsJPanel(EcoSystem system, UserAccount userAccount, Network network) {
+    public PrepareOrderDetailsJPanel(JPanel userProcessContainer, UserAccount userAccount, Organization organization, Enterprise enterprise, EcoSystem system, Network network) {
         initComponents();
+        this.userProcessContainer = userProcessContainer;
         this.system = system;
         this.userAccount = userAccount;
         this.network = network;
-        requestTable.getTableHeader().setDefaultRenderer(new MyTableFormat());
-        populateRequestTable();
+        tblMatchedOrders.getTableHeader().setDefaultRenderer(new MyTableFormat()); // Assuming MyTableFormat is available
+        populateMatchedOrdersTable();
     }
   
 
-    private void populateRequestTable(){
-        DefaultTableModel dtm = (DefaultTableModel) requestTable.getModel();
+    private void populateMatchedOrdersTable(){
+        DefaultTableModel dtm = (DefaultTableModel) tblMatchedOrders.getModel();
         
         dtm.setRowCount(0);
         
-         for(PatientRequest patientRequest: system.getPatientRequestDirectory().getPatientRequestList()){            
-            Object row[] = new Object[4];
-            row[0]= patientRequest;
-            row[1]= patientRequest.getPatient().getName(); // Access via getPatient()
-            row[2]= patientRequest.getPatient().getContact(); // Access via getPatient()
-            row[3]= patientRequest.getStatus();
+        for(OrganMatch match : system.getMatchedRequests()){            
+            Object row[] = new Object[8];
+            row[0]= match; // Display Match ID (or toString of OrganMatch)
+            row[1]= match.getPatientRequest().getPatient().getName();
+            row[2]= match.getPatientRequest().getRequiredOrganType().getValue();
+            row[3]= match.getPatientRequest().getPatient().getBloodType().getValue();
+            row[4]= match.getDonorRequest().getDonor().getName();
+            row[5]= match.getDonorRequest().getOfferedOrganType().getValue();
+            row[6]= match.getDonorRequest().getDonor().getBloodType().getValue();
+            row[7]= String.format("%.2f", match.getMatchScore());
               
             dtm.addRow(row);
         }        
+    }
+    
+    private void populateMatchDetails(OrganMatch match) {
+        txtPatientName.setText(match.getPatientRequest().getPatient().getName());
+        txtRequiredOrgan.setText(match.getPatientRequest().getRequiredOrganType().getValue());
+        txtPatientBloodType.setText(match.getPatientRequest().getPatient().getBloodType().getValue());
+        txtMatchStatus.setText(match.getStatus());
+
+        txtDonorName.setText(match.getDonorRequest().getDonor().getName());
+        txtOfferedOrgan.setText(match.getDonorRequest().getOfferedOrganType().getValue());
+        txtDonorBloodType.setText(match.getDonorRequest().getDonor().getBloodType().getValue());
     }
 
     /**
@@ -85,33 +106,30 @@ public class PrepareOrderDetailsJPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        buttonFinalize = new javax.swing.JButton();
-        buttonSendForFunding = new javax.swing.JButton();
-        jLabel6 = new javax.swing.JLabel();
-        uidText = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        nameText = new javax.swing.JTextField();
-        jLabel16 = new javax.swing.JLabel();
-        contactText = new javax.swing.JTextField();
-        jLabel17 = new javax.swing.JLabel();
-        emailText = new javax.swing.JTextField();
-        jLabel10 = new javax.swing.JLabel();
-        bloodTypeText = new javax.swing.JTextField();
-        jLabel11 = new javax.swing.JLabel();
-        jLabel19 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel25 = new javax.swing.JLabel();
-        labConfirmationText = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        requestTable = new javax.swing.JTable();
-        statusText = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        tblMatchedOrders = new javax.swing.JTable();
         jSeparator3 = new javax.swing.JSeparator();
         jLabel4 = new javax.swing.JLabel();
-        buttonIssue = new javax.swing.JButton();
-        jLabel5 = new javax.swing.JLabel();
-        buttonTrackBlood = new javax.swing.JButton();
+        lblPatientDetails = new javax.swing.JLabel();
+        lblPatientName = new javax.swing.JLabel();
+        txtPatientName = new javax.swing.JTextField();
+        lblRequiredOrgan = new javax.swing.JLabel();
+        txtRequiredOrgan = new javax.swing.JTextField();
+        lblPatientBloodType = new javax.swing.JLabel();
+        txtPatientBloodType = new javax.swing.JTextField();
+        lblDonorDetails = new javax.swing.JLabel();
+        lblDonorName = new javax.swing.JLabel();
+        txtDonorName = new javax.swing.JTextField();
+        lblOfferedOrgan = new javax.swing.JLabel();
+        txtOfferedOrgan = new javax.swing.JTextField();
+        lblDonorBloodType = new javax.swing.JLabel();
+        txtDonorBloodType = new javax.swing.JTextField();
+        btnProcessOrder = new javax.swing.JButton();
+        btnBack = new javax.swing.JButton();
+        lblMatchStatus = new javax.swing.JLabel();
+        txtMatchStatus = new javax.swing.JTextField();
 
         setBackground(new java.awt.Color(0, 153, 153));
         setForeground(new java.awt.Color(204, 255, 204));
@@ -119,110 +137,13 @@ public class PrepareOrderDetailsJPanel extends javax.swing.JPanel {
         setPreferredSize(new java.awt.Dimension(1150, 720));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        buttonFinalize.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
-        buttonFinalize.setText("Finalize");
-        buttonFinalize.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        buttonFinalize.setEnabled(false);
-        buttonFinalize.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonFinalizeActionPerformed(evt);
-            }
-        });
-        add(buttonFinalize, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 470, 180, 40));
-
-        buttonSendForFunding.setBackground(new java.awt.Color(0, 102, 102));
-        buttonSendForFunding.setFont(new java.awt.Font("Times New Roman", 1, 20)); // NOI18N
-        buttonSendForFunding.setText("Send for Funding");
-        buttonSendForFunding.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        buttonSendForFunding.setEnabled(false);
-        buttonSendForFunding.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonSendForFundingActionPerformed(evt);
-            }
-        });
-        add(buttonSendForFunding, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 290, 180, 40));
-
-        jLabel6.setBackground(new java.awt.Color(0, 102, 102));
-        jLabel6.setFont(new java.awt.Font("Times New Roman", 1, 20)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(204, 255, 204));
-        jLabel6.setText("UID");
-        add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 270, -1, -1));
-
-        uidText.setBackground(new java.awt.Color(0, 153, 153));
-        uidText.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
-        uidText.setForeground(new java.awt.Color(204, 255, 204));
-        add(uidText, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 260, 180, -1));
-
-        jLabel3.setBackground(new java.awt.Color(0, 102, 102));
-        jLabel3.setFont(new java.awt.Font("Times New Roman", 1, 20)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(204, 255, 204));
-        jLabel3.setText("Options:");
-        add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 250, -1, -1));
-
-        nameText.setEditable(false);
-        nameText.setBackground(new java.awt.Color(0, 153, 153));
-        nameText.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
-        nameText.setForeground(new java.awt.Color(204, 255, 204));
-        add(nameText, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 260, 190, -1));
-
-        jLabel16.setBackground(new java.awt.Color(0, 102, 102));
-        jLabel16.setFont(new java.awt.Font("Times New Roman", 1, 20)); // NOI18N
-        jLabel16.setForeground(new java.awt.Color(204, 255, 204));
-        jLabel16.setText("Contact");
-        add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 310, -1, -1));
-
-        contactText.setBackground(new java.awt.Color(0, 153, 153));
-        contactText.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
-        contactText.setForeground(new java.awt.Color(204, 255, 204));
-        contactText.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                contactTextActionPerformed(evt);
-            }
-        });
-        add(contactText, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 310, 180, -1));
-
-        jLabel17.setBackground(new java.awt.Color(0, 102, 102));
-        jLabel17.setFont(new java.awt.Font("Times New Roman", 1, 20)); // NOI18N
-        jLabel17.setForeground(new java.awt.Color(204, 255, 204));
-        jLabel17.setText("Email");
-        add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 320, -1, -1));
-
-        emailText.setBackground(new java.awt.Color(0, 153, 153));
-        emailText.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
-        emailText.setForeground(new java.awt.Color(204, 255, 204));
-        add(emailText, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 310, 190, -1));
-
-        jLabel10.setBackground(new java.awt.Color(0, 102, 102));
-        jLabel10.setFont(new java.awt.Font("Times New Roman", 1, 20)); // NOI18N
-        jLabel10.setForeground(new java.awt.Color(204, 255, 204));
-        jLabel10.setText("Blood Type");
-        add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 370, -1, -1));
-
-        bloodTypeText.setBackground(new java.awt.Color(0, 153, 153));
-        bloodTypeText.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
-        bloodTypeText.setForeground(new java.awt.Color(204, 255, 204));
-        bloodTypeText.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bloodTypeTextActionPerformed(evt);
-            }
-        });
-        add(bloodTypeText, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 370, 190, -1));
-
-        jLabel11.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
-        add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 620, -1, -1));
-
-        jLabel19.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
-        jLabel19.setForeground(new java.awt.Color(204, 255, 204));
-        jLabel19.setText("Meets Reqs for Blood Donation?");
-        add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 600, -1, -1));
-
         jPanel3.setBackground(new java.awt.Color(0, 102, 102));
         jPanel3.setPreferredSize(new java.awt.Dimension(926, 70));
 
         jLabel25.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel25.setForeground(new java.awt.Color(255, 255, 255));
         jLabel25.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel25.setText("Prepare Order Details");
+        jLabel25.setText("Prepare Matched Order");
         jLabel25.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -243,285 +164,262 @@ public class PrepareOrderDetailsJPanel extends javax.swing.JPanel {
 
         add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1580, -1));
 
-        labConfirmationText.setBackground(new java.awt.Color(0, 153, 153));
-        labConfirmationText.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
-        labConfirmationText.setForeground(new java.awt.Color(204, 255, 204));
-        add(labConfirmationText, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 590, 200, -1));
-
-        requestTable.setBackground(new java.awt.Color(0, 102, 102));
-        requestTable.setFont(new java.awt.Font("Times New Roman", 1, 20)); // NOI18N
-        requestTable.setForeground(new java.awt.Color(204, 255, 204));
-        requestTable.setModel(new javax.swing.table.DefaultTableModel(
+        tblMatchedOrders.setBackground(new java.awt.Color(0, 102, 102));
+        tblMatchedOrders.setFont(new java.awt.Font("Times New Roman", 1, 20)); // NOI18N
+        tblMatchedOrders.setForeground(new java.awt.Color(204, 255, 204));
+        tblMatchedOrders.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "UID", "Name", "Contact", "Status"
+                "Match ID", "Patient Name", "Required Organ", "Patient Blood Type", "Donor Name", "Offered Organ", "Donor Blood Type", "Match Score"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        requestTable.setFocusable(false);
-        requestTable.setGridColor(new java.awt.Color(0, 0, 0));
-        requestTable.addMouseListener(new java.awt.event.MouseAdapter() {
+        tblMatchedOrders.setFocusable(false);
+        tblMatchedOrders.setGridColor(new java.awt.Color(0, 0, 0));
+        tblMatchedOrders.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                requestTableMousePressed(evt);
+                tblMatchedOrdersMousePressed(evt);
             }
         });
-        jScrollPane1.setViewportView(requestTable);
+        jScrollPane1.setViewportView(tblMatchedOrders);
 
         add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 100, 980, 130));
-
-        statusText.setBackground(new java.awt.Color(0, 153, 153));
-        statusText.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
-        statusText.setForeground(new java.awt.Color(204, 255, 204));
-        add(statusText, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 540, 200, -1));
-
-        jLabel1.setText("Status");
-        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 11, -1, -1));
-
-        jLabel2.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(204, 255, 204));
-        jLabel2.setText("Status");
-        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 550, -1, -1));
         add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 470, 860, -1));
 
         jLabel4.setBackground(new java.awt.Color(0, 102, 102));
         jLabel4.setFont(new java.awt.Font("Times New Roman", 1, 22)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(204, 255, 204));
-        jLabel4.setText("Patient History Details");
+        jLabel4.setText("Selected Match Details");
         add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 490, -1, -1));
 
-        buttonIssue.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
-        buttonIssue.setText("Issue");
-        buttonIssue.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        buttonIssue.setEnabled(false);
-        buttonIssue.addActionListener(new java.awt.event.ActionListener() {
+        lblPatientDetails.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        lblPatientDetails.setForeground(new java.awt.Color(204, 255, 204));
+        lblPatientDetails.setText("Patient Details:");
+        add(lblPatientDetails, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 260, -1, -1));
+
+        lblPatientName.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
+        lblPatientName.setForeground(new java.awt.Color(204, 255, 204));
+        lblPatientName.setText("Name:");
+        add(lblPatientName, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 290, -1, -1));
+
+        txtPatientName.setEditable(false);
+        txtPatientName.setBackground(new java.awt.Color(0, 153, 153));
+        txtPatientName.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
+        txtPatientName.setForeground(new java.awt.Color(204, 255, 204));
+        add(txtPatientName, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 290, 200, -1));
+
+        lblRequiredOrgan.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
+        lblRequiredOrgan.setForeground(new java.awt.Color(204, 255, 204));
+        lblRequiredOrgan.setText("Required Organ:");
+        add(lblRequiredOrgan, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 330, -1, -1));
+
+        txtRequiredOrgan.setEditable(false);
+        txtRequiredOrgan.setBackground(new java.awt.Color(0, 153, 153));
+        txtRequiredOrgan.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
+        txtRequiredOrgan.setForeground(new java.awt.Color(204, 255, 204));
+        add(txtRequiredOrgan, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 330, 200, -1));
+
+        lblPatientBloodType.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
+        lblPatientBloodType.setForeground(new java.awt.Color(204, 255, 204));
+        lblPatientBloodType.setText("Blood Type:");
+        add(lblPatientBloodType, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 370, -1, -1));
+
+        txtPatientBloodType.setEditable(false);
+        txtPatientBloodType.setBackground(new java.awt.Color(0, 153, 153));
+        txtPatientBloodType.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
+        txtPatientBloodType.setForeground(new java.awt.Color(204, 255, 204));
+        add(txtPatientBloodType, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 370, 200, -1));
+
+        lblDonorDetails.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        lblDonorDetails.setForeground(new java.awt.Color(204, 255, 204));
+        lblDonorDetails.setText("Donor Details:");
+        add(lblDonorDetails, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 260, -1, -1));
+
+        lblDonorName.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
+        lblDonorName.setForeground(new java.awt.Color(204, 255, 204));
+        lblDonorName.setText("Name:");
+        add(lblDonorName, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 290, -1, -1));
+
+        txtDonorName.setEditable(false);
+        txtDonorName.setBackground(new java.awt.Color(0, 153, 153));
+        txtDonorName.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
+        txtDonorName.setForeground(new java.awt.Color(204, 255, 204));
+        add(txtDonorName, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 290, 200, -1));
+
+        lblOfferedOrgan.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
+        lblOfferedOrgan.setForeground(new java.awt.Color(204, 255, 204));
+        lblOfferedOrgan.setText("Offered Organ:");
+        add(lblOfferedOrgan, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 330, -1, -1));
+
+        txtOfferedOrgan.setEditable(false);
+        txtOfferedOrgan.setBackground(new java.awt.Color(0, 153, 153));
+        txtOfferedOrgan.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
+        txtOfferedOrgan.setForeground(new java.awt.Color(204, 255, 204));
+        add(txtOfferedOrgan, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 330, 200, -1));
+
+        lblDonorBloodType.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
+        lblDonorBloodType.setForeground(new java.awt.Color(204, 255, 204));
+        lblDonorBloodType.setText("Blood Type:");
+        add(lblDonorBloodType, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 370, -1, -1));
+
+        txtDonorBloodType.setEditable(false);
+        txtDonorBloodType.setBackground(new java.awt.Color(0, 153, 153));
+        txtDonorBloodType.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
+        txtDonorBloodType.setForeground(new java.awt.Color(204, 255, 204));
+        add(txtDonorBloodType, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 370, 200, -1));
+
+        btnProcessOrder.setBackground(new java.awt.Color(0, 102, 102));
+        btnProcessOrder.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        btnProcessOrder.setForeground(new java.awt.Color(204, 255, 204));
+        btnProcessOrder.setText("Process Order");
+        btnProcessOrder.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonIssueActionPerformed(evt);
+                btnProcessOrderActionPerformed(evt);
             }
         });
-        add(buttonIssue, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 350, 180, 40));
+        add(btnProcessOrder, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 250, 150, 40));
 
-        jLabel5.setBackground(new java.awt.Color(0, 102, 102));
-        jLabel5.setFont(new java.awt.Font("Times New Roman", 1, 20)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(204, 255, 204));
-        jLabel5.setText("Name");
-        add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 270, -1, -1));
-
-        buttonTrackBlood.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
-        buttonTrackBlood.setText("Track Blood");
-        buttonTrackBlood.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        buttonTrackBlood.setEnabled(false);
-        buttonTrackBlood.addActionListener(new java.awt.event.ActionListener() {
+        btnBack.setBackground(new java.awt.Color(0, 102, 102));
+        btnBack.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        btnBack.setForeground(new java.awt.Color(204, 255, 204));
+        btnBack.setText("<< Back");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonTrackBloodActionPerformed(evt);
+                btnBackActionPerformed(evt);
             }
         });
-        add(buttonTrackBlood, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 410, 180, 40));
+        add(btnBack, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 550, -1, -1));
+
+        lblMatchStatus.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
+        lblMatchStatus.setForeground(new java.awt.Color(204, 255, 204));
+        lblMatchStatus.setText("Match Status:");
+        add(lblMatchStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 410, -1, -1));
+
+        txtMatchStatus.setEditable(false);
+        txtMatchStatus.setBackground(new java.awt.Color(0, 153, 153));
+        txtMatchStatus.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
+        txtMatchStatus.setForeground(new java.awt.Color(204, 255, 204));
+        add(txtMatchStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 410, 200, -1));
     }// </editor-fold>//GEN-END:initComponents
 
-    private void buttonSendForFundingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSendForFundingActionPerformed
-        // TODO add your handling code here:
-        if( !statusText.getText().equals("New Request"))
-            {
-                JOptionPane.showMessageDialog(null, new JLabel(  "<html><b>Request can not be approved!</b></html>"), "Warning", JOptionPane.WARNING_MESSAGE);
-            }
-        
-        else
-        {
-        
-        PatientRequest selectedPatientRequest = null;
-        for(PatientRequest pr : system.getPatientRequestDirectory().getPatientRequestList()){
-            if(pr.getPatient().getReceiverID().equals(uidText.getText())){
-                selectedPatientRequest = pr;
-                break;
-            }
-        }
-        
-        if (selectedPatientRequest == null) {
-            JOptionPane.showMessageDialog(null, "Patient Request not found for selected UID.", "Error", JOptionPane.ERROR_MESSAGE);
+    private void tblMatchedOrdersMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblMatchedOrdersMousePressed
+        int selectedRow = tblMatchedOrders.getSelectedRow();
+        if(selectedRow < 0){
             return;
         }
         
-        Patient patient = selectedPatientRequest.getPatient();
-        
-        try {
-            patient.setBloodType(system.getPersonBloodTypes().findBloodType(bloodTypeText.getText()));
-        }
-        catch (Exception e) {
-            JOptionPane.showMessageDialog(null, new JLabel("<html><b>Please check the patients blood group. It Should be AN,AP,BP,BN,ABP,ABN,OP,ON where N-Negative, P-Positive.</b></html>"), "Warning", JOptionPane.WARNING_MESSAGE);
+        selectedMatch = (OrganMatch) tblMatchedOrders.getValueAt(selectedRow, 0);
+        populateMatchDetails(selectedMatch);
+        btnProcessOrder.setEnabled(true);
+    }//GEN-LAST:event_tblMatchedOrdersMousePressed
+
+    private void btnProcessOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcessOrderActionPerformed
+        if (selectedMatch == null) {
+            JOptionPane.showMessageDialog(this, "Please select an organ match to process.", "Warning", JOptionPane.WARNING_MESSAGE);
             return;
         }
         
-        patient.setName(nameText.getText());
-        patient.setContact(Long.parseLong(contactText.getText()));  
+        // Update the status of the selected match
+        selectedMatch.setStatus("Processed by Case Manager");
         
-        patient.setReceiverID(uidText.getText()); 
-        patient.setName(nameText.getText());
-       
-        patient.setContact(Long.parseLong(contactText.getText()));
-        patient.setEmailID(emailText.getText());
-        patient.setStatus(RequestStatus.PatientStatus.ACTIVE);
-        patient.setLabConfirmation(true);
-      
-        
-        // Update the status of the selected patient request
-        selectedPatientRequest.setStatus("Centre Approved");
-        
-        Enterprise ent = null;
+        // Create and send a LogisticsRequest
+        LogisticsRequest logisticsRequest = new LogisticsRequest(selectedMatch);
+        logisticsRequest.setOrganMatch(selectedMatch);
+        logisticsRequest.setSender(userAccount);
+        logisticsRequest.setStatus(RequestStatus.OrganLogisticsStatus.READY_FOR_TRANSPORT.getValue());
+        logisticsRequest.setRequestDate(new Date());
+
+        // Find the LogisticsOrganization in the current network and add the request
         Organization org = null;
-        
-        for (Enterprise enterprise : network.getEnterpriseDirectory().getEnterpriseList()) {
-            if (enterprise.getEnterpriseType().toString().equals("Legal")) { // Assuming "Legal" is the Government Enterprise
-                ent = enterprise;
-                System.out.println(enterprise);
-                break;
-            }
-        }
-        
-        if (ent != null) {
-            for (Organization organization : ent.getOrganizationDirectory().getOrganizationList()) {
-                if(organization instanceof LogisticsOrganization) { // This seems incorrect for Legal/Government, should be GovernmentOrganization
+        for (Enterprise e : network.getEnterpriseDirectory().getEnterpriseList()) {
+            for (Organization organization : e.getOrganizationDirectory().getOrganizationList()) {
+                if (organization instanceof LogisticsOrganization) {
                     org = organization;
                     break;
                 }
             }
+            if (org != null) {
+                break;
+            }
         }
-        
+
         if (org != null) {
-            WorkRequest request = new System_Coordinator_Test_WorkRequest(); // This request type seems generic, might need a more specific one
-            request.setPatient(patient); // Set the updated patient
-            request.setActionDate(new Date());
-            request.setAssigned("Legal Department");
-            request.setSummary("Requested for BoneMarrow Reception"); // This summary is hardcoded, needs to be dynamic
-            request.setStatus("Assigned to Legal Department");
-            request.setUserAccount(userAccount);
-            org.getWorkQueue().getWorkRequestList().add(request);
-            System.out.println(org.getName());
-            userAccount.getWorkQueue().getWorkRequestList().add(request);
+            org.getWorkQueue().addWorkRequest(logisticsRequest);
+            userAccount.getWorkQueue().add(logisticsRequest); // Add to sender's work queue as well
+            selectedMatch.setStatus(RequestStatus.OrganLogisticsStatus.READY_FOR_TRANSPORT.getValue()); // Update OrganMatch status
+            JOptionPane.showMessageDialog(this, "Organ match processed and Logistics Request sent successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
             
-            dB4OUtil.storeSystem(system);
-            populateRequestTable();
-            JOptionPane.showMessageDialog(null, new JLabel(  "<html><b>Request approved successfully!</b></html>"));
-            statusText.setText("Centre Approved");
-           
+            // Send notification to a Logistics Officer
+            UserAccount logisticsOfficerAccount = null;
+            for (UserAccount ua : org.getUserAccountDirectory().getUserAccountList()) {
+                if (ua.getRole() instanceof Business.Role.LogisticsOfficerRole) {
+                    logisticsOfficerAccount = ua;
+                    break;
+                }
+            }
+            if (logisticsOfficerAccount != null) {
+                EcoSystem.sendNotification(logisticsOfficerAccount, "New Organ Logistics Request for Match ID: " + selectedMatch.getMatchId() + " from Case Manager " + userAccount.getUsername());
+            } else {
+                System.err.println("No Logistics Officer found in the Logistics Organization to send notification.");
+            }
+
         } else {
-            JOptionPane.showMessageDialog(null, "No organization present", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
+            JOptionPane.showMessageDialog(this, "No Logistics Organization found to send the request to.", "Error", JOptionPane.ERROR_MESSAGE);
         }
-
-        dB4OUtil.storeSystem(system);
-        populateRequestTable();
-        }
-    }//GEN-LAST:event_buttonSendForFundingActionPerformed
-
-    private void buttonFinalizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonFinalizeActionPerformed
-        // TODO add your handling code here:
         
-    }//GEN-LAST:event_buttonFinalizeActionPerformed
+        dB4OUtil.storeSystem(system);
+        populateMatchedOrdersTable(); // Refresh the table
+        // Clear details or disable buttons after processing
+        txtPatientName.setText("");
+        txtRequiredOrgan.setText("");
+        txtPatientBloodType.setText("");
+        txtMatchStatus.setText("");
+        txtDonorName.setText("");
+        txtOfferedOrgan.setText("");
+        txtDonorBloodType.setText("");
+        btnProcessOrder.setEnabled(false);
+    }//GEN-LAST:event_btnProcessOrderActionPerformed
 
-    private void contactTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contactTextActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_contactTextActionPerformed
-
-    private void requestTableMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_requestTableMousePressed
-        int selectedRow = requestTable.getSelectedRow();
-        if(selectedRow < 0){
-        }
-        else{
-       //display the details 
-            patientRequest = (PatientRequest) requestTable.getValueAt(selectedRow, 0);
-            populateRequestDetails(patientRequest);
-            buttonSendForFunding.setEnabled(true);
-            buttonFinalize.setEnabled(true);
-
-            if(labConfirmationText.getText().equals("false"))
-            {
-                labConfirmationText.setBorder(BorderFactory.createLineBorder(Color.RED));
-                labConfirmationText.setForeground(Color.red);
-            }
-            if(patientRequest.getStatus().equals("New Request")){
-                buttonSendForFunding.setEnabled(true);
-                buttonFinalize.setEnabled(true);
-            }
-            else {
-                buttonSendForFunding.setEnabled(false);
-                buttonFinalize.setEnabled(false);
-            }
-            
-            
-             dB4OUtil.storeSystem(system);
-            
-            
-        }
-    }//GEN-LAST:event_requestTableMousePressed
-
-    private void bloodTypeTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bloodTypeTextActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_bloodTypeTextActionPerformed
-
-    private void buttonIssueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonIssueActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_buttonIssueActionPerformed
-
-    private void buttonTrackBloodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonTrackBloodActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_buttonTrackBloodActionPerformed
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        userProcessContainer.remove(this);
+        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+        layout.previous(userProcessContainer);
+    }//GEN-LAST:event_btnBackActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField bloodTypeText;
-    private javax.swing.JButton buttonFinalize;
-    private javax.swing.JButton buttonIssue;
-    private javax.swing.JButton buttonSendForFunding;
-    private javax.swing.JButton buttonTrackBlood;
-    private javax.swing.JTextField contactText;
-    private javax.swing.JTextField emailText;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel19;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JButton btnBack;
+    private javax.swing.JButton btnProcessOrder;
     private javax.swing.JLabel jLabel25;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator3;
-    private javax.swing.JTextField labConfirmationText;
-    private javax.swing.JTextField nameText;
-    private javax.swing.JTable requestTable;
-    private javax.swing.JTextField statusText;
-    private javax.swing.JTextField uidText;
+    private javax.swing.JLabel lblDonorBloodType;
+    private javax.swing.JLabel lblDonorDetails;
+    private javax.swing.JLabel lblDonorName;
+    private javax.swing.JLabel lblMatchStatus;
+    private javax.swing.JLabel lblOfferedOrgan;
+    private javax.swing.JLabel lblPatientBloodType;
+    private javax.swing.JLabel lblPatientDetails;
+    private javax.swing.JLabel lblPatientName;
+    private javax.swing.JLabel lblRequiredOrgan;
+    private javax.swing.JTable tblMatchedOrders;
+    private javax.swing.JTextField txtDonorBloodType;
+    private javax.swing.JTextField txtDonorName;
+    private javax.swing.JTextField txtMatchStatus;
+    private javax.swing.JTextField txtOfferedOrgan;
+    private javax.swing.JTextField txtPatientBloodType;
+    private javax.swing.JTextField txtPatientName;
+    private javax.swing.JTextField txtRequiredOrgan;
     // End of variables declaration//GEN-END:variables
-
-    private void populateRequestDetails(PatientRequest patientRequest) {
-            uidText.setText(patientRequest.getPatient().getReceiverID());
-            nameText.setText(patientRequest.getPatient().getName());
-            bloodTypeText.setText(patientRequest.getPatient().getBloodType().toString());
-            contactText.setText(String.valueOf(patientRequest.getPatient().getContact()));
-            emailText.setText(patientRequest.getPatient().getEmailID());
-            statusText.setText(patientRequest.getStatus()); // Status is on PatientRequest
-            
-            labConfirmationText.setText(String.valueOf(patientRequest.getPatient().isLabConfirmation()));
-             
-            uidText.setEditable(false);
-            nameText.setEditable(false);
-            bloodTypeText.setEditable(false);
-            contactText.setEditable(false);
-            emailText.setEditable(false);
-            statusText.setEditable(false);
-            labConfirmationText.setEditable(false);     
-    }
 }

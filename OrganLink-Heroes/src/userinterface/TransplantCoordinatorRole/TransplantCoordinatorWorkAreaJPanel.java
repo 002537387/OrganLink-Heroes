@@ -5,6 +5,7 @@ import Business.Enterprise.Enterprise;
 import Business.Network.Network;
 import Business.Organization.Organization;
 import Business.UserAccount.UserAccount;
+import java.awt.CardLayout; // Added import
 import javax.swing.JOptionPane; // Added import for JOptionPane
 import javax.swing.JPanel;
 
@@ -157,15 +158,14 @@ public class TransplantCoordinatorWorkAreaJPanel extends javax.swing.JPanel {
     private void btnRunMatchingAlgorithmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRunMatchingAlgorithmActionPerformed
         business.runOrganMatchingAlgorithm();
         JOptionPane.showMessageDialog(this, "Organ matching algorithm executed successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+        EcoSystem.sendNotification(account, "Organ matching algorithm executed. New matches available for review.");
     }//GEN-LAST:event_btnRunMatchingAlgorithmActionPerformed
 
     private void btnViewMatchResultsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewMatchResultsActionPerformed
-        // TODO: Navigate to ViewMatchResultsJPanel
-        // Example:
-        // ViewMatchResultsJPanel viewMatchResultsJPanel = new ViewMatchResultsJPanel(userProcessContainer, business);
-        // userProcessContainer.add("ViewMatchResultsJPanel", viewMatchResultsJPanel);
-        // CardLayout layout = (CardLayout) userProcessContainer.getLayout();
-        // layout.next(userProcessContainer);
+        ViewMatchResultsJPanel viewMatchResultsJPanel = new ViewMatchResultsJPanel(userProcessContainer, business, account);
+        userProcessContainer.add("ViewMatchResultsJPanel", viewMatchResultsJPanel);
+        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+        layout.next(userProcessContainer);
     }//GEN-LAST:event_btnViewMatchResultsActionPerformed
 
 

@@ -12,7 +12,6 @@ import Business.Organization.Organization;
 import Business.UserAccount.UserAccount;
 import javax.swing.JPanel; // Added import
 import userinterface.CustomerRole.PickCustomerActionJPanel;
-import userinterface.DonorRole.DonorWorkAreaJPanel;
 
 /**
  *

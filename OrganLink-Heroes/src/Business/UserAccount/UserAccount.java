@@ -5,8 +5,11 @@
 package Business.UserAccount;
 
 import Business.Employee.Employee;
+import Business.Notifications.Notification;
 import Business.Role.Role;
 import Business.WorkQueue.WorkQueue;
+import Business.WorkQueue.WorkRequest;
+import java.util.ArrayList;
 
 /**
  *
@@ -15,14 +18,14 @@ import Business.WorkQueue.WorkQueue;
 public class UserAccount {
      private String username;
      private String password;
-     private Employee employee;
-     private Role role;
-     private WorkQueue workQueue;
-     private String name;
-    
-    // Constructor initializes workQueue
+    private Employee employee;
+    private Role role;
+    private ArrayList<WorkRequest> workQueue;
+    private ArrayList<Notification> notificationList; // New field for notifications
+
     public UserAccount() {
-        workQueue = new WorkQueue();
+        workQueue = new ArrayList();
+        notificationList = new ArrayList<>(); // Initialize notificationList
     }
 
     // Getter for username
@@ -66,18 +69,20 @@ public class UserAccount {
     }
 
     // Getter for workQueue
-    public WorkQueue getWorkQueue() {
+    public ArrayList<WorkRequest> getWorkQueue() {
         return workQueue;
     }
 
-    // Getter for name
-    public String getName() {
-        return name;
+    public void setWorkQueue(ArrayList<WorkRequest> workQueue) {
+        this.workQueue = workQueue;
     }
 
-    // Setter for name
-    public void setName(String name) {
-        this.name = name;
+    public ArrayList<Notification> getNotificationList() {
+        return notificationList;
+    }
+
+    public void setNotificationList(ArrayList<Notification> notificationList) {
+        this.notificationList = notificationList;
     }
 
     // Override toString method to return username

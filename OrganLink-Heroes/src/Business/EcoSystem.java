@@ -26,6 +26,7 @@ import Business.Role.SystemAdminRole;
 import Business.Statuses.DonorApplicationStatuses;
 import Business.Statuses.RequestStatus;
 import Business.UserAccount.UserAccount;
+import Business.Notifications.Notification; // Added import for Notification
 import Business.UserAccount.UserAccountDirectory;
 import java.util.ArrayList;
 
@@ -62,6 +63,15 @@ public class EcoSystem extends Organization {
         this.personBloodTypes = new PersonBloodTypes();
         this.matchedRequests = new ArrayList<>(); // Initialize matchedRequests
         this.emergencyDirectory = new EmergencyDirectory();
+    }
+    
+    // Method to send notifications to a user
+    public static void sendNotification(UserAccount recipient, String message) {
+        if (recipient != null) {
+            Notification notification = new Notification(message, recipient.getUsername());
+            recipient.getNotificationList().add(notification);
+            System.out.println("Notification sent to " + recipient.getUsername() + ": " + message);
+        }
     }
 
     // Singleton instance accessor
@@ -194,90 +204,38 @@ public class EcoSystem extends Organization {
     
     // Organ Matching Algorithm
     public ArrayList<OrganMatch> runOrganMatchingAlgorithm() {
-        ArrayList<OrganMatch> currentMatches = new ArrayList<>();
+        this.matchedRequests.clear(); // Clear previous matches
         
-        for (PatientRequest patientRequest : patientRequestDirectory.getPatientRequestList()) {
-            // Only consider patient requests that are approved and awaiting matching
-            if (patientRequest.getStatus().equals(RequestStatus.PatientRequestStatus.MATCHED_AWAITING_ACCEPTANCE.getValue())) {
-                
-                Patient patient = patientRequest.getPatient();
-                if (patient == null) continue; // Skip if patient is null
+        ArrayList<PatientRequest> activePatientRequests = new ArrayList<>();
+        for (PatientRequest pr : patientRequestDirectory.getPatientRequestList()) {
+            if (pr.getStatus().equals(RequestStatus.PatientRequestStatus.IN_PRIORITY_QUEUE.getValue())) {
+                activePatientRequests.add(pr);
+            }
+        }
 
-                for (DonorRequest donorRequest : donorRequestDirectory.getDonorRequestList()) {
-                    // Only consider donor requests that are approved and active
-                    if (donorRequest.getStatus().equals(RequestStatus.DonorApplicationStatus.APPROVED.getValue())) {
-                        
-                        Donor donor = donorRequest.getDonor();
-                        if (donor == null) continue; // Skip if donor is null
-
-                        double matchScore = 0;
-                        boolean compatible = true;
-
-                        // 1. Organ Type Compatibility
-                        if (!patientRequest.getRequiredOrganType().equals(donorRequest.getOfferedOrganType().getValue())) {
-                            compatible = false;
-                        } else {
-                            matchScore += 1.0;
-                        }
-
-                        // 2. Blood Type Compatibility
-                        PersonBloodTypes.BloodType patientBloodType = patient.getBloodType();
-                        PersonBloodTypes.BloodType donorBloodType = donor.getBloodType();
-                        if (patientBloodType != null && donorBloodType != null) {
-                            if (!personBloodTypes.findBloodType(patientBloodType.getValue()).getEligibleDonors().contains(donorBloodType)) {
-                                compatible = false;
-                            } else {
-                                matchScore += 1.0;
-                            }
-                        } else {
-                            compatible = false; // Cannot check compatibility without blood types
-                        }
-
-                        // 3. Tissue Markers / Antibody Profile (simple check for now)
-                        if (patient.getTissueMarkers() != null && !patient.getTissueMarkers().isEmpty() &&
-                            donor.getTissueMarkers() != null && !donor.getTissueMarkers().isEmpty()) {
-                            if (patient.getTissueMarkers().equals(donor.getTissueMarkers())) {
-                                matchScore += 0.5; // Partial score for matching tissue markers
-                            }
-                        }
-                        if (patient.getAntibodyProfile() != null && !patient.getAntibodyProfile().isEmpty() &&
-                            donor.getAntibodyProfile() != null && !donor.getAntibodyProfile().isEmpty()) {
-                            if (patient.getAntibodyProfile().equals(donor.getAntibodyProfile())) {
-                                matchScore += 0.5; // Partial score for matching antibody profile
-                            }
-                        }
-                        
-                        // 4. Geographic Proximity (simple check: same state, same city)
-                        // Assuming patient and donor addresses are available and relevant
-                        if (patient.getState().equals(donor.getState())) {
-                            matchScore += 0.5;
-                            if (patient.getCity().equals(donor.getCity())) {
-                                matchScore += 0.5;
-                            }
-                        }
-
-                        // 5. Medical Urgency Weighting
-                        double urgencyMultiplier = 1.0;
-                        if (patientRequest.getMedicalUrgencyLevel().equals("Critical")) urgencyMultiplier = 2.0;
-                        else if (patientRequest.getMedicalUrgencyLevel().equals("High")) urgencyMultiplier = 1.5;
-                        
-                        matchScore *= urgencyMultiplier;
-
-                        if (compatible && matchScore > 0) { // Ensure there's at least one match criteria met
-                            OrganMatch match = new OrganMatch(patientRequest, donorRequest, matchScore);
-                            currentMatches.add(match);
-                        }
-                    }
-                }
+        ArrayList<DonorRequest> activeDonorRequests = new ArrayList<>();
+        for (DonorRequest dr : donorRequestDirectory.getDonorRequestList()) {
+            if (dr.getStatus().equals(RequestStatus.DonorApplicationStatus.APPROVED.getValue())) {
+                activeDonorRequests.add(dr);
             }
         }
         
-        // Sort matches by score (highest first)
-        currentMatches.sort((m1, m2) -> Double.compare(m2.getMatchScore(), m1.getMatchScore()));
+        for (PatientRequest patientRequest : activePatientRequests) {
+            OrganMatch bestMatch = OrganMatch.FindBestMatch(patientRequest, activeDonorRequests);
+            if (bestMatch != null) {
+                this.matchedRequests.add(bestMatch);
+                // Optionally, update status of patient/donor requests here if a match is found
+                patientRequest.setStatus(RequestStatus.PatientRequestStatus.MATCHED_AWAITING_ACCEPTANCE.getValue());
+                // For the donor, you might set a status like "Matched - Pending Acceptance" or similar
+                // bestMatch.getDonorRequest().setStatus(RequestStatus.DonorApplicationStatus.MATCHED.getValue());
+            }
+        }
         
-        // Store these matches
-        this.matchedRequests.addAll(currentMatches); 
-        return currentMatches;
+        // Sort matches by score (highest first) - already handled by FindBestMatch if it selects best
+        // This sorting here would be to sort the entire list of best matches if multiple patients got matches
+        this.matchedRequests.sort((m1, m2) -> Double.compare(m2.getMatchScore(), m1.getMatchScore()));
+        
+        return this.matchedRequests;
     }
     
     // Anti-Trafficking Protection: Detect Suspicious Activity

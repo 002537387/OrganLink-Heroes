@@ -146,6 +146,7 @@ public class ViewDonorApplicationJPanel extends javax.swing.JPanel {
         cityText.setEnabled(false);
         stateJComboBox.setEnabled(false);
         zipText.setEnabled(false);
+        offeredOrganTypeTextField.setEnabled(false);
         btnYesQ1.setEnabled(false);
         btnNoQ1.setEnabled(false);
         btnYesQ2.setEnabled(false);
@@ -189,7 +190,7 @@ public class ViewDonorApplicationJPanel extends javax.swing.JPanel {
         btnNoQ4 = new javax.swing.JRadioButton();
         btnYesQ4 = new javax.swing.JRadioButton();
         dobDateField = new com.toedter.calendar.JDateChooser();
-        jButton2 = new javax.swing.JButton();
+        btnBack = new javax.swing.JButton();
         stateJComboBox = new javax.swing.JComboBox();
         genderJComboBox = new javax.swing.JComboBox();
         jPanel3 = new javax.swing.JPanel();
@@ -200,6 +201,8 @@ public class ViewDonorApplicationJPanel extends javax.swing.JPanel {
         jLabel24 = new javax.swing.JLabel();
         bloodTypeComboBox = new javax.swing.JComboBox<>();
         jLabel10 = new javax.swing.JLabel();
+        lblOfferedOrganType = new javax.swing.JLabel(); // Added
+        offeredOrganTypeTextField = new javax.swing.JTextField(); // Added
 
         setBackground(new java.awt.Color(0, 153, 153));
         setMinimumSize(new java.awt.Dimension(1280, 685));
@@ -381,15 +384,15 @@ public class ViewDonorApplicationJPanel extends javax.swing.JPanel {
         });
         add(dobDateField, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 160, 180, -1));
 
-        jButton2.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
-        jButton2.setText("Close");
-        jButton2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnBack.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
+        btnBack.setText("<< Back");
+        btnBack.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnBackActionPerformed(evt);
             }
         });
-        add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1070, 560, 120, 40));
+        add(btnBack, new org.netbeans.lib.awtextra.AbsoluteConstraints(1070, 560, 120, 40));
 
         stateJComboBox.setBackground(new java.awt.Color(0, 153, 153));
         stateJComboBox.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
@@ -461,12 +464,21 @@ public class ViewDonorApplicationJPanel extends javax.swing.JPanel {
         jLabel10.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
         jLabel10.setText("PIN:");
         add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 110, 50, -1));
+
+        lblOfferedOrganType.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
+        lblOfferedOrganType.setText("Offered Organ:");
+        add(lblOfferedOrganType, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 300, -1, -1));
+
+        offeredOrganTypeTextField.setBackground(new java.awt.Color(0, 153, 153));
+        offeredOrganTypeTextField.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
+        offeredOrganTypeTextField.setEnabled(false);
+        add(offeredOrganTypeTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 300, 180, -1));
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         // TODO add your handling code here
-        returnToCustomerWorkArea();
-    }//GEN-LAST:event_jButton2ActionPerformed
+        goBack();
+    }//GEN-LAST:event_btnBackActionPerformed
 
     private void stateJComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stateJComboBoxActionPerformed
 
@@ -626,8 +638,10 @@ public class ViewDonorApplicationJPanel extends javax.swing.JPanel {
     private com.toedter.calendar.JDateChooser dobDateField;
     private javax.swing.JTextField emailText;
     private javax.swing.JComboBox genderJComboBox;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton btnBack;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel lblOfferedOrganType; // Added
+    private javax.swing.JTextField offeredOrganTypeTextField; // Added
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
@@ -656,10 +670,10 @@ public class ViewDonorApplicationJPanel extends javax.swing.JPanel {
     private javax.swing.JTextField zipText;
     // End of variables declaration//GEN-END:variables
 
-    private void returnToCustomerWorkArea() {
+    private void goBack() {
         userProcessContainer.remove(this);
         CardLayout layout = (CardLayout) userProcessContainer.getLayout();
-        layout.next(userProcessContainer);
+        layout.previous(userProcessContainer);
     }
 
     private void populateDonorRequestData() {
@@ -675,6 +689,7 @@ public class ViewDonorApplicationJPanel extends javax.swing.JPanel {
         zipText.setText(String.valueOf(donorRequest.getDonor().getZipCode()));
         contactText.setText(String.valueOf(donorRequest.getDonor().getContact()));
         emailText.setText(donorRequest.getDonor().getEmailID());
+        offeredOrganTypeTextField.setText(donorRequest.getOfferedOrganType().toString());
         btnNoQ1.setSelected(true);
         btnNoQ2.setSelected(true);
         btnNoQ4.setSelected(true);

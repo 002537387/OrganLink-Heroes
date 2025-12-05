@@ -184,7 +184,7 @@ public class ManageLegalOfficerRequestJPanel extends javax.swing.JPanel {
             {
             request.setStatus("Assign to LegalOfficer" + userAccount.getUsername());
             request.setUserAccount(userAccount);
-            userAccount.getWorkQueue().getWorkRequestList().add(request);
+            userAccount.getWorkQueue().add(request);
             }
             else{
             //JOptionPane.showMessageDialog(null, "Work Request is already assigned!" );

@@ -249,6 +249,10 @@ public class ManageOrganLogisticsJPanel extends javax.swing.JPanel {
         request.setReceiver(account);
         request.setStatus(RequestStatus.OrganLogisticsStatus.RETRIEVAL_STARTED.getValue());
         JOptionPane.showMessageDialog(this, "Request assigned to you. Status updated to 'Retrieval Started'.", "Success", JOptionPane.INFORMATION_MESSAGE);
+        
+        // Notify the Case Manager (sender of the LogisticsRequest)
+        EcoSystem.sendNotification(request.getSender(), "Your Logistics Request for Match ID: " + request.getOrganMatch().getMatchId() + " has been assigned to Logistics Officer " + account.getUsername() + " and retrieval has started.");
+        
         populateRequestTable();
     }//GEN-LAST:event_btnAssignToMeActionPerformed
 
@@ -273,6 +277,9 @@ public class ManageOrganLogisticsJPanel extends javax.swing.JPanel {
             request.setTrackingNumber(txtTrackingNumber.getText());
             request.setResolveDate(new Date());
             
+            // Notify the Case Manager (sender of the LogisticsRequest) about the status update
+            EcoSystem.sendNotification(request.getSender(), "Logistics Request for Match ID: " + request.getOrganMatch().getMatchId() + " has been updated to: " + newStatus.trim());
+
             if (newStatus.trim().equalsIgnoreCase(RequestStatus.OrganLogisticsStatus.DELIVERED.getValue())) {
                 request.getOrganMatch().setStatus(RequestStatus.OrganLogisticsStatus.DELIVERED.getValue()); // Update OrganMatch status
                 
@@ -301,6 +308,33 @@ public class ManageOrganLogisticsJPanel extends javax.swing.JPanel {
                     transplantClinicOrganization.getWorkQueue().addWorkRequest(surgeryRequest);
                     request.getOrganMatch().setStatus(RequestStatus.SurgeryStatus.SCHEDULED.getValue()); // Update OrganMatch status
                     JOptionPane.showMessageDialog(this, "Organ delivered! Surgery request sent to Transplant Clinic.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                    
+                    // Notify the Transplant Coordinator
+                    UserAccount transplantCoordinatorAccount = null;
+                    for (Network net : business.getNetworkList()) { // Iterate through all networks
+                        for (Enterprise ent : net.getEnterpriseDirectory().getEnterpriseList()) {
+                            for (Organization organization : ent.getOrganizationDirectory().getOrganizationList()) {
+                                if (organization.getType() == Organization.Type.TransplantClinic) { // Assuming this is the TransplantCoordinatorOrganization
+                                    for (UserAccount ua : organization.getUserAccountDirectory().getUserAccountList()) {
+                                        if (ua.getRole() instanceof Business.Role.TransplantCoordinatorRole) {
+                                            transplantCoordinatorAccount = ua;
+                                            break;
+                                        }
+                                    }
+                                }
+                                if (transplantCoordinatorAccount != null) break;
+                            }
+                            if (transplantCoordinatorAccount != null) break;
+                        }
+                        if (transplantCoordinatorAccount != null) break;
+                    }
+
+                    if (transplantCoordinatorAccount != null) {
+                        EcoSystem.sendNotification(transplantCoordinatorAccount, "Organ for Match ID: " + request.getOrganMatch().getMatchId() + " has been delivered and surgery request sent to Transplant Clinic.");
+                    } else {
+                        System.err.println("No Transplant Coordinator found to send notification.");
+                    }
+
                 } else {
                     JOptionPane.showMessageDialog(this, "No Transplant Clinic Organization found to process the surgery request.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
@@ -328,6 +362,8 @@ public class ManageOrganLogisticsJPanel extends javax.swing.JPanel {
         // Simulate QR scan and update chain of custody
         request.setQrCodeScanStatus("Scanned at " + new Date());
         JOptionPane.showMessageDialog(this, "QR Code scanned successfully for request: " + request.getOrganMatch().getMatchId(), "Success", JOptionPane.INFORMATION_MESSAGE);
+        // Notify the Case Manager (sender of the LogisticsRequest) about the QR scan
+        EcoSystem.sendNotification(request.getSender(), "Logistics Request for Match ID: " + request.getOrganMatch().getMatchId() + ": Organ scanned at " + request.getQrCodeScanStatus());
         populateRequestTable();
     }//GEN-LAST:event_btnSimulateQRScanActionPerformed
 

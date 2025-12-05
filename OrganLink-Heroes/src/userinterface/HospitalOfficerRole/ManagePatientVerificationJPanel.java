@@ -8,6 +8,7 @@ import Business.Requests.PatientRequest;
 import Business.Statuses.RequestStatus;
 import Business.UserAccount.UserAccount;
 import Business.WorkQueue.WorkRequest;
+import userinterface.CommonPanels.ViewPatientApplicationJPanel;
 import java.awt.CardLayout;
 import java.util.Date;
 import javax.swing.JOptionPane;
@@ -73,6 +74,7 @@ public class ManagePatientVerificationJPanel extends javax.swing.JPanel {
         btnReject = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
         btnAssignToMe = new javax.swing.JButton();
+        btnViewDetails = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(0, 153, 153));
 
@@ -142,6 +144,16 @@ public class ManagePatientVerificationJPanel extends javax.swing.JPanel {
             }
         });
 
+        btnViewDetails.setBackground(new java.awt.Color(0, 102, 102));
+        btnViewDetails.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        btnViewDetails.setForeground(new java.awt.Color(204, 255, 204));
+        btnViewDetails.setText("View Details");
+        btnViewDetails.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewDetailsActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -156,6 +168,8 @@ public class ManagePatientVerificationJPanel extends javax.swing.JPanel {
                                 .addComponent(btnBack)
                                 .addGap(222, 222, 222)
                                 .addComponent(btnAssignToMe)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnViewDetails)
                                 .addGap(18, 18, 18)
                                 .addComponent(btnApprove)
                                 .addGap(18, 18, 18)
@@ -176,7 +190,8 @@ public class ManagePatientVerificationJPanel extends javax.swing.JPanel {
                     .addComponent(btnApprove)
                     .addComponent(btnReject)
                     .addComponent(btnBack)
-                    .addComponent(btnAssignToMe))
+                    .addComponent(btnAssignToMe)
+                    .addComponent(btnViewDetails))
                 .addContainerGap(222, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -205,7 +220,7 @@ public class ManagePatientVerificationJPanel extends javax.swing.JPanel {
             return;
         }
 
-        request.setStatus(RequestStatus.PatientRequestStatus.MATCHED_AWAITING_ACCEPTANCE.getValue()); // Approved means it's ready for matching
+        request.setStatus(RequestStatus.PatientRequestStatus.IN_PRIORITY_QUEUE.getValue()); // Approved means it's ready for matching
         request.getPatient().setLabConfirmation(true); // Assuming lab confirmation is part of this approval
         request.getPatient().setLegalApproval(true); // Assuming legal approval is part of this approval
         request.setResolveDate(new Date());
@@ -256,12 +271,31 @@ public class ManagePatientVerificationJPanel extends javax.swing.JPanel {
         populateRequestTable();
     }//GEN-LAST:event_btnAssignToMeActionPerformed
 
+    private void btnViewDetailsActionPerformed(java.awt.event.ActionEvent evt) {
+        int selectedRow = tblPatientRequests.getSelectedRow();
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(this, "Please select a request to view.", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        PatientRequest selectedRequest = (PatientRequest) tblPatientRequests.getValueAt(selectedRow, 0);
+        if (selectedRequest == null)
+            return;
+
+        ViewPatientApplicationJPanel panel = new ViewPatientApplicationJPanel(business, selectedRequest,
+                userProcessContainer);
+        userProcessContainer.add("ViewPatientApplicationJPanel", panel);
+        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+        layout.next(userProcessContainer);
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnApprove;
     private javax.swing.JButton btnAssignToMe;
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnReject;
+    private javax.swing.JButton btnViewDetails;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JTable tblPatientRequests;

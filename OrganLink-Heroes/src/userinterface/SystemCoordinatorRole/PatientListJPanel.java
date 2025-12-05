@@ -261,7 +261,7 @@ public class PatientListJPanel extends javax.swing.JPanel {
                 if (org != null) {
                     org.getWorkQueue().getWorkRequestList().add(request);
                     System.out.println(org.getName());
-                    userAccount.getWorkQueue().getWorkRequestList().add(request);
+                    userAccount.getWorkQueue().add(request);
                     JOptionPane.showMessageDialog(null,
                             new JLabel("<html><b>Patient successfully assigned to the Hospital.</b></html>"),
                             "Info", JOptionPane.INFORMATION_MESSAGE);

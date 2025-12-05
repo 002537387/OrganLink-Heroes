@@ -94,7 +94,7 @@ public class CreatePatientJPanel extends javax.swing.JPanel {
         dtm.setRowCount(0);
         
 
-        for (WorkRequest request : userAccount.getWorkQueue().getWorkRequestList()) {
+        for (WorkRequest request : userAccount.getWorkQueue()) {
             Object[] row = new Object[6];
             row[0] = request;
             
@@ -364,7 +364,7 @@ public class CreatePatientJPanel extends javax.swing.JPanel {
         if (org != null) {
             org.getWorkQueue().getWorkRequestList().add(request);
             System.out.println(org.getName());
-            userAccount.getWorkQueue().getWorkRequestList().add(request);
+            userAccount.getWorkQueue().add(request);
             
             dB4OUtil.storeSystem(system);
             populateTable();
