@@ -26,7 +26,7 @@ import javax.swing.JPanel;
 
 /**
  *
- * @author Ing-Ruei
+ * @author Ing-Ruei//
  */
 public class ViewDonorApplicationJPanel extends javax.swing.JPanel {
 

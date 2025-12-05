@@ -27,7 +27,7 @@ import javax.swing.JPanel;
 
 /**
  *
- * @author User
+ * @author Userwanyu
  */
 public class DonorApplicationJPanel extends javax.swing.JPanel {
 
