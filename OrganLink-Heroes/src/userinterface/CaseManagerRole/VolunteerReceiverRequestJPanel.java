@@ -493,7 +493,7 @@ public class VolunteerReceiverRequestJPanel extends javax.swing.JPanel {
             request.setUserAccount(userAccount);
             org.getWorkQueue().getWorkRequestList().add(request);
             System.out.println(org.getName());
-            userAccount.getWorkQueue().getWorkRequestList().add(request);
+            userAccount.getWorkQueue().add(request);
             
             dB4OUtil.storeSystem(system);
             populateRequestTable();

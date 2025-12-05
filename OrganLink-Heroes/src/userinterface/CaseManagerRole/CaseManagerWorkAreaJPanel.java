@@ -36,6 +36,10 @@ public class CaseManagerWorkAreaJPanel extends javax.swing.JPanel {
     PatientDirectory patientDirectory;
     private DB4OUtil dB4OUtil = DB4OUtil.getInstance();
     private Network network;
+    private javax.swing.JPanel userProcessContainer;
+    private javax.swing.JLabel btnPrepareMatchedOrder;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     
     
     public CaseManagerWorkAreaJPanel(UserAccount account,ThirdPartyOrganization bloodBankOrganization, Enterprise enterprise, EcoSystem system, Network network) {
@@ -132,6 +136,19 @@ public class CaseManagerWorkAreaJPanel extends javax.swing.JPanel {
         });
         Header.add(btnReceiveRequests, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 0, -1, 50));
 
+        btnPrepareMatchedOrder = new javax.swing.JLabel();
+        btnPrepareMatchedOrder.setBackground(new java.awt.Color(31, 31, 31));
+        btnPrepareMatchedOrder.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        btnPrepareMatchedOrder.setForeground(new java.awt.Color(204, 255, 204));
+        btnPrepareMatchedOrder.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnPrepareMatchedOrder.setText("Prepare Matched Order");
+        btnPrepareMatchedOrder.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnPrepareMatchedOrderMouseClicked(evt);
+            }
+        });
+        Header.add(btnPrepareMatchedOrder, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 0, -1, 50));
+
         add(Header, java.awt.BorderLayout.PAGE_START);
 
         userProcessContainer.setBackground(new java.awt.Color(0, 153, 153));
@@ -139,25 +156,67 @@ public class CaseManagerWorkAreaJPanel extends javax.swing.JPanel {
         add(userProcessContainer, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnReceiveRequestsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnReceiveRequestsMouseClicked
-        // TODO add your handling code here:
-        userProcessContainer.removeAll();
-        DonorApplicationListJPanel panel = new DonorApplicationListJPanel(system, userAccount, network, userProcessContainer);
-        userProcessContainer.add("DonorApplicationListJPanel", panel);
-        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
-        layout.next(userProcessContainer);
-    }//GEN-LAST:event_btnReceiveRequestsMouseClicked
+        private void btnReceiveRequestsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnReceiveRequestsMouseClicked
 
+            // TODO add your handling code here:
 
+            userProcessContainer.removeAll();
 
+            DonorApplicationListJPanel panel = new DonorApplicationListJPanel(system, userAccount, network, userProcessContainer);
 
+            userProcessContainer.add("DonorApplicationListJPanel", panel);
 
+            CardLayout layout = (CardLayout) userProcessContainer.getLayout();
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel Header;
-    private javax.swing.JLabel btnReceiveRequests;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel userProcessContainer;
-    // End of variables declaration//GEN-END:variables
+            layout.next(userProcessContainer);
+
+        }//GEN-LAST:event_btnReceiveRequestsMouseClicked
+
+    
+
+            private void btnPrepareMatchedOrderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPrepareMatchedOrderMouseClicked
+
+    
+
+                userProcessContainer.removeAll();
+
+    
+
+                PrepareOrderDetailsJPanel panel = new PrepareOrderDetailsJPanel(userProcessContainer, userAccount, bloodBankOrganization, enterprise, system, network);
+
+    
+
+                userProcessContainer.add("PrepareOrderDetailsJPanel", panel);
+
+    
+
+                CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+
+    
+
+                layout.next(userProcessContainer);
+
+    
+
+            }//GEN-LAST:event_btnPrepareMatchedOrderMouseClicked
+
+    
+
+        
+
+    
+
+        
+
+    
+
+            // Variables declaration - do not modify//GEN-BEGIN:variables
+
+    
+
+            private javax.swing.JPanel Header;
+
+    
+
+            private javax.swing.JLabel btnReceiveRequests;
 }

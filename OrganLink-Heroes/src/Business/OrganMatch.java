@@ -1,5 +1,6 @@
 package Business;
 
+import Business.BloodTypes.PersonBloodTypes;
 import Business.Requests.DonorRequest;
 import Business.Requests.PatientRequest;
 import java.util.Date;
@@ -73,4 +74,55 @@ public class OrganMatch {
     public String toString() {
         return "Match for Patient: " + patientRequest.getPatient().getName() + " and Donor: " + donorRequest.getDonor().getName();
     }
-}
+    
+    public static OrganMatch FindBestMatch(PatientRequest patientRequest, java.util.List<DonorRequest> donorRequests) {
+        OrganMatch bestMatch = null;
+        double maxScore = -1;
+
+        for (DonorRequest donorRequest : donorRequests) {
+            double currentScore = calculateScore(patientRequest, donorRequest);
+            if (currentScore > maxScore) {
+                maxScore = currentScore;
+                bestMatch = new OrganMatch(patientRequest, donorRequest, maxScore);
+            }
+        }
+        return bestMatch;
+    }
+
+    private static double calculateScore(PatientRequest patientRequest, DonorRequest donorRequest) {
+        // Factor 1: Organ Type Match (Essential)
+        if (patientRequest.getRequiredOrganType() != donorRequest.getOfferedOrganType()) {
+            return 0; // No match if organ types are different
+        }
+
+        // Factor 2: Blood Type Compatibility (Essential)
+        PersonBloodTypes bloodMatcher = new PersonBloodTypes();
+        Business.BloodTypes.PersonBloodTypes.BloodType patientBloodType = bloodMatcher.findBloodType(patientRequest.getPatient().getBloodType().getValue());
+        Business.BloodTypes.PersonBloodTypes.BloodType donorBloodType = bloodMatcher.findBloodType(donorRequest.getDonor().getBloodType().getValue());
+        
+        if (!patientBloodType.getEligibleDonors().contains(donorBloodType)) {
+            return 0; // No match if blood types are incompatible
+        }
+
+        // Base score for compatible match
+        double score = 50;
+
+        // Factor 3: Medical Urgency
+        switch (patientRequest.getMedicalUrgencyLevel()) {
+            case CRITICAL:
+                score += 40;
+                break;
+            case HIGH:
+                score += 30;
+                break;
+            case MEDIUM:
+                score += 20;
+                break;
+            case STANDARD:
+                score += 10;
+                break;
+        }
+
+        return score;
+    }}
+

@@ -88,7 +88,7 @@ public class ManageLabTechnicianRequests extends javax.swing.JPanel {
         
         model.setRowCount(0);
         
-        for(WorkRequest request : userAccount.getWorkQueue().getWorkRequestList()){
+        for(WorkRequest request : userAccount.getWorkQueue()){
             request.setStatus(request.getStatus().replaceAll("Plasma", "BoneMarrow"));
             Object[] row = new Object[6];
             row[0] = request;
@@ -399,7 +399,7 @@ public class ManageLabTechnicianRequests extends javax.swing.JPanel {
         { 
         request.setStatus("Assigned to MedTech" + userAccount.getUsername());
         request.setUserAccount(userAccount);
-        userAccount.getWorkQueue().getWorkRequestList().add(request);
+        userAccount.getWorkQueue().add(request);
         }
         else{
             

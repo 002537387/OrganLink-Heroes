@@ -2,11 +2,9 @@ package userinterface.TransplantCoordinatorRole;
 
 import Business.EcoSystem;
 import Business.OrganMatch;
-import Business.Requests.DonorRequest;
-import Business.Requests.PatientRequest;
-import Business.Statuses.RequestStatus;
+import Business.UserAccount.UserAccount; // Added import
 import java.awt.CardLayout;
-import java.util.Date;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
@@ -15,35 +13,43 @@ public class ViewMatchResultsJPanel extends javax.swing.JPanel {
 
     private JPanel userProcessContainer;
     private EcoSystem business;
+    private UserAccount account; // New field for the current user
+    private OrganMatch selectedMatch; // To store the selected organ match
 
     /**
      * Creates new form ViewMatchResultsJPanel
      */
-    public ViewMatchResultsJPanel(JPanel userProcessContainer, EcoSystem business) {
+    public ViewMatchResultsJPanel(JPanel userProcessContainer, EcoSystem business, UserAccount account) {
         initComponents();
         this.userProcessContainer = userProcessContainer;
         this.business = business;
-        
-        populateMatchTable();
+        this.account = account;
+        populateMatchResultsTable();
     }
-    
-    public void populateMatchTable() {
+
+    private void populateMatchResultsTable() {
         DefaultTableModel model = (DefaultTableModel) tblMatchResults.getModel();
         model.setRowCount(0);
-        
-        for (OrganMatch match : business.getMatchedRequests()) {
-            Object[] row = new Object[7];
-            row[0] = match; // The OrganMatch object itself
-            row[1] = match.getPatientRequest().getPatient().getName();
-            row[2] = match.getDonorRequest().getDonor().getName();
-            row[3] = match.getPatientRequest().getRequiredOrganType();
-            row[4] = match.getDonorRequest().getOfferedOrganType();
-            row[5] = String.format("%.2f", match.getMatchScore());
-            row[6] = match.getStatus();
+
+        ArrayList<OrganMatch> matchedRequests = business.getMatchedRequests();
+
+        if (matchedRequests.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No organ matches found yet.", "Information", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        for (OrganMatch match : matchedRequests) {
+            Object[] row = new Object[6];
+            row[0] = match.getPatientRequest().getPatient().getName();
+            row[1] = match.getPatientRequest().getPatient().getBloodType().getValue();
+            row[2] = match.getPatientRequest().getRequiredOrganType().getValue();
+            row[3] = match.getDonorRequest().getDonor().getName();
+            row[4] = match.getDonorRequest().getDonor().getBloodType().getValue();
+            row[5] = String.format("%.2f", match.getMatchScore()); // Format score to 2 decimal places
             model.addRow(row);
         }
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -53,34 +59,28 @@ public class ViewMatchResultsJPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        lblTitle = new javax.swing.JLabel();
+        lblMatchResults = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblMatchResults = new javax.swing.JTable();
-        btnAllocateOrgan = new javax.swing.JButton();
-        btnRejectMatch = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
-        btnInitiatePreSurgery = new javax.swing.JButton(); // New button
+        btnSelectMatch = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(0, 153, 153));
 
-        lblTitle.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
-        lblTitle.setForeground(new java.awt.Color(204, 255, 204));
-        lblTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblTitle.setText("Organ Match Results");
+        lblMatchResults.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
+        lblMatchResults.setForeground(new java.awt.Color(204, 255, 204));
+        lblMatchResults.setText("Organ Match Results");
 
         tblMatchResults.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+
             },
             new String [] {
-                "Match ID", "Patient", "Donor", "Required Organ", "Offered Organ", "Match Score", "Status"
+                "Patient Name", "Patient Blood Type", "Required Organ", "Donor Name", "Donor Blood Type", "Match Score"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -88,26 +88,6 @@ public class ViewMatchResultsJPanel extends javax.swing.JPanel {
             }
         });
         jScrollPane1.setViewportView(tblMatchResults);
-
-        btnAllocateOrgan.setBackground(new java.awt.Color(0, 102, 102));
-        btnAllocateOrgan.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        btnAllocateOrgan.setForeground(new java.awt.Color(204, 255, 204));
-        btnAllocateOrgan.setText("Allocate Organ");
-        btnAllocateOrgan.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAllocateOrganActionPerformed(evt);
-            }
-        });
-
-        btnRejectMatch.setBackground(new java.awt.Color(0, 102, 102));
-        btnRejectMatch.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        btnRejectMatch.setForeground(new java.awt.Color(204, 255, 204));
-        btnRejectMatch.setText("Reject Match");
-        btnRejectMatch.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRejectMatchActionPerformed(evt);
-            }
-        });
 
         btnBack.setBackground(new java.awt.Color(0, 102, 102));
         btnBack.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
@@ -119,13 +99,13 @@ public class ViewMatchResultsJPanel extends javax.swing.JPanel {
             }
         });
 
-        btnInitiatePreSurgery.setBackground(new java.awt.Color(0, 102, 102));
-        btnInitiatePreSurgery.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        btnInitiatePreSurgery.setForeground(new java.awt.Color(204, 255, 204));
-        btnInitiatePreSurgery.setText("Initiate Pre-Surgery");
-        btnInitiatePreSurgery.addActionListener(new java.awt.event.ActionListener() {
+        btnSelectMatch.setBackground(new java.awt.Color(0, 102, 102));
+        btnSelectMatch.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        btnSelectMatch.setForeground(new java.awt.Color(204, 255, 204));
+        btnSelectMatch.setText("Select Match");
+        btnSelectMatch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnInitiatePreSurgeryActionPerformed(evt);
+                btnSelectMatchActionPerformed(evt);
             }
         });
 
@@ -134,37 +114,27 @@ public class ViewMatchResultsJPanel extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(100, 100, 100)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblTitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 715, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnBack)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnInitiatePreSurgery)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnAllocateOrgan)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnRejectMatch)))
-                        .addGap(0, 71, Short.MAX_VALUE)))
-                .addContainerGap())
+                    .addComponent(btnBack)
+                    .addComponent(lblMatchResults)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(btnSelectMatch)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(100, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addComponent(lblTitle)
-                .addGap(40, 40, 40)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(42, 42, 42)
+                .addComponent(lblMatchResults)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAllocateOrgan)
-                    .addComponent(btnRejectMatch)
-                    .addComponent(btnBack)
-                    .addComponent(btnInitiatePreSurgery))
-                .addContainerGap(222, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnSelectMatch, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30)
+                .addComponent(btnBack)
+                .addContainerGap(149, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -174,92 +144,28 @@ public class ViewMatchResultsJPanel extends javax.swing.JPanel {
         layout.previous(userProcessContainer);
     }//GEN-LAST:event_btnBackActionPerformed
 
-    private void btnAllocateOrganActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAllocateOrganActionPerformed
+    private void btnSelectMatchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectMatchActionPerformed
         int selectedRow = tblMatchResults.getSelectedRow();
+
         if (selectedRow < 0) {
-            JOptionPane.showMessageDialog(this, "Please select a match to allocate.", "Warning", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Please select a match to proceed.", "Warning", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        OrganMatch match = (OrganMatch) tblMatchResults.getValueAt(selectedRow, 0);
-        if (!match.getStatus().equals("Pending Acceptance")) {
-            JOptionPane.showMessageDialog(this, "Only pending matches can be allocated.", "Warning", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        
-        // Update statuses
-        match.setStatus("Accepted");
-        match.getPatientRequest().setStatus(RequestStatus.PatientRequestStatus.READY_FOR_TRANSPLANT.getValue());
-        match.getDonorRequest().setStatus(RequestStatus.DonorApplicationStatus.ACTIVE_DONOR.getValue()); // Or 'Organ Allocated'
-        
-        // Optionally, create an Organ object and link it to the patient
-        // Organ allocatedOrgan = new Organ(match.getDonorRequest().getOfferedOrganType(), match.getDonorRequest().getDonor().getDonorID());
-        // allocatedOrgan.setPatientId(match.getPatientRequest().getPatient().getReceiverID());
-        // allocatedOrgan.setCurrentStatus("Allocated");
-        
-        JOptionPane.showMessageDialog(this, "Organ allocated successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-        populateMatchTable();
-    }//GEN-LAST:event_btnAllocateOrganActionPerformed
-
-    private void btnRejectMatchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRejectMatchActionPerformed
-        int selectedRow = tblMatchResults.getSelectedRow();
-        if (selectedRow < 0) {
-            JOptionPane.showMessageDialog(this, "Please select a match to reject.", "Warning", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        OrganMatch match = (OrganMatch) tblMatchResults.getValueAt(selectedRow, 0);
-        if (!match.getStatus().equals("Pending Acceptance")) {
-            JOptionPane.showMessageDialog(this, "Only pending matches can be rejected.", "Warning", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        
-        match.setStatus("Rejected");
-        // Optionally, revert patient/donor request statuses if needed
-        // match.getPatientRequest().setStatus(RequestStatus.PatientRequestStatus.IN_PRIORITY_QUEUE.getValue());
-        // match.getDonorRequest().setStatus(RequestStatus.DonorApplicationStatus.APPROVED.getValue());
-        
-        JOptionPane.showMessageDialog(this, "Match rejected.", "Success", JOptionPane.INFORMATION_MESSAGE);
-        populateMatchTable();
-    }//GEN-LAST:event_btnRejectMatchActionPerformed
-
-    private void btnInitiatePreSurgeryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInitiatePreSurgeryActionPerformed
-        int selectedRow = tblMatchResults.getSelectedRow();
-        if (selectedRow < 0) {
-            JOptionPane.showMessageDialog(this, "Please select an accepted match to initiate pre-surgery coordination.", "Warning", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        OrganMatch match = (OrganMatch) tblMatchResults.getValueAt(selectedRow, 0);
-        if (!match.getStatus().equals("Accepted")) {
-            JOptionPane.showMessageDialog(this, "Only accepted matches can initiate pre-surgery coordination.", "Warning", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        
-        // Update statuses
-        match.setStatus("Pre-Surgery Coordination");
-        match.getPatientRequest().setStatus(RequestStatus.PatientRequestStatus.READY_FOR_TRANSPLANT.getValue());
-        match.getDonorRequest().setStatus(RequestStatus.DonorApplicationStatus.PRE_SURGERY_COORDINATION.getValue()); 
-        
-        JOptionPane.showMessageDialog(this, "Pre-surgery coordination initiated.", "Success", JOptionPane.INFORMATION_MESSAGE);
-        populateMatchTable();
-        
-        // Navigate to PreSurgeryCoordinationJPanel
-        PreSurgeryCoordinationJPanel preSurgeryCoordinationJPanel = new PreSurgeryCoordinationJPanel(userProcessContainer, business, match);
-        userProcessContainer.add("PreSurgeryCoordinationJPanel", preSurgeryCoordinationJPanel);
-        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
-        layout.next(userProcessContainer);
-    }//GEN-LAST:event_btnInitiatePreSurgeryActionPerformed
+        // TODO: Implement logic to handle the selected match, e.g.,
+        //  - Mark the requests as 'accepted' or 'in-progress'
+        //  - Navigate to a panel for further coordination
+        JOptionPane.showMessageDialog(this, "Match selected successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+        EcoSystem.sendNotification(account, "Match for Patient " + selectedMatch.getPatientRequest().getPatient().getName() + " and Donor " + selectedMatch.getDonorRequest().getDonor().getName() + " has been selected.");
+        // TODO: Implement logic to send a notification to the relevant Case Manager
+    }//GEN-LAST:event_btnSelectMatchActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAllocateOrgan;
     private javax.swing.JButton btnBack;
-    private javax.swing.JButton btnInitiatePreSurgery;
-    private javax.swing.JButton btnRejectMatch;
+    private javax.swing.JButton btnSelectMatch;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lblTitle;
+    private javax.swing.JLabel lblMatchResults;
     private javax.swing.JTable tblMatchResults;
     // End of variables declaration//GEN-END:variables
 }
-

@@ -5,9 +5,14 @@
  */
 package userinterface.CustomerRole;
 
+import Business.BloodTypes.PersonBloodTypes;
 import Business.BloodTypes.PersonBloodTypes.BloodType;
 import Business.DB4OUtil.DB4OUtil;
 import Business.EcoSystem;
+import Business.Enterprise.Enterprise;
+import Business.Network.Network;
+import Business.Organization.HospitalOrganization;
+import Business.Organization.Organization;
 import Business.OrganTypes.OrganType;
 import Business.People.Donor;
 import Business.Requests.DonorRequest;
@@ -43,6 +48,8 @@ public class DonorApplicationJPanel extends javax.swing.JPanel {
     private ButtonGroup radioGroup3;
     private ButtonGroup radioGroup4;
     private JPanel customerProcessContainer;
+    private javax.swing.JComboBox<String> cbOfferedOrganType; // Added
+    private javax.swing.JLabel lblOfferedOrganType; // Added
 
     public DonorApplicationJPanel(EcoSystem system, JPanel customerProcessContainer) {
         initComponents();
@@ -68,7 +75,8 @@ public class DonorApplicationJPanel extends javax.swing.JPanel {
 
         populateGenderComboBox();
         populateStateComboBox();
-        populatebloodTypeComboBox();
+        populateBloodTypeComboBox();
+        populateOrganTypeComboBox(); // Call new method here
 
     }
 
@@ -200,6 +208,8 @@ public class DonorApplicationJPanel extends javax.swing.JPanel {
         jLabel24 = new javax.swing.JLabel();
         bloodTypeComboBox = new javax.swing.JComboBox<>();
         jLabel10 = new javax.swing.JLabel();
+        lblOfferedOrganType = new javax.swing.JLabel(); // Added
+        cbOfferedOrganType = new javax.swing.JComboBox<>(); // Added
 
         setBackground(new java.awt.Color(0, 153, 153));
         setForeground(new java.awt.Color(204, 255, 204));
@@ -263,6 +273,14 @@ public class DonorApplicationJPanel extends javax.swing.JPanel {
         jLabel9.setForeground(new java.awt.Color(204, 255, 204));
         jLabel9.setText("Blood Type:");
         add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 250, -1, 20));
+
+        lblOfferedOrganType.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
+        lblOfferedOrganType.setForeground(new java.awt.Color(204, 255, 204));
+        lblOfferedOrganType.setText("Offered Organ:");
+        add(lblOfferedOrganType, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 300, -1, -1));
+
+        cbOfferedOrganType.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
+        add(cbOfferedOrganType, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 300, 180, 40));
 
         streetText.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
         add(streetText, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 390, 180, -1));
@@ -661,21 +679,46 @@ public class DonorApplicationJPanel extends javax.swing.JPanel {
                                     } 
                                     
                   //添加organ type
-               String selectedOrganTypeName = (String) bloodTypeComboBox.getSelectedItem();
-               if (selectedOrganTypeName != null && !selectedOrganTypeName.isEmpty()) {
-               // 將字符串轉換為 OrganType 枚舉
-               OrganType selectedOrganType = OrganType.valueOf(selectedOrganTypeName.toUpperCase());
-               donorRequest.setOfferedOrganType(selectedOrganType);
-               }
+                String selectedOrganTypeName = (String) bloodTypeComboBox.getSelectedItem();
+                if (selectedOrganTypeName != null && !selectedOrganTypeName.isEmpty()) {
+                    // 將字符串轉換為 OrganType 枚舉
+                    OrganType selectedOrganType = OrganType.valueOf(((String) cbOfferedOrganType.getSelectedItem()).toUpperCase());
+                    donorRequest.setOfferedOrganType(selectedOrganType);
+                }
                
                 donorRequest.setStatus("New Request"); // status on DonorRequest
                 system.getDonorDirectory().addDonor(donor); // Add the donor to the directory
-                system.getDonorRequestDirectory().addDonorRequest(donorRequest); // Add the donor request to the directory
                 
-                JOptionPane.showMessageDialog(null,
-                        new JLabel("<html><b>Thank you for volunteering to save a life!</b></html>"));
-                
-                
+                // Find a Hospital Organization and add the request to its work queue
+                Organization hospitalOrganization = null;
+                for (Network network : system.getNetworkList()) {
+                    for (Enterprise enterprise : network.getEnterpriseDirectory().getEnterpriseList()) {
+                        if (enterprise.getEnterpriseType() == Enterprise.EnterpriseType.Hospital) {
+                            for (Organization org : enterprise.getOrganizationDirectory().getOrganizationList()) {
+                                if (org instanceof HospitalOrganization) {
+                                    hospitalOrganization = org;
+                                    break;
+                                }
+                            }
+                        }
+                        if (hospitalOrganization != null) {
+                            break;
+                        }
+                    }
+                    if (hospitalOrganization != null) {
+                        break;
+                    }
+                }
+
+                if (hospitalOrganization != null) {
+                    hospitalOrganization.getWorkQueue().addWorkRequest(donorRequest);
+                    System.out.println("Donor request added to work queue of: " + hospitalOrganization.getName());
+                    JOptionPane.showMessageDialog(this, "Donor registration submitted successfully and sent for verification!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    System.out.println("No Hospital Organization found to process the request.");
+                    JOptionPane.showMessageDialog(this, "No Hospital Organization found to process the request.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+
                 dB4OUtil.storeSystem(system);
                 returnToCustomerWorkArea();
                 // disableAllButton();
@@ -871,11 +914,18 @@ public class DonorApplicationJPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }
 
-    private void populatebloodTypeComboBox() {
+    private void populateBloodTypeComboBox() {
 
         bloodTypeComboBox.removeAllItems();
-         for (OrganType organType : OrganType.values()) {
-            bloodTypeComboBox.addItem(organType.toString());
+        for (PersonBloodTypes.BloodType bt : system.getPersonBloodTypes().getBloodTypeList()) {
+            bloodTypeComboBox.addItem(bt.toString());
+        }
+    }
+    
+    private void populateOrganTypeComboBox() {
+        cbOfferedOrganType.removeAllItems();
+        for (OrganType organType : OrganType.values()) {
+            cbOfferedOrganType.addItem(organType.toString());
         }
     }// GEN-LAST:event_bloodTypeComboBoxActionPerformed
 

@@ -107,6 +107,9 @@ public class ConfigureASystem {
 
         Employee laboratoryEmployee = laboratoryOrg.getEmployeeDirectory().createEmployee("Lab Technician");
         UserAccount labEmployee = laboratoryOrg.getUserAccountDirectory().createUserAccount("labemployee", "password", laboratoryEmployee, new LabTechnicianRole());
+        
+        Employee transplantCoordinatorEmployee = transplantClinicOrg.getEmployeeDirectory().createEmployee("Transplant Coordinator");
+        UserAccount transplantCoordinator = transplantClinicOrg.getUserAccountDirectory().createUserAccount("transplantcoordinator", "password", transplantCoordinatorEmployee, new Business.Role.TransplantCoordinatorRole());
 
         Employee employee = system.getEmployeeDirectory().createEmployee("sysadmin");
         UserAccount ua = system.getUserAccountDirectory().createUserAccount("sysadmin", "sysadmin", employee, new SystemAdminRole());

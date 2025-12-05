@@ -10,8 +10,10 @@ import Business.UserAccount.UserAccount;
 import Business.WorkQueue.WorkRequest;
 import Business.UserAccount.UserAccount;
 import Business.WorkQueue.WorkRequest;
+import userinterface.CommonPanels.ViewDonorApplicationJPanel;
 import java.awt.CardLayout;
 import java.util.Date;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
@@ -44,13 +46,17 @@ public class ManageDonorVerificationJPanel extends javax.swing.JPanel {
         DefaultTableModel model = (DefaultTableModel) tblDonorRequests.getModel();
         model.setRowCount(0);
         
+        System.out.println("Populating donor requests for: " + hospitalOrganization.getName());
+        System.out.println("Work queue size: " + hospitalOrganization.getWorkQueue().getWorkRequestList().size());
+        
         for (WorkRequest request : hospitalOrganization.getWorkQueue().getWorkRequestList()) {
             if (request instanceof DonorRequest) {
+                System.out.println("Found a DonorRequest in the work queue.");
                 DonorRequest donorRequest = (DonorRequest) request;
                 Object[] row = new Object[6];
                 row[0] = donorRequest; // The DonorRequest object itself
-                row[1] = donorRequest.getSender().getEmployee().getName();
-                row[2] = donorRequest.getDonationType();
+                row[1] = donorRequest.getDonor().getName();
+                row[2] = donorRequest.getOfferedOrganType();
                 row[3] = donorRequest.getStatus();
                 row[4] = donorRequest.getReceiver() == null ? "Not Assigned" : donorRequest.getReceiver().getEmployee().getName();
                 row[5] = donorRequest.getRequestDate();
@@ -75,6 +81,7 @@ public class ManageDonorVerificationJPanel extends javax.swing.JPanel {
         btnReject = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
         btnAssignToMe = new javax.swing.JButton();
+        btnViewDetails = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(0, 153, 153));
 
@@ -144,6 +151,16 @@ public class ManageDonorVerificationJPanel extends javax.swing.JPanel {
             }
         });
 
+        btnViewDetails.setBackground(new java.awt.Color(0, 102, 102));
+        btnViewDetails.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        btnViewDetails.setForeground(new java.awt.Color(204, 255, 204));
+        btnViewDetails.setText("View Details");
+        btnViewDetails.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewDetailsActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -158,6 +175,8 @@ public class ManageDonorVerificationJPanel extends javax.swing.JPanel {
                                 .addComponent(btnBack)
                                 .addGap(222, 222, 222)
                                 .addComponent(btnAssignToMe)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnViewDetails)
                                 .addGap(18, 18, 18)
                                 .addComponent(btnApprove)
                                 .addGap(18, 18, 18)
@@ -178,7 +197,8 @@ public class ManageDonorVerificationJPanel extends javax.swing.JPanel {
                     .addComponent(btnApprove)
                     .addComponent(btnReject)
                     .addComponent(btnBack)
-                    .addComponent(btnAssignToMe))
+                    .addComponent(btnAssignToMe)
+                    .addComponent(btnViewDetails))
                 .addContainerGap(222, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -247,10 +267,10 @@ public class ManageDonorVerificationJPanel extends javax.swing.JPanel {
         }
 
         DonorRequest request = (DonorRequest) tblDonorRequests.getValueAt(selectedRow, 0);
-        if (!request.getStatus().equals(RequestStatus.DonorApplicationStatus.PENDING_REVIEW.getValue())) {
-            JOptionPane.showMessageDialog(this, "Request is not in PENDING_REVIEW status and cannot be assigned.", "Warning", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+//        if (!request.getStatus().equals(RequestStatus.DonorApplicationStatus.PENDING_REVIEW.getValue())) {
+//            JOptionPane.showMessageDialog(this, "Request is not in PENDING_REVIEW status and cannot be assigned.", "Warning", JOptionPane.WARNING_MESSAGE);
+//            return;
+//        }
         
         request.setReceiver(account);
         request.setStatus(RequestStatus.DonorApplicationStatus.ADDITIONAL_TESTING_REQUESTED.getValue()); // Or another appropriate status for assigned
@@ -258,12 +278,32 @@ public class ManageDonorVerificationJPanel extends javax.swing.JPanel {
         populateRequestTable();
     }//GEN-LAST:event_btnAssignToMeActionPerformed
 
+    private void btnViewDetailsActionPerformed(java.awt.event.ActionEvent evt) {
+        int selectedRow = tblDonorRequests.getSelectedRow();
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(this, new JLabel("Select a blood request to view"), "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        DonorRequest selectedRequest = (DonorRequest) tblDonorRequests.getValueAt(selectedRow, 0);
+        if (selectedRequest == null)
+            return;
+
+        ViewDonorApplicationJPanel panel = new ViewDonorApplicationJPanel(business, selectedRequest,
+                userProcessContainer);
+        userProcessContainer.add("ViewDonorApplicationJPanel", panel);
+        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+        layout.next(userProcessContainer);
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnApprove;
     private javax.swing.JButton btnAssignToMe;
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnReject;
+    private javax.swing.JButton btnViewDetails;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JTable tblDonorRequests;

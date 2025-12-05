@@ -103,10 +103,9 @@ public class DonorListJPanel extends javax.swing.JPanel {
 
         model.setRowCount(0);
 
-        for (WorkRequest request : userAccount.getWorkQueue().getWorkRequestList()) {
+        for (WorkRequest request : userAccount.getWorkQueue()){
             Object[] row = new Object[6];
             row[0] = request;
-
             row[1] = request.getDonor();
             row[2] = request.getSummary();
             row[3] = request.getEnterprise();
@@ -379,7 +378,6 @@ public class DonorListJPanel extends javax.swing.JPanel {
                 if (org != null) {
                     org.getWorkQueue().getWorkRequestList().add(request);
                     System.out.println(org.getName());
-                    userAccount.getWorkQueue().getWorkRequestList().add(request);
                     JOptionPane.showMessageDialog(null, new JLabel("<html><b>Request sent successfully!</b></html>"),
                             "Info", JOptionPane.INFORMATION_MESSAGE);
                     request.setActionDate(new Date());
