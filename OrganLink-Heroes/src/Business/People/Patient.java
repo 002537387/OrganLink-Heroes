@@ -28,6 +28,9 @@ public class Patient {
     private long contact;
     private String emailID;
     private RequestStatus.PatientStatus status;
+    private boolean brainInjury;
+    private boolean diabitiesBP;       // Currently you do NOT have any diabitiesBP? 
+    private boolean breathingProb;
     private boolean labConfirmation;
     private boolean legalApproval;
     private boolean emergencyStatus;
@@ -193,7 +196,15 @@ public class Patient {
     public void setAntibodyProfile(String antibodyProfile) {
         this.antibodyProfile = antibodyProfile;
     }
-    
+    public boolean isBrainInjury() { return brainInjury; }  // Check if donor has brain injury
+    public void setBrainInjury(boolean brainInjury) { this.brainInjury = brainInjury; } // Set brain injury status
+
+    public boolean isDiabitiesBP() { return diabitiesBP; }  // Check if donor has diabetes/BP
+    public void setDiabitiesBP(boolean diabitiesBP) { this.diabitiesBP = diabitiesBP; } // Set diabetes/BP status
+
+    public boolean isBreathingProb() { return breathingProb; } // Check if donor has breathing problems
+    public void setBreathingProb(boolean breathingProb) { this.breathingProb = breathingProb; } // Set breathing problem status
+
     // Override toString method for patient ID
     @Override
     public String toString() {

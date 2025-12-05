@@ -3,6 +3,7 @@ package userinterface.CommonPanels;
 import Business.BloodTypes.PersonBloodTypes;
 import Business.DB4OUtil.DB4OUtil;
 import Business.EcoSystem;
+import Business.OrganTypes.OrganType;
 import Business.Requests.PatientRequest;
 import java.awt.CardLayout;
 
@@ -74,7 +75,7 @@ public class ViewPatientApplicationJPanel extends javax.swing.JPanel {
         contactText.setEnabled(false);
         genderJComboBox.setEnabled(false);
 
-        bloodTypeComboBox.setEnabled(false);
+        OrganTypeComboBox.setEnabled(false);
         streetText.setEnabled(false);
         cityText.setEnabled(false);
         stateJComboBox.setEnabled(false);
@@ -115,7 +116,7 @@ public class ViewPatientApplicationJPanel extends javax.swing.JPanel {
         jLabel25 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel23 = new javax.swing.JLabel();
-        bloodTypeComboBox = new javax.swing.JComboBox<>();
+        OrganTypeComboBox = new javax.swing.JComboBox<>();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         organTypeTextField = new javax.swing.JTextField();
@@ -269,9 +270,9 @@ public class ViewPatientApplicationJPanel extends javax.swing.JPanel {
         jLabel23.setText("Address Details");
         add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 340, -1, -1));
 
-        bloodTypeComboBox.setBackground(new java.awt.Color(0, 153, 153));
-        bloodTypeComboBox.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
-        add(bloodTypeComboBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 250, 180, 40));
+        OrganTypeComboBox.setBackground(new java.awt.Color(0, 153, 153));
+        OrganTypeComboBox.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
+        add(OrganTypeComboBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 250, 180, 40));
 
         jLabel10.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
         jLabel10.setText("PIN:");
@@ -303,15 +304,15 @@ public class ViewPatientApplicationJPanel extends javax.swing.JPanel {
     }                                 
     
     private void populatebloodTypeComboBox() {
-        bloodTypeComboBox.removeAllItems();
-        for (PersonBloodTypes.BloodType bt : system.getPersonBloodTypes().getBloodTypeList()) {
-            bloodTypeComboBox.addItem(bt.toString());
+         OrganTypeComboBox.removeAllItems();
+         for (OrganType organType : OrganType.values()) {
+            OrganTypeComboBox.addItem(organType.toString());
         }
     }
 
     // Variables declaration - do not modify                     
     private javax.swing.JTextField ageText;
-    private javax.swing.JComboBox<String> bloodTypeComboBox;
+    private javax.swing.JComboBox<String> OrganTypeComboBox;
     private javax.swing.JTextField cityText;
     private javax.swing.JTextField contactText;
     private com.toedter.calendar.JDateChooser dobDateField;
@@ -363,7 +364,7 @@ public class ViewPatientApplicationJPanel extends javax.swing.JPanel {
         zipText.setText(String.valueOf(patientRequest.getPatient().getZipCode()));
         contactText.setText(String.valueOf(patientRequest.getPatient().getContact()));
         emailText.setText(patientRequest.getPatient().getEmailID());
-        bloodTypeComboBox.setSelectedItem(patientRequest.getPatient().getBloodType().toString());
+        OrganTypeComboBox.setSelectedItem(patientRequest.getRequiredOrganType());
         organTypeTextField.setText(patientRequest.getRequiredOrganType().toString());
         
     }
