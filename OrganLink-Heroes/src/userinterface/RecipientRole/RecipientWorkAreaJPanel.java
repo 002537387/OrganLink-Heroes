@@ -49,8 +49,8 @@ public class RecipientWorkAreaJPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         lblWelcome = new javax.swing.JLabel();
+        btnPaitientsRegistration = new javax.swing.JButton();
         btnViewRequestStatus = new javax.swing.JButton();
-        btnViewEstimatedWaitTime = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(0, 153, 153));
 
@@ -59,6 +59,16 @@ public class RecipientWorkAreaJPanel extends javax.swing.JPanel {
         lblWelcome.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblWelcome.setText("Welcome Recipient!");
 
+        btnPaitientsRegistration.setBackground(new java.awt.Color(0, 102, 102));
+        btnPaitientsRegistration.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        btnPaitientsRegistration.setForeground(new java.awt.Color(204, 255, 204));
+        btnPaitientsRegistration.setText("Paitient Registration");
+        btnPaitientsRegistration.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPaitientsRegistrationActionPerformed(evt);
+            }
+        });
+
         btnViewRequestStatus.setBackground(new java.awt.Color(0, 102, 102));
         btnViewRequestStatus.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         btnViewRequestStatus.setForeground(new java.awt.Color(204, 255, 204));
@@ -66,16 +76,6 @@ public class RecipientWorkAreaJPanel extends javax.swing.JPanel {
         btnViewRequestStatus.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnViewRequestStatusActionPerformed(evt);
-            }
-        });
-
-        btnViewEstimatedWaitTime.setBackground(new java.awt.Color(0, 102, 102));
-        btnViewEstimatedWaitTime.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        btnViewEstimatedWaitTime.setForeground(new java.awt.Color(204, 255, 204));
-        btnViewEstimatedWaitTime.setText("View Estimated Wait Time");
-        btnViewEstimatedWaitTime.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnViewEstimatedWaitTimeActionPerformed(evt);
             }
         });
 
@@ -90,7 +90,7 @@ public class RecipientWorkAreaJPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGap(250, 250, 250)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnViewEstimatedWaitTime, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnPaitientsRegistration, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnViewRequestStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(250, Short.MAX_VALUE))
         );
@@ -100,16 +100,16 @@ public class RecipientWorkAreaJPanel extends javax.swing.JPanel {
                 .addGap(50, 50, 50)
                 .addComponent(lblWelcome)
                 .addGap(80, 80, 80)
-                .addComponent(btnViewRequestStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnPaitientsRegistration, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(btnViewEstimatedWaitTime, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnViewRequestStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(311, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnViewRequestStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewRequestStatusActionPerformed
+    private void btnPaitientsRegistrationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewRequestStatusActionPerformed
         // TODO: Implement logic for viewing request status
-        ViewRequestStatusJPanel viewRequestStatusPanel = new ViewRequestStatusJPanel(
+        PatientsRegistrationJPanel PatientsRegistrationJPanel = new PatientsRegistrationJPanel(
         userProcessContainer, 
         account, 
         organization, 
@@ -118,14 +118,14 @@ public class RecipientWorkAreaJPanel extends javax.swing.JPanel {
         network
     );
         // 使用 CardLayout 切换到新页面
-        userProcessContainer.add("ViewRequestStatusJPanel", viewRequestStatusPanel);
+        userProcessContainer.add("PatientsRegistrationJPanel", PatientsRegistrationJPanel);
         CardLayout layout = (CardLayout) userProcessContainer.getLayout();
         layout.next(userProcessContainer);
     }//GEN-LAST:event_btnViewRequestStatusActionPerformed
 
-    private void btnViewEstimatedWaitTimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewEstimatedWaitTimeActionPerformed
+    private void btnViewRequestStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewEstimatedWaitTimeActionPerformed
         // TODO: Implement logic for viewing estimated wait time
-        EstimateWaitingTimeJPanel EstimateWaitingTimeJPanel = new EstimateWaitingTimeJPanel(
+        ViewRequestStatusJPanel ViewRequestStatusJPanel = new ViewRequestStatusJPanel(
         userProcessContainer, 
         account, 
         organization, 
@@ -134,14 +134,14 @@ public class RecipientWorkAreaJPanel extends javax.swing.JPanel {
         network
     );
         // 使用 CardLayout 切换到新页面
-        userProcessContainer.add("ViewRequestStatusJPanel", EstimateWaitingTimeJPanel);
+        userProcessContainer.add("ViewRequestStatusJPanel", ViewRequestStatusJPanel);
         CardLayout layout = (CardLayout) userProcessContainer.getLayout();
         layout.next(userProcessContainer);
     }//GEN-LAST:event_btnViewEstimatedWaitTimeActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnViewEstimatedWaitTime;
+    private javax.swing.JButton btnPaitientsRegistration;
     private javax.swing.JButton btnViewRequestStatus;
     private javax.swing.JLabel lblWelcome;
     // End of variables declaration//GEN-END:variables

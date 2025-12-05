@@ -8,10 +8,19 @@ import Business.EcoSystem;
 import Business.Enterprise.Enterprise;
 import Business.Network.Network;
 import Business.Organization.Organization;
+import Business.Requests.DonorRequest;
+import Business.Requests.PatientRequest;
 import Business.UserAccount.UserAccount;
 import HomePages.LoginJPanel;
 import java.awt.CardLayout;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
+import userinterface.CommonPanels.ViewDonorApplicationJPanel;
+import userinterface.CommonPanels.ViewPatientApplicationJPanel;
 import userinterface.CustomerRole.PickCustomerActionJPanel;
 
 /**
@@ -28,6 +37,9 @@ public class ViewRequestStatusJPanel extends javax.swing.JPanel {
     private EcoSystem business;
     private Network network;
     
+     // 添加這個列表來存儲 PatientRequest 對象
+    private List<PatientRequest> patientRequestList = new ArrayList<>();
+    
     /**
      * Creates new form ViewJPanel
      */
@@ -43,10 +55,33 @@ public class ViewRequestStatusJPanel extends javax.swing.JPanel {
         this.business = business;
         this.network = network;
         
- 
+         
+        // 初始化表格並載入資料
+        populatePatientRequestTable();
         
     }
     
+     private void populatePatientRequestTable() {
+        DefaultTableModel dtm = (DefaultTableModel) tblRecipientApplications.getModel();
+        dtm.setRowCount(0);
+        patientRequestList.clear();
+        
+        int sequentialId = 1;
+        
+        // 從 EcoSystem 獲取所有 PatientRequest
+        for (PatientRequest patientRequest : business.getPatientRequestDirectory().getPatientRequestList()) {
+            Object row[] = new Object[6];
+            row[0] = sequentialId++;  // 序號
+            row[1] = patientRequest.getPatient().getName();
+            row[2] = patientRequest.getPatient().getContact();
+            row[3] = patientRequest.getRequiredOrganType() ;
+            row[4] = patientRequest.getStatus();
+            row[5] = "Calculating..."; // 等待時間 (可以之後計算)
+            
+            dtm.addRow(row);
+            patientRequestList.add(patientRequest);
+        }
+    }
     
   
     /**
@@ -59,83 +94,161 @@ public class ViewRequestStatusJPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         jScrollPane2 = new javax.swing.JScrollPane();
-        tblDonorApplications = new javax.swing.JTable();
-        jLabel1 = new javax.swing.JLabel();
-        btnBack = new javax.swing.JButton();
+        tblRecipientApplications = new javax.swing.JTable();
+        btnPrepareOrder1 = new javax.swing.JButton();
+        btnPrepareOrder2 = new javax.swing.JButton();
+        btnPrepareOrder = new javax.swing.JButton();
+        jLabel26 = new javax.swing.JLabel();
 
-        tblDonorApplications.setBackground(new java.awt.Color(0, 102, 102));
-        tblDonorApplications.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
-        tblDonorApplications.setForeground(new java.awt.Color(255, 255, 255));
-        tblDonorApplications.setModel(new javax.swing.table.DefaultTableModel(
+        setBackground(new java.awt.Color(0, 102, 102));
+
+        tblRecipientApplications.setBackground(new java.awt.Color(0, 102, 102));
+        tblRecipientApplications.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
+        tblRecipientApplications.setForeground(new java.awt.Color(255, 255, 255));
+        tblRecipientApplications.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Patient ID", "Name", "Contact", "Organ Type", "Status"
+                "Patient ID", "Name", "Contact", "Organ Type", "Status", "Waiting Time"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        tblDonorApplications.setFocusable(false);
-        tblDonorApplications.setGridColor(new java.awt.Color(0, 0, 0));
-        jScrollPane2.setViewportView(tblDonorApplications);
+        tblRecipientApplications.setFocusable(false);
+        tblRecipientApplications.setGridColor(new java.awt.Color(0, 0, 0));
+        jScrollPane2.setViewportView(tblRecipientApplications);
 
-        jLabel1.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
-        jLabel1.setText("Recipient Application Tracking");
-
-        btnBack.setText("Back");
-        btnBack.addActionListener(new java.awt.event.ActionListener() {
+        btnPrepareOrder1.setBackground(new java.awt.Color(0, 102, 102));
+        btnPrepareOrder1.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
+        btnPrepareOrder1.setForeground(new java.awt.Color(204, 255, 204));
+        btnPrepareOrder1.setText("<< Back");
+        btnPrepareOrder1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnPrepareOrder1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBackActionPerformed(evt);
+                btnPrepareOrder1ActionPerformed(evt);
             }
         });
+
+        btnPrepareOrder2.setBackground(new java.awt.Color(0, 102, 102));
+        btnPrepareOrder2.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
+        btnPrepareOrder2.setForeground(new java.awt.Color(204, 255, 204));
+        btnPrepareOrder2.setText("<< Back");
+        btnPrepareOrder2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnPrepareOrder2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPrepareOrder2ActionPerformed(evt);
+            }
+        });
+
+        btnPrepareOrder.setBackground(new java.awt.Color(0, 102, 102));
+        btnPrepareOrder.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
+        btnPrepareOrder.setForeground(new java.awt.Color(204, 255, 204));
+        btnPrepareOrder.setText("View Details");
+        btnPrepareOrder.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnPrepareOrder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPrepareOrderActionPerformed(evt);
+            }
+        });
+
+        jLabel26.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel26.setForeground(new java.awt.Color(204, 255, 204));
+        jLabel26.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel26.setText("Recipient Application Tracking");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(78, 78, 78)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 329, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 905, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(167, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel26, javax.swing.GroupLayout.PREFERRED_SIZE, 1273, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(58, 58, 58)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnPrepareOrder2, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnPrepareOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 969, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(btnPrepareOrder1, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(23, Short.MAX_VALUE)
-                .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(89, 89, 89))
+                .addContainerGap()
+                .addComponent(jLabel26, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnPrepareOrder2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnPrepareOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(72, 72, 72))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(btnPrepareOrder1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+    private void btnPrepareOrder1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrepareOrder1ActionPerformed
         // TODO add your handling code here:
+    }//GEN-LAST:event_btnPrepareOrder1ActionPerformed
+
+    private void btnPrepareOrder2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrepareOrder2ActionPerformed
+        // TODO add your handling code here:
+         // TODO add your handling code here:
           // 移除当前页面
         userProcessContainer.remove(this);
         // 返回上一页
         CardLayout layout = (CardLayout) userProcessContainer.getLayout();
         layout.previous(userProcessContainer);
+    }//GEN-LAST:event_btnPrepareOrder2ActionPerformed
+
+    private void btnPrepareOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrepareOrderActionPerformed
+        // TODO add your handling code here:
         
-    }//GEN-LAST:event_btnBackActionPerformed
+        int selectedRow = tblRecipientApplications.getSelectedRow();
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(null, new JLabel("Select a organ request to view"), "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        PatientRequest selectedRequest = patientRequestList.get(selectedRow);
+        if (selectedRequest == null) {
+            return;
+        }
+
+        ViewPatientApplicationJPanel panel = new ViewPatientApplicationJPanel( business, selectedRequest, userProcessContainer);
+        userProcessContainer.add("ViewPatientApplicationJPanel", panel);
+        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+        layout.next(userProcessContainer);
+    }//GEN-LAST:event_btnPrepareOrderActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnBack;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton btnPrepareOrder;
+    private javax.swing.JButton btnPrepareOrder1;
+    private javax.swing.JButton btnPrepareOrder2;
+    private javax.swing.JLabel jLabel26;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable tblDonorApplications;
+    private javax.swing.JTable tblRecipientApplications;
     // End of variables declaration//GEN-END:variables
 }
