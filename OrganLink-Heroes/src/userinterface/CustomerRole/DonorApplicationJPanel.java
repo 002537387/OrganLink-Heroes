@@ -929,11 +929,8 @@ public class DonorApplicationJPanel extends javax.swing.JPanel {
     // End of variables declaration//GEN-END:variables
 
     private void returnToCustomerWorkArea() {
-        customerProcessContainer.removeAll();
-        customerProcessContainer.add("PickCustomerActionJPanel",
-                new PickCustomerActionJPanel(system, customerProcessContainer));
-        CardLayout layout = (CardLayout) customerProcessContainer.getLayout();
-        layout.next(customerProcessContainer);
-    }
+        customerProcessContainer.remove(this);
+       CardLayout layout = (CardLayout) customerProcessContainer.getLayout();
+       layout.previous(customerProcessContainer);    }
 
 }
