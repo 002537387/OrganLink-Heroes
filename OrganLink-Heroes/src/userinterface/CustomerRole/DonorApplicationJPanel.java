@@ -34,6 +34,7 @@ public class DonorApplicationJPanel extends javax.swing.JPanel {
     /**
      * Creates new form DonorApplicationJPanel
      */
+    //
     private boolean emailValid;
     private EcoSystem system;
     private DB4OUtil dB4OUtil = DB4OUtil.getInstance();
