@@ -37,10 +37,9 @@ public class MainJFrame extends javax.swing.JFrame {
         staticMainProcessContainer = mainProcessContainer;
         staticSystem = system;
 
-        mainProcessContainer.add("CustomerWorkAreaJPanel", new CustomerWorkAreaJPanel(system, mainProcessContainer));
-        CardLayout layout = (CardLayout) mainProcessContainer.getLayout();
-        layout.next(mainProcessContainer);
-
+         mainProcessContainer.add("LoginJPanel", new LoginJPanel(system, mainProcessContainer));
+    CardLayout layout = (CardLayout) mainProcessContainer.getLayout();
+    layout.next(mainProcessContainer);
     }
 
     /**

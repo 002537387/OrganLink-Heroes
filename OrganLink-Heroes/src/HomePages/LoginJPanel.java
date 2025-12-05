@@ -235,10 +235,15 @@ public class LoginJPanel extends javax.swing.JPanel {
     
     private void btnCustomerModeActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCustomerModeActionPerformed
         // TODO add your handling code here:
-        mainProcessContainer.removeAll();
-        mainProcessContainer.add("CustomerWorkAreaJPanel", new CustomerWorkAreaJPanel(system, mainProcessContainer));
-        CardLayout layout = (CardLayout) mainProcessContainer.getLayout();
-        layout.next(mainProcessContainer);
+        // 創建客戶工作區
+    JPanel customerWorkArea = new CustomerWorkAreaJPanel(system, mainProcessContainer);
+    
+    // 使用 MainWorkArea 包裝
+    MainWorkArea mainWorkArea = new MainWorkArea(system, customerWorkArea, mainProcessContainer);
+    mainProcessContainer.add("MainWorkArea", mainWorkArea);
+    
+    CardLayout layout = (CardLayout) mainProcessContainer.getLayout();
+    layout.next(mainProcessContainer);
 
     }// GEN-LAST:event_btnCustomerModeActionPerformed
     
