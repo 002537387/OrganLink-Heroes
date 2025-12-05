@@ -68,7 +68,7 @@ public class DonorApplicationJPanel extends javax.swing.JPanel {
 
         populateGenderComboBox();
         populateStateComboBox();
-        populatebloodTypeComboBox();
+        populateOrganTypeComboBox();
 
     }
 
@@ -139,7 +139,7 @@ public class DonorApplicationJPanel extends javax.swing.JPanel {
         genderJComboBox.setEnabled(false);
 
         // bloodTypesTextField.setEnabled(false);
-        bloodTypeComboBox.setEnabled(false);
+        organTypeComboBox.setEnabled(false);
         streetText.setEnabled(false);
         cityText.setEnabled(false);
         stateJComboBox.setEnabled(false);
@@ -198,7 +198,7 @@ public class DonorApplicationJPanel extends javax.swing.JPanel {
         jLabel23 = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
         jLabel24 = new javax.swing.JLabel();
-        bloodTypeComboBox = new javax.swing.JComboBox<>();
+        organTypeComboBox = new javax.swing.JComboBox<>();
         jLabel10 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(0, 153, 153));
@@ -261,7 +261,7 @@ public class DonorApplicationJPanel extends javax.swing.JPanel {
 
         jLabel9.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(204, 255, 204));
-        jLabel9.setText("Blood Type:");
+        jLabel9.setText("Organ Type:");
         add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 250, -1, 20));
 
         streetText.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
@@ -463,13 +463,13 @@ public class DonorApplicationJPanel extends javax.swing.JPanel {
         jLabel24.setText("Elibility Requirements:");
         add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 340, -1, -1));
 
-        bloodTypeComboBox.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
-        bloodTypeComboBox.addActionListener(new java.awt.event.ActionListener() {
+        organTypeComboBox.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
+        organTypeComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bloodTypeComboBoxActionPerformed(evt);
+                organTypeComboBoxActionPerformed(evt);
             }
         });
-        add(bloodTypeComboBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 250, 180, 40));
+        add(organTypeComboBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 250, 180, 40));
 
         jLabel10.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(204, 255, 204));
@@ -499,9 +499,9 @@ public class DonorApplicationJPanel extends javax.swing.JPanel {
         // bloodTypesTextField.setBorder(BorderFactory.createLineBorder(Color.RED));
         // bloodTypesTextField.setForeground(Color.red);
         // }
-        if (bloodTypeComboBox.getSelectedItem().equals("")) {
-            bloodTypeComboBox.setBorder(BorderFactory.createLineBorder(Color.RED));
-            bloodTypeComboBox.setForeground(Color.red);
+        if (organTypeComboBox.getSelectedItem().equals("")) {
+            organTypeComboBox.setBorder(BorderFactory.createLineBorder(Color.RED));
+            organTypeComboBox.setForeground(Color.red);
         }
         if (nameText.getText().isEmpty()) {
             nameText.setBorder(BorderFactory.createLineBorder(Color.RED));
@@ -558,7 +558,7 @@ public class DonorApplicationJPanel extends javax.swing.JPanel {
                 || ageText.getText().isEmpty()
                 || String.valueOf(genderJComboBox.getSelectedItem()).equals("")
                 || // String.valueOf(bloodTypesTextField.getText()).equals("") ||
-                String.valueOf(bloodTypeComboBox.getSelectedItem()).equals("")
+                String.valueOf(organTypeComboBox.getSelectedItem()).equals("")
                 || String.valueOf(stateJComboBox.getSelectedItem()).equals("")) {
             JOptionPane.showMessageDialog(null, new JLabel("<html><b>All fields are mandatory!</b></html>"), "Error",
                     JOptionPane.ERROR_MESSAGE);
@@ -617,7 +617,7 @@ public class DonorApplicationJPanel extends javax.swing.JPanel {
             try {
                 // TODO:
                 donor.setBloodType(
-                        system.getPersonBloodTypes().findBloodType((bloodTypeComboBox.getSelectedItem().toString())));
+                        system.getPersonBloodTypes().findBloodType((organTypeComboBox.getSelectedItem().toString())));
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, new JLabel("<html><b>Blood type doesn't exist</b></html>"));
                 return;
@@ -661,7 +661,7 @@ public class DonorApplicationJPanel extends javax.swing.JPanel {
                                     } 
                                     
                   //添加organ type
-               String selectedOrganTypeName = (String) bloodTypeComboBox.getSelectedItem();
+               String selectedOrganTypeName = (String) organTypeComboBox.getSelectedItem();
                if (selectedOrganTypeName != null && !selectedOrganTypeName.isEmpty()) {
                // 將字符串轉換為 OrganType 枚舉
                OrganType selectedOrganType = OrganType.valueOf(selectedOrganTypeName.toUpperCase());
@@ -699,7 +699,7 @@ public class DonorApplicationJPanel extends javax.swing.JPanel {
         genderJComboBox.setEnabled(true);
 
         // bloodTypesTextField.setEnabled(true);
-        bloodTypeComboBox.setEnabled(true);
+        organTypeComboBox.setEnabled(true);
         streetText.setEnabled(true);
         cityText.setEnabled(true);
         stateJComboBox.setEnabled(true);
@@ -724,7 +724,7 @@ public class DonorApplicationJPanel extends javax.swing.JPanel {
         genderJComboBox.setSelectedItem("");
 
         stateJComboBox.setSelectedItem("");
-        bloodTypeComboBox.setSelectedItem("");
+        organTypeComboBox.setSelectedItem("");
 
         dobDateField.setCalendar(null);
 
@@ -867,15 +867,15 @@ public class DonorApplicationJPanel extends javax.swing.JPanel {
         ageText.setText((String.valueOf(new Date().getYear() - dob.getYear())));
     }// GEN-LAST:event_emailTextMouseClicked
 
-    private void bloodTypeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_bloodTypeComboBoxActionPerformed
+    private void organTypeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_bloodTypeComboBoxActionPerformed
         // TODO add your handling code here:
     }
 
-    private void populatebloodTypeComboBox() {
+    private void populateOrganTypeComboBox() {
 
-        bloodTypeComboBox.removeAllItems();
+        organTypeComboBox.removeAllItems();
          for (OrganType organType : OrganType.values()) {
-            bloodTypeComboBox.addItem(organType.toString());
+            organTypeComboBox.addItem(organType.toString());
         }
     }// GEN-LAST:event_bloodTypeComboBoxActionPerformed
 
@@ -885,7 +885,6 @@ public class DonorApplicationJPanel extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField ageText;
-    private javax.swing.JComboBox<String> bloodTypeComboBox;
     private javax.swing.JRadioButton btnNoQ1;
     private javax.swing.JRadioButton btnNoQ2;
     private javax.swing.JRadioButton btnNoQ4;
@@ -922,6 +921,7 @@ public class DonorApplicationJPanel extends javax.swing.JPanel {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JTextField nameText;
+    private javax.swing.JComboBox<String> organTypeComboBox;
     private javax.swing.JComboBox stateJComboBox;
     private javax.swing.JTextField streetText;
     private javax.swing.JTextField uidText;

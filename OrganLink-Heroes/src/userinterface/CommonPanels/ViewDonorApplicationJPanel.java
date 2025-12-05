@@ -8,6 +8,7 @@ package userinterface.CommonPanels;
 import Business.BloodTypes.PersonBloodTypes;
 import Business.DB4OUtil.DB4OUtil;
 import Business.EcoSystem;
+import Business.OrganTypes.OrganType;
 import Business.Requests.DonorRequest;
 import java.awt.CardLayout;
 
@@ -68,7 +69,7 @@ public class ViewDonorApplicationJPanel extends javax.swing.JPanel {
 
         populateGenderComboBox();
         populateStateComboBox();
-        populatebloodTypeComboBox();
+        populateOrganTypeComboBox();
 
         populateDonorRequestData();
         disableAllButton();
@@ -141,7 +142,7 @@ public class ViewDonorApplicationJPanel extends javax.swing.JPanel {
         genderJComboBox.setEnabled(false);
 
 //        bloodTypesTextField.setEnabled(false);
-        bloodTypeComboBox.setEnabled(false);
+        organTypeComboBox.setEnabled(false);
         streetText.setEnabled(false);
         cityText.setEnabled(false);
         stateJComboBox.setEnabled(false);
@@ -198,7 +199,7 @@ public class ViewDonorApplicationJPanel extends javax.swing.JPanel {
         jLabel23 = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
         jLabel24 = new javax.swing.JLabel();
-        bloodTypeComboBox = new javax.swing.JComboBox<>();
+        organTypeComboBox = new javax.swing.JComboBox<>();
         jLabel10 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(0, 153, 153));
@@ -258,7 +259,7 @@ public class ViewDonorApplicationJPanel extends javax.swing.JPanel {
         add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 260, -1, -1));
 
         jLabel9.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
-        jLabel9.setText("Blood Type:");
+        jLabel9.setText("Organ Type:");
         add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 250, -1, 20));
 
         streetText.setBackground(new java.awt.Color(0, 153, 153));
@@ -449,14 +450,14 @@ public class ViewDonorApplicationJPanel extends javax.swing.JPanel {
         jLabel24.setText("Elibility Requirements:");
         add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 340, -1, -1));
 
-        bloodTypeComboBox.setBackground(new java.awt.Color(0, 153, 153));
-        bloodTypeComboBox.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
-        bloodTypeComboBox.addActionListener(new java.awt.event.ActionListener() {
+        organTypeComboBox.setBackground(new java.awt.Color(0, 153, 153));
+        organTypeComboBox.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
+        organTypeComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bloodTypeComboBoxActionPerformed(evt);
+                organTypeComboBoxActionPerformed(evt);
             }
         });
-        add(bloodTypeComboBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 250, 180, 40));
+        add(organTypeComboBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 250, 180, 40));
 
         jLabel10.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
         jLabel10.setText("PIN:");
@@ -596,16 +597,16 @@ public class ViewDonorApplicationJPanel extends javax.swing.JPanel {
         ageText.setText((String.valueOf(new Date().getYear() - dob.getYear())));
     }//GEN-LAST:event_emailTextMouseClicked
 
-    private void bloodTypeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bloodTypeComboBoxActionPerformed
+    private void organTypeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_organTypeComboBoxActionPerformed
         // TODO add your handling code here:
     }
 
-    private void populatebloodTypeComboBox() {
-        bloodTypeComboBox.removeAllItems();
-        for (PersonBloodTypes.BloodType bt : system.getPersonBloodTypes().getBloodTypeList()) {
-            bloodTypeComboBox.addItem(bt.toString());
+    private void populateOrganTypeComboBox() {
+        organTypeComboBox.removeAllItems();
+         for (OrganType organType : OrganType.values()) {
+            organTypeComboBox.addItem(organType.toString());
         }
-    }//GEN-LAST:event_bloodTypeComboBoxActionPerformed
+    }//GEN-LAST:event_organTypeComboBoxActionPerformed
 
     private void btnNoQ1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNoQ1ActionPerformed
         // TODO add your handling code here:
@@ -614,7 +615,6 @@ public class ViewDonorApplicationJPanel extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField ageText;
-    private javax.swing.JComboBox<String> bloodTypeComboBox;
     private javax.swing.JRadioButton btnNoQ1;
     private javax.swing.JRadioButton btnNoQ2;
     private javax.swing.JRadioButton btnNoQ4;
@@ -650,6 +650,7 @@ public class ViewDonorApplicationJPanel extends javax.swing.JPanel {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JTextField nameText;
+    private javax.swing.JComboBox<String> organTypeComboBox;
     private javax.swing.JComboBox stateJComboBox;
     private javax.swing.JTextField streetText;
     private javax.swing.JTextField uidText;

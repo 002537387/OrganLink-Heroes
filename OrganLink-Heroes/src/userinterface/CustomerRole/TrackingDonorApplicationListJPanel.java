@@ -17,6 +17,8 @@ import Business.Statuses.DonorApplicationStatuses;
 import Business.UserAccount.UserAccount;
 import Magic.Design.MyTableFormat;
 import java.awt.CardLayout;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -38,11 +40,16 @@ public class TrackingDonorApplicationListJPanel extends javax.swing.JPanel {
     private Network network;
     JPanel userProcessContainer;
 
+    // 添加這個列表來存儲 DonorRequest 對象
+    private List<DonorRequest> donorRequestList = new ArrayList<>();
+    
     public TrackingDonorApplicationListJPanel(EcoSystem system, JPanel userProcessContainer) {
         initComponents();
         this.system = system;
         this.userProcessContainer = userProcessContainer;
         tblDonorApplications.getTableHeader().setDefaultRenderer(new MyTableFormat());
+        
+        
         populateDonorApplicationTable();
 
     }
@@ -51,16 +58,19 @@ public class TrackingDonorApplicationListJPanel extends javax.swing.JPanel {
         DefaultTableModel dtm = (DefaultTableModel) tblDonorApplications.getModel();
 
         dtm.setRowCount(0);
-
+        
+        int sequentialId = 1;
+        
         for (DonorRequest donorRequest : system.getDonorRequestDirectory().getDonorRequestList()) {
             Object row[] = new Object[5];
-            row[0] = donorRequest;
+            row[0] = sequentialId++;
             row[1] = donorRequest.getDonor().getName(); // Access via getDonor()
             row[2] = donorRequest.getDonor().getContact(); // Access via getDonor()
-            row[3] = donorRequest.getDonor().getOrganType(); // Access via getDonor()
+            row[3] = donorRequest.getOfferedOrganType(); // Access via getDonor()
             row[4] = donorRequest.getStatus();
-
+            
             dtm.addRow(row);
+            donorRequestList.add(donorRequest); 
         }
     }
 
@@ -170,7 +180,7 @@ public class TrackingDonorApplicationListJPanel extends javax.swing.JPanel {
             return;
         }
 
-        DonorRequest selectedRequest = (DonorRequest) tblDonorApplications.getValueAt(selectedRow, 0);
+       DonorRequest selectedRequest = donorRequestList.get(selectedRow);
         if (selectedRequest == null)
             return;
 
