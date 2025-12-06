@@ -96,32 +96,32 @@ public class OrganMatch {
         }
 
         // Factor 2: Blood Type Compatibility (Essential)
-        PersonBloodTypes bloodMatcher = new PersonBloodTypes();
-        Business.BloodTypes.PersonBloodTypes.BloodType patientBloodType = bloodMatcher.findBloodType(patientRequest.getPatient().getBloodType().getValue());
-        Business.BloodTypes.PersonBloodTypes.BloodType donorBloodType = bloodMatcher.findBloodType(donorRequest.getDonor().getBloodType().getValue());
-        
-        if (!patientBloodType.getEligibleDonors().contains(donorBloodType)) {
-            return 0; // No match if blood types are incompatible
-        }
+//        PersonBloodTypes bloodMatcher = new PersonBloodTypes();
+//        Business.BloodTypes.PersonBloodTypes.BloodType patientBloodType = bloodMatcher.findBloodType(patientRequest.getPatient().getBloodType().getValue());
+//        Business.BloodTypes.PersonBloodTypes.BloodType donorBloodType = bloodMatcher.findBloodType(donorRequest.getDonor().getBloodType().getValue());
+//        
+//        if (!patientBloodType.getEligibleDonors().contains(donorBloodType)) {
+//            return 0; // No match if blood types are incompatible
+//        }
 
         // Base score for compatible match
         double score = 50;
 
         // Factor 3: Medical Urgency
-        switch (patientRequest.getMedicalUrgencyLevel()) {
-            case CRITICAL:
-                score += 40;
-                break;
-            case HIGH:
-                score += 30;
-                break;
-            case MEDIUM:
-                score += 20;
-                break;
-            case STANDARD:
-                score += 10;
-                break;
-        }
+//        switch (patientRequest.getMedicalUrgencyLevel()) {
+//            case CRITICAL:
+//                score += 40;
+//                break;
+//            case HIGH:
+//                score += 30;
+//                break;
+//            case MEDIUM:
+//                score += 20;
+//                break;
+//            case STANDARD:
+//                score += 10;
+//                break;
+//        }
 
         return score;
     }}

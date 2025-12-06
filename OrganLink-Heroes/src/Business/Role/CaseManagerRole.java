@@ -13,6 +13,7 @@ import Business.UserAccount.UserAccount;
 
 import javax.swing.JPanel;
 import userinterface.CaseManagerRole.CaseManagerWorkAreaJPanel;
+import userinterface.CaseManagerRole.PrepareOrderDetailsJPanel;
 
 /**
  *
@@ -24,6 +25,6 @@ public class CaseManagerRole extends Role {
     @Override
     public JPanel createWorkArea(JPanel userProcessContainer, UserAccount account, Organization organization, Enterprise enterprise, EcoSystem business, Network network) {
         // Return the CaseManagerWorkAreaJPanel with necessary parameters
-        return new CaseManagerWorkAreaJPanel(account, (ThirdPartyOrganization) organization, enterprise, business, network);
+        return new PrepareOrderDetailsJPanel(userProcessContainer,account, (ThirdPartyOrganization) organization, enterprise, business, network);
     }
 }

@@ -12,6 +12,7 @@ import Business.Organization.LaboratoryOrganization;
 import Business.UserAccount.UserAccount;
 
 import javax.swing.JPanel;
+import userinterface.LabEmployeeRole.LabEmployeeWorkAreaJPanel;
 import userinterface.LabTechnicianRole.LabTechnicianWorkAreaJPanel;
 
 /**
@@ -24,6 +25,6 @@ public class LabTechnicianRole extends Role {
     @Override
     public JPanel createWorkArea(JPanel userProcessContainer, UserAccount account, Organization organization, Enterprise enterprise, EcoSystem business, Network network) {
         // Return new work area panel specific to lab employee
-        return new LabTechnicianWorkAreaJPanel(account, (LaboratoryOrganization) organization, enterprise, business, network);
+        return new LabEmployeeWorkAreaJPanel(account, (LaboratoryOrganization) organization, enterprise, business, network);
     }
 }

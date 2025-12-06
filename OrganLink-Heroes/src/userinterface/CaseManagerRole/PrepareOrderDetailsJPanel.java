@@ -11,6 +11,7 @@ import Business.Enterprise.Enterprise;
 import Business.Network.Network;
 import Magic.Design.*;
 import Business.OrganMatch; // Import OrganMatch
+import Business.Organization.CaseManagerOrganization;
 import Business.Organization.LogisticsOrganization;
 import Business.Organization.Organization;
 import Business.People.Patient;
@@ -20,6 +21,7 @@ import Business.Statuses.RequestStatus; // Added import for RequestStatus
 import Business.UserAccount.UserAccount;
 import Business.WorkQueue.System_Coordinator_Test_WorkRequest;
 import Business.WorkQueue.WorkRequest;
+import Business.WorkQueue.OrganMatchWorkRequest; // Added
 import Magic.Design.MyJButton;
 import Magic.Design.MyTableFormat;
 import java.awt.CardLayout;
@@ -52,14 +54,17 @@ public class PrepareOrderDetailsJPanel extends javax.swing.JPanel {
     private UserAccount userAccount;
     private Network network;
     private OrganMatch selectedMatch; // To store the selected organ match
+    private OrganMatchWorkRequest selectedOrganMatchWorkRequest; // To store the selected work request
     private JPanel userProcessContainer;
     private DB4OUtil dB4OUtil = DB4OUtil.getInstance();
+    private Organization organization;
     
     public PrepareOrderDetailsJPanel(JPanel userProcessContainer, UserAccount userAccount, Organization organization, Enterprise enterprise, EcoSystem system, Network network) {
         initComponents();
         this.userProcessContainer = userProcessContainer;
         this.system = system;
         this.userAccount = userAccount;
+        this.organization = organization;
         this.network = network;
         tblMatchedOrders.getTableHeader().setDefaultRenderer(new MyTableFormat()); // Assuming MyTableFormat is available
         populateMatchedOrdersTable();
@@ -70,26 +75,35 @@ public class PrepareOrderDetailsJPanel extends javax.swing.JPanel {
         DefaultTableModel dtm = (DefaultTableModel) tblMatchedOrders.getModel();
         
         dtm.setRowCount(0);
+        System.out.println("Case Manager's work queue size: " + organization.getWorkQueue().getWorkRequestList().size());
         
-        for(OrganMatch match : system.getMatchedRequests()){            
-            Object row[] = new Object[8];
-            row[0]= match; // Display Match ID (or toString of OrganMatch)
-            row[1]= match.getPatientRequest().getPatient().getName();
-            row[2]= match.getPatientRequest().getRequiredOrganType().getValue();
-            row[3]= match.getPatientRequest().getPatient().getBloodType().getValue();
-            row[4]= match.getDonorRequest().getDonor().getName();
-            row[5]= match.getDonorRequest().getOfferedOrganType().getValue();
-            row[6]= match.getDonorRequest().getDonor().getBloodType().getValue();
-            row[7]= String.format("%.2f", match.getMatchScore());
-              
-            dtm.addRow(row);
-        }        
+        for(WorkRequest request : organization.getWorkQueue().getWorkRequestList()){
+            System.out.println("Processing request of type: " + request.getClass().getName());
+            if (request instanceof OrganMatchWorkRequest) {
+                OrganMatchWorkRequest omwr = (OrganMatchWorkRequest) request;
+                OrganMatch match = omwr.getOrganMatch();
+                
+                System.out.println("Found OrganMatchWorkRequest for patient: " + match.getPatientRequest().getPatient().getName());
+                
+                Object row[] = new Object[8];
+                row[0]= omwr; // Display the WorkRequest object
+                row[1]= match.getPatientRequest().getPatient().getName();
+                row[2]= match.getPatientRequest().getRequiredOrganType().getValue();
+                row[3]= match.getDonorRequest().getDonor().getBloodType().getValue();
+                row[4]= match.getDonorRequest().getDonor().getName();
+                row[5]= match.getDonorRequest().getOfferedOrganType().getValue();
+                row[6]= match.getDonorRequest().getDonor().getBloodType().getValue();
+                row[7]= String.format("%.2f", match.getMatchScore());
+                  
+                dtm.addRow(row);
+            }
+        }
     }
     
     private void populateMatchDetails(OrganMatch match) {
         txtPatientName.setText(match.getPatientRequest().getPatient().getName());
         txtRequiredOrgan.setText(match.getPatientRequest().getRequiredOrganType().getValue());
-        txtPatientBloodType.setText(match.getPatientRequest().getPatient().getBloodType().getValue());
+        txtPatientBloodType.setText(match.getDonorRequest().getDonor().getBloodType().getValue());
         txtMatchStatus.setText(match.getStatus());
 
         txtDonorName.setText(match.getDonorRequest().getDonor().getName());
@@ -317,22 +331,24 @@ public class PrepareOrderDetailsJPanel extends javax.swing.JPanel {
             return;
         }
         
-        selectedMatch = (OrganMatch) tblMatchedOrders.getValueAt(selectedRow, 0);
+        selectedOrganMatchWorkRequest = (OrganMatchWorkRequest) tblMatchedOrders.getValueAt(selectedRow, 0);
+        selectedMatch = selectedOrganMatchWorkRequest.getOrganMatch();
         populateMatchDetails(selectedMatch);
         btnProcessOrder.setEnabled(true);
     }//GEN-LAST:event_tblMatchedOrdersMousePressed
 
     private void btnProcessOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcessOrderActionPerformed
-        if (selectedMatch == null) {
+        if (selectedMatch == null || selectedOrganMatchWorkRequest == null) {
             JOptionPane.showMessageDialog(this, "Please select an organ match to process.", "Warning", JOptionPane.WARNING_MESSAGE);
             return;
         }
         
-        // Update the status of the selected match
-        selectedMatch.setStatus("Processed by Case Manager");
+        // Update the status of the selected match and its work request
+        selectedMatch.setStatus(RequestStatus.OrganMatchStatus.PROCESSED_BY_CASE_MANAGER.getValue());
+        selectedOrganMatchWorkRequest.setStatus(RequestStatus.OrganMatchStatus.PROCESSED_BY_CASE_MANAGER.getValue());
         
         // Create and send a LogisticsRequest
-        LogisticsRequest logisticsRequest = new LogisticsRequest(selectedMatch);
+        LogisticsRequest logisticsRequest = new LogisticsRequest(selectedMatch); // Pass the OrganMatch to the LogisticsRequest
         logisticsRequest.setOrganMatch(selectedMatch);
         logisticsRequest.setSender(userAccount);
         logisticsRequest.setStatus(RequestStatus.OrganLogisticsStatus.READY_FOR_TRANSPORT.getValue());
@@ -355,7 +371,10 @@ public class PrepareOrderDetailsJPanel extends javax.swing.JPanel {
         if (org != null) {
             org.getWorkQueue().addWorkRequest(logisticsRequest);
             userAccount.getWorkQueue().add(logisticsRequest); // Add to sender's work queue as well
-            selectedMatch.setStatus(RequestStatus.OrganLogisticsStatus.READY_FOR_TRANSPORT.getValue()); // Update OrganMatch status
+            
+            // Remove the processed OrganMatchWorkRequest from the Case Manager's queue
+            userAccount.getWorkQueue().remove(selectedOrganMatchWorkRequest);
+
             JOptionPane.showMessageDialog(this, "Organ match processed and Logistics Request sent successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
             
             // Send notification to a Logistics Officer

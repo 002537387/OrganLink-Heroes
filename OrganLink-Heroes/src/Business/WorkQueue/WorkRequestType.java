@@ -3,7 +3,8 @@ package Business.WorkQueue;
 public enum WorkRequestType {
     DONOR_REQUEST("Donor Request"),
     PATIENT_REQUEST("Patient Request"),
-    ANTITRAFFICKING_ALERT("Anti-Trafficking Alert");
+    ANTITRAFFICKING_ALERT("Anti-Trafficking Alert"),
+    OrganMatch("Organ Match");
 
     private final String value;
 

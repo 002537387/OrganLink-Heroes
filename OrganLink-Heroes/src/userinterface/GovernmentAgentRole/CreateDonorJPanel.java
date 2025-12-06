@@ -180,7 +180,7 @@ public class CreateDonorJPanel extends javax.swing.JPanel {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         uidTextField = new javax.swing.JTextField();
-        hlaTypeTextField = new javax.swing.JTextField();
+        bloodGroupTextField = new javax.swing.JTextField();
 
         setBackground(new java.awt.Color(0, 153, 153));
         setForeground(new java.awt.Color(204, 255, 204));
@@ -331,11 +331,11 @@ public class CreateDonorJPanel extends javax.swing.JPanel {
         uidTextField.setEnabled(false);
         add(uidTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 450, 230, -1));
 
-        hlaTypeTextField.setBackground(new java.awt.Color(0, 153, 153));
-        hlaTypeTextField.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
-        hlaTypeTextField.setForeground(new java.awt.Color(204, 255, 204));
-        hlaTypeTextField.setEnabled(false);
-        add(hlaTypeTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 500, 230, -1));
+        bloodGroupTextField.setBackground(new java.awt.Color(0, 153, 153));
+        bloodGroupTextField.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
+        bloodGroupTextField.setForeground(new java.awt.Color(204, 255, 204));
+        bloodGroupTextField.setEnabled(false);
+        add(bloodGroupTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 500, 230, -1));
     }// </editor-fold>//GEN-END:initComponents
 
     private void buttonCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonCreateActionPerformed
@@ -347,7 +347,8 @@ public class CreateDonorJPanel extends javax.swing.JPanel {
         
         System.out.println(contactTextField.getText());  
         donor.setContact((int) Double.parseDouble(contactTextField.getText())); 
-        donor.setBloodType(system.getPersonBloodTypes().findBloodType(hlaTypeTextField.getText()));
+        donor.setBloodType(system.getPersonBloodTypes().findBloodType(bloodGroupTextField.getText()));
+        donor.setTissueMarkers(""); // Explicitly set tissue markers to empty or null
         donor.setStatus(RequestStatus.DonorApplicationStatus.APPROVED);
         system.getDonorDirectory().addDonor(donor);
 
@@ -359,7 +360,7 @@ public class CreateDonorJPanel extends javax.swing.JPanel {
         nameTextField.setText("");
         contactTextField.setText("");
         uidTextField.setText("");
-        hlaTypeTextField.setText("");
+        bloodGroupTextField.setText("");
          buttonCreate.setEnabled(false);
         
 
@@ -378,7 +379,7 @@ public class CreateDonorJPanel extends javax.swing.JPanel {
         nameTextField.setText( String.valueOf(tblGoogleSheet.getValueAt(selectedRow, 1)));
         contactTextField.setText( String.valueOf(tblGoogleSheet.getValueAt(selectedRow, 2)));
         uidTextField.setText( String.valueOf(tblGoogleSheet.getValueAt(selectedRow, 0)));
-        hlaTypeTextField.setText( String.valueOf(tblGoogleSheet.getValueAt(selectedRow, 3)));
+        bloodGroupTextField.setText( String.valueOf(tblGoogleSheet.getValueAt(selectedRow, 3)));
         
         buttonCreate.setEnabled(true);
         }
@@ -389,7 +390,7 @@ public class CreateDonorJPanel extends javax.swing.JPanel {
     private javax.swing.JButton buttonCreate;
     private javax.swing.JTextField contactTextField;
     private javax.swing.JTable donorTable;
-    private javax.swing.JTextField hlaTypeTextField;
+    private javax.swing.JTextField bloodGroupTextField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel25;

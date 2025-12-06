@@ -37,7 +37,8 @@ public abstract class Organization {
         Laboratory("Laboratory Organization"),
         Logistics("Logistics Organization"),
         Hospital("Hospital Organization"),
-        TransplantClinic("Transplant Clinic Organization");
+        TransplantClinic("Transplant Clinic Organization"),
+        CaseManager("Case Manager Organization");
 
         private String value;
 

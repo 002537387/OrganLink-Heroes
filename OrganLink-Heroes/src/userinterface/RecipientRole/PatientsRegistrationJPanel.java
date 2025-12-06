@@ -65,6 +65,7 @@ public class PatientsRegistrationJPanel extends javax.swing.JPanel {
     private ButtonGroup radioGroup3;
     private ButtonGroup radioGroup4;
     private JPanel customerProcessContainer;
+    private javax.swing.JLabel lblBloodType; // Added
     
     public PatientsRegistrationJPanel(JPanel userProcessContainer, UserAccount account, Organization organization, Enterprise enterprise, EcoSystem business, Network network) {
         initComponents();
@@ -97,7 +98,14 @@ public class PatientsRegistrationJPanel extends javax.swing.JPanel {
         populateGenderComboBox();
         populateStateComboBox();
         populateOrganTypeComboBox();
-
+        populateBloodTypeComboBox();
+    }
+    
+    private void populateBloodTypeComboBox() {
+        bloodTypeComboBox.removeAllItems();
+        for (PersonBloodTypes.BloodType type : PersonBloodTypes.BloodType.values()) {
+            bloodTypeComboBox.addItem(type.toString());
+        }
     }
 
     private void populateGenderComboBox() {
@@ -168,6 +176,7 @@ public class PatientsRegistrationJPanel extends javax.swing.JPanel {
 
         // bloodTypesTextField.setEnabled(false);
         OrganTypeComboBox.setEnabled(false);
+        bloodTypeComboBox.setEnabled(false);
         streetText.setEnabled(false);
         cityText.setEnabled(false);
         stateJComboBox.setEnabled(false);
@@ -232,6 +241,8 @@ public class PatientsRegistrationJPanel extends javax.swing.JPanel {
         jLabel24 = new javax.swing.JLabel();
         OrganTypeComboBox = new javax.swing.JComboBox<>();
         jLabel10 = new javax.swing.JLabel();
+        lblBloodType = new javax.swing.JLabel();
+        bloodTypeComboBox = new javax.swing.JComboBox<>();
 
         setBackground(new java.awt.Color(0, 102, 102));
 
@@ -282,6 +293,14 @@ public class PatientsRegistrationJPanel extends javax.swing.JPanel {
         jLabel12.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(204, 255, 204));
         jLabel12.setText("Street address:");
+        
+        lblBloodType.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
+        lblBloodType.setForeground(new java.awt.Color(204, 255, 204));
+        lblBloodType.setText("Blood Type:");
+        add(lblBloodType, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 310, -1, -1));
+        
+        bloodTypeComboBox.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
+        add(bloodTypeComboBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 300, 180, 40));
 
         jLabel13.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(204, 255, 204));
@@ -450,6 +469,17 @@ public class PatientsRegistrationJPanel extends javax.swing.JPanel {
         OrganTypeComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 OrganTypeComboBoxActionPerformed(evt);
+            }
+        });
+        
+        lblBloodType.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
+        lblBloodType.setForeground(new java.awt.Color(204, 255, 204));
+        lblBloodType.setText("Blood Type:");
+
+        bloodTypeComboBox.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
+        bloodTypeComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bloodTypeComboBoxActionPerformed(evt);
             }
         });
 
@@ -859,6 +889,7 @@ public class PatientsRegistrationJPanel extends javax.swing.JPanel {
                 patient.setZipCode(Integer.parseInt(zipText.getText()));
                 patient.setContact(Long.parseLong(contactText.getText()));
                 patient.setEmailID(emailText.getText());
+                patient.setBloodType((BloodType) bloodTypeComboBox.getSelectedItem()); // Set blood type
                 patient.setdP(tempdP);
 
                 // Set health questions
@@ -893,6 +924,36 @@ public class PatientsRegistrationJPanel extends javax.swing.JPanel {
                 // Add patient and request to directories
                 business.getPatientDirectory().addPatient(patient);
                 business.getPatientRequestDirectory().addPatientRequest(patientRequest);
+                
+                // Find a Hospital Organization and add the request to its work queue
+                Organization hospitalOrganization = null;
+                for (Network network : business.getNetworkList()) {
+                    for (Enterprise enterprise : network.getEnterpriseDirectory().getEnterpriseList()) {
+                        if (enterprise.getEnterpriseType() == Enterprise.EnterpriseType.Hospital) {
+                            for (Organization org : enterprise.getOrganizationDirectory().getOrganizationList()) {
+                                if (org instanceof HospitalOrganization) {
+                                    hospitalOrganization = org;
+                                    break;
+                                }
+                            }
+                        }
+                        if (hospitalOrganization != null) {
+                            break;
+                        }
+                    }
+                    if (hospitalOrganization != null) {
+                        break;
+                    }
+                }
+
+                if (hospitalOrganization != null) {
+                    hospitalOrganization.getWorkQueue().addWorkRequest(patientRequest);
+                    System.out.println("Patient request added to work queue of: " + hospitalOrganization.getName());
+                    JOptionPane.showMessageDialog(this, "Patient registration submitted successfully and sent for verification!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    System.out.println("No Hospital Organization found to process the request.");
+                    JOptionPane.showMessageDialog(this, "No Hospital Organization found to process the request.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
                 
                 // Save to database
                 dB4OUtil.storeSystem(business);
@@ -1018,6 +1079,10 @@ public class PatientsRegistrationJPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_OrganTypeComboBoxActionPerformed
 
+    private void bloodTypeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bloodTypeComboBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_bloodTypeComboBoxActionPerformed
+
     private void uEmailKeyTyped(java.awt.event.KeyEvent evt) {// GEN-FIRST:event_uEmailKeyTyped
         // TODO add your handling code here:
         if (!emailValidator(emailText.getText())) {
@@ -1079,6 +1144,7 @@ public class PatientsRegistrationJPanel extends javax.swing.JPanel {
     private javax.swing.JComboBox stateJComboBox;
     private javax.swing.JTextField streetText;
     private javax.swing.JTextField uidText;
+    private javax.swing.JComboBox<String> bloodTypeComboBox;
     private javax.swing.JTextField zipText;
     // End of variables declaration//GEN-END:variables
 }

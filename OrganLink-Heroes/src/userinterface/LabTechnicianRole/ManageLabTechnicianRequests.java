@@ -69,7 +69,7 @@ public class ManageLabTechnicianRequests extends javax.swing.JPanel {
         model.setRowCount(0);
         
         for(WorkRequest request : medTechOrganization.getWorkQueue().getWorkRequestList()){
-            request.setStatus(request.getStatus().replaceAll("Plasma", "BoneMarrow"));
+
             Object[] row = new Object[6];
             row[0] = request;
             row[1] = request.getSummary();
@@ -89,13 +89,13 @@ public class ManageLabTechnicianRequests extends javax.swing.JPanel {
         model.setRowCount(0);
         
         for(WorkRequest request : userAccount.getWorkQueue()){
-            request.setStatus(request.getStatus().replaceAll("Plasma", "BoneMarrow"));
+
             Object[] row = new Object[6];
             row[0] = request;
             row[1] = request.getDonor();
             row[2] = request.getDonor().getName();
             //row[3] = request.getDonor().getContact();
-            row[3] = request.getDonor().getBloodType();
+            row[3] = request.getDonor().getTissueMarkers();
             row[4] = request.getUserAccount().getUsername();
             row[5] = request.getStatus();
              
@@ -433,61 +433,31 @@ public class ManageLabTechnicianRequests extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, new JLabel(  "<html><b>Kindly do the Test for other infections!</b></html>"), "Warning", JOptionPane.WARNING_MESSAGE);
            
         }
-        else if(txtHLAList.getText().equals(null)){
+        else if(txtHLAList.getText().trim().isEmpty()){
             txtHLAList.setBorder(BorderFactory.createLineBorder(Color.RED));
             txtHLAList.setForeground(Color.red);
-           // JOptionPane.showMessageDialog(null, "Kindly select a Blood Group!", "Error", JOptionPane.ERROR_MESSAGE);
-            JOptionPane.showMessageDialog(null, new JLabel(  "<html><b>Kindly select a HLA Type!</b></html>"), "Warning", JOptionPane.WARNING_MESSAGE);
-           
+            JOptionPane.showMessageDialog(null, new JLabel(  "<html><b>Kindly enter HLA Type!</b></html>"), "Warning", JOptionPane.WARNING_MESSAGE);
         }
         else{
-        for(Enterprise ent : network.getEnterpriseDirectory().getEnterpriseList()){
-            System.out.println("You are being monitored");
-            System.out.println(ent.getEnterpriseType().toString());
-              if(ent.getEnterpriseType().toString().equals("BoneMarrowBank")){
-                  ep = ent;           
-              }
-        }  
-        if(ep == null){
-            JOptionPane.showMessageDialog(null, new JLabel("<html><b>"
-                    + " There is no BoneMarrow Bank!"
-                    + "</b></html>"), 
-                    "Warning", 
-                    JOptionPane.WARNING_MESSAGE);
+            WorkRequest request = (WorkRequest)tblMedTechDonors.getValueAt(selectedRow, 0);
+            Donor donor = request.getDonor();
+            donor.setTissueMarkers(txtHLAList.getText().trim()); // Store HLA information in donor's tissueMarkers
+            
+            request.setStatus("HLA Tested & Marrow Added to Bank");
+            
+            dB4OUtil.storeSystem(system);
+            
+            populateOrganizationDonorTable();
+            populateMedTechDonorTable();
+            
+            JOptionPane.showMessageDialog(null, new JLabel("<html><b>Marrow added to Bank with HLA information!</b></html>"));
+            
+            buttonAddMarrow.setEnabled(false);
+            buttonBoneMarrowDiscard.setEnabled(false);
+            checkBoneMarrow.setEnabled(false);
+            txtHLAList.setEnabled(false);
+            txtHLAList.setText("");
         }
-        for (Organization org: ep.getOrganizationDirectory().getOrganizationList()){
-              System.out.println(org.getClass().getTypeName().toString()+" asit");
-              if(org.getClass().getTypeName().toString().equals("Business.Organization.Bone_Marrow_Bank_Organization")){
-                 org =org;
-              }
-        }  
-        WorkRequest request = (WorkRequest)tblMedTechDonors.getValueAt(selectedRow, 0);
-        
-//        try {
-//            org.getAllHLAs().add(PersonBloodTypes.createHLA(String.valueOf(txtHLAList.getText())));
-//            PersonBloodTypes h = new PersonBloodTypes();
-//            h.updateBloodTypelist(txtHLAList.getText());
-//            ((LocalClinicOrganization)org).getInventory().bloodTypeComboCountAdd(h);
-//          }
-//        catch( NullPointerException ex   )
-//          { System.out.println("");
-//          }
-//        
-//                request.setStatus("BoneMarrow added to Bank");
-//                
-//                dB4OUtil.storeSystem(system);
-//                
-//                populateOrganizationDonorTable();
-//                populateMedTechDonorTable();
-//            
-//                JOptionPane.showMessageDialog(null, new JLabel(  "<html><b>BoneMarrow added to the bank!</b></html>"));
-//           
-//                
-//                buttonAddMarrow.setEnabled(false);
-//                buttonBoneMarrowDiscard.setEnabled(false);        
-         }
-         dB4OUtil.storeSystem(system);
-         
     }//GEN-LAST:event_buttonAddMarrowActionPerformed
 
     private void checkTestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkTestActionPerformed
@@ -529,15 +499,8 @@ public class ManageLabTechnicianRequests extends javax.swing.JPanel {
         
         else{
        WorkRequest request1 = (WorkRequest)tblMedTechDonors.getValueAt(selectedRow, 0);
-//       Donor donor = null;
-//        for(Donor dnr: system.getDonorDirectory().getDonorList()){
-//            if(dnr.getDonorID().equals(request1.getDonor().getDonorID())){
-//                donor = dnr;
-//            }
-//        }
                 request1.setStatus("BoneMarrow Donated");
                 
-                //request1.getDonor().setStatus("BoneMarrow Donated");
                 dB4OUtil.storeSystem(system);
                 
                 populateOrganizationDonorTable();
@@ -547,12 +510,9 @@ public class ManageLabTechnicianRequests extends javax.swing.JPanel {
            
         for(Donor dnr: system.getDonorDirectory().getDonorList()){
             if(dnr.getDonorID().equals(request1.getDonor().getDonorID())){
-                //dnr.setLastDonationDate(new Date()); // Removed
                 dnr.setStatus(RequestStatus.DonorApplicationStatus.RETRIEVAL_SCHEDULED);
-                //System.out.println(String.valueOf(dnr.getLastDonationDate())+" last donation date"); // Removed
             }
         }
-//        populateMedTechDonorTable();
         buttonMarrowDonated.setEnabled(false);
         txtHLAList.setEnabled(false);
         buttonAddMarrow.setEnabled(true);

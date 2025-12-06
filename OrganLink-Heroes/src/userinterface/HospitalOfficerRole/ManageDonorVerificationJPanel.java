@@ -230,6 +230,7 @@ public class ManageDonorVerificationJPanel extends javax.swing.JPanel {
         request.setStatus(RequestStatus.DonorApplicationStatus.APPROVED.getValue());
         request.getDonor().setStatus(RequestStatus.DonorApplicationStatus.ACTIVE_DONOR); // Update donor's status
         request.setResolveDate(new Date());
+        business.getDonorRequestDirectory().addDonorRequest(request);
         JOptionPane.showMessageDialog(this, "Donor request approved.", "Success", JOptionPane.INFORMATION_MESSAGE);
         populateRequestTable();
     }//GEN-LAST:event_btnApproveActionPerformed

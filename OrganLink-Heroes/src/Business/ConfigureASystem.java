@@ -92,9 +92,10 @@ public class ConfigureASystem {
         Organization hospitalOrg = hospital.getOrganizationDirectory().createOrganization(Organization.Type.Hospital, "Hospitals Organization");
         Organization laboratoryOrg = laboratory.getOrganizationDirectory().createOrganization(Organization.Type.Laboratory, "Laboratories Organization");
         Organization transplantClinicOrg = transplantCenter.getOrganizationDirectory().createOrganization(Organization.Type.TransplantClinic, "Transplant Clinic Organization");
+        Organization caseManagerOrg = thirdParty.getOrganizationDirectory().createOrganization(Organization.Type.CaseManager, "Case Manager Organization");
 
-        Employee thirdPartyEmployee = thirdPartyOrg.getEmployeeDirectory().createEmployee("Case Manager");
-        UserAccount caseManager = thirdPartyOrg.getUserAccountDirectory().createUserAccount("casemanager", "password", thirdPartyEmployee, new CaseManagerRole());
+        Employee thirdPartyEmployee = caseManagerOrg.getEmployeeDirectory().createEmployee("Case Manager");
+        UserAccount caseManager = caseManagerOrg.getUserAccountDirectory().createUserAccount("casemanager", "password", thirdPartyEmployee, new CaseManagerRole());
 
         Employee governmentEmployee = governmentOrg.getEmployeeDirectory().createEmployee("Government Agent");
         UserAccount govAgent = governmentOrg.getUserAccountDirectory().createUserAccount("governmentagent", "password", governmentEmployee, new GovernmentAgentRole());

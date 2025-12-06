@@ -19,7 +19,7 @@ import Business.Organization.LaboratoryOrganization;
 import Business.UserAccount.UserAccount;
 import java.awt.CardLayout;
 import javax.swing.JPanel;
-import userinterface.CommonPanels.DonorApplicationListJPanel;
+import userinterface.LabTechnicianRole.ManageLabTechnicianRequests;
 
 
 public class LabEmployeeWorkAreaJPanel extends javax.swing.JPanel {
@@ -107,8 +107,8 @@ public class LabEmployeeWorkAreaJPanel extends javax.swing.JPanel {
     private void BtnManageRequestMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BtnManageRequestMouseClicked
         // TODO add your handling code here:
         userProcessContainer.removeAll();
-        DonorApplicationListJPanel panel = new DonorApplicationListJPanel(system, userAccount, network, userProcessContainer);
-        userProcessContainer.add("DonorApplicationListJPanel", panel);
+        ManageLabTechnicianRequests manageLabTechnicianRequests = new ManageLabTechnicianRequests(system, userAccount, medhTechOrg, enterprise, network);
+        userProcessContainer.add("ManageLabTechnicianRequests", manageLabTechnicianRequests);
         CardLayout layout = (CardLayout) userProcessContainer.getLayout();
         layout.next(userProcessContainer);
         
