@@ -41,10 +41,11 @@ public class ViewMatchResultsJPanel extends javax.swing.JPanel {
         for (OrganMatch match : matchedRequests) {
             Object[] row = new Object[6];
             row[0] = match.getPatientRequest().getPatient().getName();
-            row[1] = match.getPatientRequest().getRequiredOrganType().getValue();
-            row[2] = match.getDonorRequest().getDonor().getName();
-            row[3] = match.getDonorRequest().getDonor().getBloodType().getValue();
-            row[4] = String.format("%.2f", match.getMatchScore()); // Format score to 2 decimal places
+            row[1] = match.getDonorRequest().getDonor().getBloodType().getValue();
+            row[2] = match.getPatientRequest().getRequiredOrganType().getValue();
+            row[3] = match.getDonorRequest().getDonor().getName();
+            row[4] = match.getDonorRequest().getDonor().getBloodType().getValue();
+            row[5] = String.format("%.2f", match.getMatchScore()); // Format score to 2 decimal places
             model.addRow(row);
         }
     }

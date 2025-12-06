@@ -134,7 +134,7 @@ public class CreatePatientJPanel extends javax.swing.JPanel {
         jLabel6 = new javax.swing.JLabel();
         nameTextField = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
-        HLATypesTextField = new javax.swing.JTextField();
+        bloodGroupTextField = new javax.swing.JTextField();
 
         setBackground(new java.awt.Color(0, 153, 153));
         setForeground(new java.awt.Color(204, 255, 204));
@@ -289,19 +289,19 @@ public class CreatePatientJPanel extends javax.swing.JPanel {
         jLabel8.setBackground(new java.awt.Color(0, 153, 153));
         jLabel8.setFont(new java.awt.Font("Times New Roman", 1, 20)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(204, 255, 204));
-        jLabel8.setText("Blood Type");
+        jLabel8.setText("Blood Group");
         add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 420, -1, -1));
 
-        HLATypesTextField.setBackground(new java.awt.Color(0, 153, 153));
-        HLATypesTextField.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
-        HLATypesTextField.setForeground(new java.awt.Color(255, 255, 255));
-        HLATypesTextField.setEnabled(false);
-        HLATypesTextField.addActionListener(new java.awt.event.ActionListener() {
+        bloodGroupTextField.setBackground(new java.awt.Color(0, 153, 153));
+        bloodGroupTextField.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
+        bloodGroupTextField.setForeground(new java.awt.Color(255, 255, 255));
+        bloodGroupTextField.setEnabled(false);
+        bloodGroupTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                HLATypesTextFieldActionPerformed(evt);
+                bloodGroupTextFieldActionPerformed(evt);
             }
         });
-        add(HLATypesTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 420, 210, -1));
+        add(bloodGroupTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 420, 210, -1));
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCreateReceiverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateReceiverActionPerformed
@@ -312,7 +312,8 @@ public class CreatePatientJPanel extends javax.swing.JPanel {
         patient.setReceiverID(uidTextField.getText());
         patient.setName(nameTextField.getText());
         patient.setEmailID((emailTextField.getText()));
-        patient.setBloodType(system.getPersonBloodTypes().findBloodType(HLATypesTextField.getText()));
+        patient.setBloodType(system.getPersonBloodTypes().findBloodType(bloodGroupTextField.getText()));
+        patient.setTissueMarkers(""); // Explicitly set tissue markers to empty or null
         patient.setEmergencyStatus(chkEmergency.isSelected());
         patient.setStatus(RequestStatus.PatientStatus.ACTIVE);
         
@@ -381,7 +382,7 @@ public class CreatePatientJPanel extends javax.swing.JPanel {
         uidTextField.setText("");
         nameTextField.setText("");
         emailTextField.setText("");
-        HLATypesTextField.setText("");
+        bloodGroupTextField.setText("");
     }//GEN-LAST:event_btnCreateReceiverActionPerformed
 
     private void tblPatientMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPatientMousePressed
@@ -400,7 +401,7 @@ public class CreatePatientJPanel extends javax.swing.JPanel {
              nameTextField.setText( String.valueOf(tblPatient.getValueAt(selectedRow, 1)));
             emailTextField.setText( String.valueOf(tblPatient.getValueAt(selectedRow, 2)));
             
-            HLATypesTextField.setText( String.valueOf(tblPatient.getValueAt(selectedRow, 4)));
+            bloodGroupTextField.setText( String.valueOf(tblPatient.getValueAt(selectedRow, 4)));
             
             
             btnCreateReceiver.setEnabled(true);
@@ -410,17 +411,17 @@ public class CreatePatientJPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_tblPatientMousePressed
 
-    private void HLATypesTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HLATypesTextFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_HLATypesTextFieldActionPerformed
-
     private void chkEmergencyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkEmergencyActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_chkEmergencyActionPerformed
 
+    private void bloodGroupTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bloodGroupTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_bloodGroupTextFieldActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField HLATypesTextField;
+    private javax.swing.JTextField bloodGroupTextField;
     private javax.swing.JButton btnCreateReceiver;
     private javax.swing.JCheckBox chkEmergency;
     private javax.swing.JTextField emailTextField;

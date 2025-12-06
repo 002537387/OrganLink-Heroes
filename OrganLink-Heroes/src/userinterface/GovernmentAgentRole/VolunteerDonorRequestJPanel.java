@@ -403,7 +403,7 @@ public class VolunteerDonorRequestJPanel extends javax.swing.JPanel {
         jLabel23.setBackground(new java.awt.Color(0, 153, 153));
         jLabel23.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
         jLabel23.setForeground(new java.awt.Color(204, 255, 204));
-        jLabel23.setText("HLA Types");
+        jLabel23.setText("Blood Group");
         add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 440, -1, 20));
 
         jLabel1.setBackground(new java.awt.Color(0, 153, 153));
@@ -522,6 +522,7 @@ public class VolunteerDonorRequestJPanel extends javax.swing.JPanel {
             ageText.setText(String.valueOf(donorRequest.getDonor().getAge()));
             genderText.setText(donorRequest.getDonor().getGender());
             hlaTypesTextField.setText(donorRequest.getDonor().getBloodType().toString());
+            donorRequest.getDonor().setTissueMarkers(""); // Clear tissue markers
             streetText.setText(donorRequest.getDonor().getStreetAddress());
             cityText.setText(donorRequest.getDonor().getCity());
             stateText.setText(donorRequest.getDonor().getState());
@@ -549,7 +550,6 @@ public class VolunteerDonorRequestJPanel extends javax.swing.JPanel {
             nameText.setEditable(false);
             ageText.setEditable(false);
             genderText.setEditable(false);
-            hlaTypesTextField.setEditable(false);
             streetText.setEditable(false);
             cityText.setEditable(false);
             stateText.setEditable(false);
@@ -629,6 +629,7 @@ public class VolunteerDonorRequestJPanel extends javax.swing.JPanel {
         donor.setAge(Integer.parseInt(ageText.getText())); // Age
         donor.setGender(genderText.getText()); // gender
         donor.setBloodType(system.getPersonBloodTypes().findBloodType(hlaTypesTextField.getText()));
+        donor.setTissueMarkers(""); // Clear tissue markers as this panel doesn't set it
         donor.setStreetAddress(streetText.getText()); // streetAddress
         donor.setCity(cityText.getText()); // city
         donor.setState(stateText.getText()); // state
