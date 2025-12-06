@@ -9,6 +9,7 @@ public class RequestStatus {
         ADDITIONAL_TESTING_REQUESTED("Additional Testing Requested"),
         ACTIVE_DONOR("Active Donor"),
         RETRIEVAL_SCHEDULED("Retrieval Scheduled"), // Added for DonorApplicationStatus
+        MATCHED_AWAITING_CASE_MANAGER("Matched - Awaiting Case Manager"),
         PRE_SURGERY_COORDINATION("Pre-Surgery Coordination"); // Added for DonorApplicationStatus
 
         private final String value;
@@ -26,6 +27,7 @@ public class RequestStatus {
         PENDING_VERIFICATION("Pending Verification"),
         IN_PRIORITY_QUEUE("In Priority Queue"),
         MATCHED_AWAITING_ACCEPTANCE("Matched - Awaiting Acceptance"),
+        MATCHED_AWAITING_CASE_MANAGER("Matched - Awaiting Case Manager"),
         MATCH_ACCEPTED("Match Accepted"),
         MATCH_DECLINED("Match Declined"),
         READY_FOR_TRANSPLANT("Ready for Transplant"),
@@ -112,6 +114,27 @@ public class RequestStatus {
         private final String value;
 
         PatientStatus(String value) {
+            this.value = value;
+        }
+
+        public String getValue() {
+            return value;
+        }
+    }
+    
+    public enum OrganMatchStatus {
+        PENDING_CASE_MANAGER_REVIEW("Pending Case Manager Review"),
+        PROCESSED_BY_CASE_MANAGER("Processed by Case Manager"),
+        APPROVED_BY_DOCTOR("Approved by Doctor"),
+        REJECTED_BY_DOCTOR("Rejected by Doctor"),
+        RETRIEVAL_SCHEDULED("Retrieval Scheduled"),
+        TRANSPLANT_SCHEDULED("Transplant Scheduled"),
+        COMPLETED("Completed"),
+        CANCELLED("Cancelled");
+
+        private final String value;
+
+        OrganMatchStatus(String value) {
             this.value = value;
         }
 

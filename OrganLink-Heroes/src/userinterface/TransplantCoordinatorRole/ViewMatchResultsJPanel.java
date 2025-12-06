@@ -2,7 +2,14 @@ package userinterface.TransplantCoordinatorRole;
 
 import Business.EcoSystem;
 import Business.OrganMatch;
-import Business.UserAccount.UserAccount; // Added import
+import Business.UserAccount.UserAccount;
+import Business.WorkQueue.OrganMatchWorkRequest; // Added
+import Business.Enterprise.Enterprise; // Added
+import Business.Network.Network; // Added
+import Business.Organization.Organization; // Added
+import Business.Role.CaseManagerRole; // Added to check for CaseManagerRole
+import Business.Statuses.RequestStatus; // Added
+import Business.DB4OUtil.DB4OUtil; // Added
 import java.awt.CardLayout;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
@@ -152,12 +159,57 @@ public class ViewMatchResultsJPanel extends javax.swing.JPanel {
             return;
         }
 
-        // TODO: Implement logic to handle the selected match, e.g.,
-        //  - Mark the requests as 'accepted' or 'in-progress'
-        //  - Navigate to a panel for further coordination
-        JOptionPane.showMessageDialog(this, "Match selected successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-        EcoSystem.sendNotification(account, "Match for Patient " + selectedMatch.getPatientRequest().getPatient().getName() + " and Donor " + selectedMatch.getDonorRequest().getDonor().getName() + " has been selected.");
-        // TODO: Implement logic to send a notification to the relevant Case Manager
+        selectedMatch = business.getMatchedRequests().get(selectedRow);
+        System.out.println("Selected match: " + selectedMatch.getMatchId());
+
+        // Create an OrganMatchWorkRequest for the Case Manager
+        OrganMatchWorkRequest organMatchRequest = new OrganMatchWorkRequest(selectedMatch, account);
+        organMatchRequest.setStatus(RequestStatus.OrganMatchStatus.PENDING_CASE_MANAGER_REVIEW.getValue());
+        organMatchRequest.setSummary("New organ match for patient " + selectedMatch.getPatientRequest().getPatient().getName() + " and donor " + selectedMatch.getDonorRequest().getDonor().getName());
+        System.out.println("Created OrganMatchWorkRequest with status: " + organMatchRequest.getStatus());
+
+        // Find a CaseManagerOrganization and add the work request
+        Organization caseManagerOrganization = null;
+        System.out.println("Searching for CaseManagerOrganization...");
+        for (Network network : business.getNetworkList()) {
+            for (Enterprise enterprise : network.getEnterpriseDirectory().getEnterpriseList()) {
+                for (Organization org : enterprise.getOrganizationDirectory().getOrganizationList()) {
+                    if (org.getType() == Organization.Type.CaseManager) {
+                        caseManagerOrganization = org;
+                        System.out.println("Found CaseManagerOrganization: " + caseManagerOrganization.getName());
+                        break;
+                    }
+                }
+                if (caseManagerOrganization != null) {
+                    break;
+                }
+            }
+            if (caseManagerOrganization != null) {
+                break;
+            }
+        }
+
+        if (caseManagerOrganization != null) {
+            caseManagerOrganization.getWorkQueue().addWorkRequest(organMatchRequest);
+            System.out.println("OrganMatchWorkRequest added to work queue of: " + caseManagerOrganization.getName());
+            
+            // Update the status of patient and donor requests
+            selectedMatch.getPatientRequest().setStatus(RequestStatus.PatientRequestStatus.MATCHED_AWAITING_CASE_MANAGER.getValue());
+            selectedMatch.getDonorRequest().setStatus(RequestStatus.DonorApplicationStatus.MATCHED_AWAITING_CASE_MANAGER.getValue());
+            selectedMatch.setStatus(RequestStatus.OrganMatchStatus.PENDING_CASE_MANAGER_REVIEW.getValue());
+            System.out.println("Patient Request status updated to: " + selectedMatch.getPatientRequest().getStatus());
+            System.out.println("Donor Request status updated to: " + selectedMatch.getDonorRequest().getStatus());
+            System.out.println("OrganMatch status updated to: " + selectedMatch.getStatus());
+
+            JOptionPane.showMessageDialog(this, "Match selected and sent to Case Manager for review!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            EcoSystem.sendNotification(account, "Match for Patient " + selectedMatch.getPatientRequest().getPatient().getName() + " and Donor " + selectedMatch.getDonorRequest().getDonor().getName() + " has been selected and sent to Case Manager.");
+            business.getMatchedRequests().remove(selectedMatch); // Remove from available matches once processed
+            populateMatchResultsTable(); // Refresh table
+        } else {
+            System.out.println("No Case Manager Organization found.");
+            JOptionPane.showMessageDialog(this, "No Case Manager Organization found to process the match.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        DB4OUtil.getInstance().storeSystem(business);
     }//GEN-LAST:event_btnSelectMatchActionPerformed
 
 

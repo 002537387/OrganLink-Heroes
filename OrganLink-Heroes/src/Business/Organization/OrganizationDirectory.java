@@ -42,6 +42,8 @@ public class OrganizationDirectory {
             organization = new LogisticsOrganization(realName, this);
         } else if (type.getValue().equals(Organization.Type.TransplantClinic.getValue())){
             organization = new TransplantClinicOrganization(realName, this);
+        } else if (type.getValue().equals(Organization.Type.CaseManager.getValue())) {
+            organization = new CaseManagerOrganization();
         }
 
 
