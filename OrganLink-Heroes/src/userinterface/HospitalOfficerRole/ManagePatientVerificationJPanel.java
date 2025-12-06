@@ -224,6 +224,7 @@ public class ManagePatientVerificationJPanel extends javax.swing.JPanel {
         request.getPatient().setLabConfirmation(true); // Assuming lab confirmation is part of this approval
         request.getPatient().setLegalApproval(true); // Assuming legal approval is part of this approval
         request.setResolveDate(new Date());
+        business.getPatientRequestDirectory().addPatientRequest(request);
         JOptionPane.showMessageDialog(this, "Patient request approved and sent for matching.", "Success", JOptionPane.INFORMATION_MESSAGE);
         populateRequestTable();
     }//GEN-LAST:event_btnApproveActionPerformed
@@ -260,10 +261,6 @@ public class ManagePatientVerificationJPanel extends javax.swing.JPanel {
         }
 
         PatientRequest request = (PatientRequest) tblPatientRequests.getValueAt(selectedRow, 0);
-        if (!request.getStatus().equals(RequestStatus.PatientRequestStatus.PENDING_VERIFICATION.getValue())) {
-            JOptionPane.showMessageDialog(this, "Request is not in PENDING_VERIFICATION status and cannot be assigned.", "Warning", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
         
         request.setReceiver(account);
         request.setStatus(RequestStatus.PatientRequestStatus.PENDING_VERIFICATION.getValue()); // Still pending verification, but now assigned
